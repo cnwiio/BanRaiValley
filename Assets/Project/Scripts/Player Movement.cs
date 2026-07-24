@@ -7,9 +7,8 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private CharacterController characterController;
     [SerializeField] private Camera PlayerCam;
-    [SerializeField] private float Speed;
-    [SerializeField] private float JumpHeight;
-    [SerializeField] private float GravityMultiplyer;
+    [SerializeField] private PlayerMovementData Data;
+    [SerializeField] private PlayerInputReader InputReader;
 
     private Vector3 movementInput;
     private Vector3 horizontalMovement;
@@ -21,24 +20,23 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 CamForwardDirection;
     private Vector3 CamRightDirection;
 
-    private InputActionMap playerActionsMap;
     #region Handle Input
 
-
-    public void OnMove(InputAction.CallbackContext value)
+    private void OnEnable()
     {
-        movementInput.x = value.ReadValue<Vector2>().x;
-        movementInput.z = value.ReadValue<Vector2>().y;
+        EventBus<OnJumpEvent>.Subscribe(HandleJumpInput);
     }
 
-    public void OnJump(InputAction.CallbackContext ctx)
+    private void OnDisable()
     {
-        if (ctx.performed) 
+        EventBus<OnJumpEvent>.Unsubscribe(HandleJumpInput);
+    }
+
+    public void HandleJumpInput(OnJumpEvent ctx)
+    {
+        if (characterController.isGrounded)
         {
-            if (characterController.isGrounded)
-            {
-                JumpTriggered = true;
-            }
+            JumpTriggered = true;
         }
     }
 
@@ -46,18 +44,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
-        playerActionsMap = InputSystem.actions.FindActionMap("Player");
+        // cached
         _camTransform = PlayerCam.transform;
-    }
-
-    private void Start()    
-    {
-        InputSystem.actions.FindActionMap("Player")?.Disable();
-        playerActionsMap.Enable();
-
-        // cursor
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
     }
 
     void Update()
@@ -75,8 +63,9 @@ public class PlayerMovement : MonoBehaviour
 
     void HandleHorizontalMovement()
     {
-        horizontalMovement = (CamForwardDirection * movementInput.z) + (CamRightDirection * movementInput.x);
-        horizontalMovement *= Speed;
+        movementInput = InputReader.MovementInput;
+        horizontalMovement = (CamForwardDirection * movementInput.y) + (CamRightDirection * movementInput.x);
+        horizontalMovement *= Data.Speed;
     }
 
     void HandleVerticalMovement()
@@ -85,18 +74,18 @@ public class PlayerMovement : MonoBehaviour
         {
             if (characterController.velocity.y < 0)
             {
-                VerticalMovement = -0.5f; 
+                VerticalMovement = Data.GroundSnapForce; 
             }
 
             if (JumpTriggered)
             {
-                VerticalMovement = Mathf.Sqrt(2 * Mathf.Abs(Physics.gravity.y) * JumpHeight);
+                VerticalMovement = Mathf.Sqrt(2 * Mathf.Abs(Physics.gravity.y) * Data.JumpHeight);
                 JumpTriggered = false;
             }
         }
         else
         {
-            VerticalMovement += Physics.gravity.y * GravityMultiplyer;
+            VerticalMovement += Physics.gravity.y * Data.GravityMultiplyer;
         }
     }
 
