@@ -11,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private PlayerInputReader InputReader;
 
     private Vector3 movementInput;
+    private Vector3 horizontalDirection;
     private Vector3 horizontalMovement;
     private float VerticalMovement;
     private Vector3 FinalMovement;
@@ -64,8 +65,8 @@ public class PlayerMovement : MonoBehaviour
     void HandleHorizontalMovement()
     {
         movementInput = InputReader.MovementInput;
-        horizontalMovement = (CamForwardDirection * movementInput.y) + (CamRightDirection * movementInput.x);
-        horizontalMovement *= Data.Speed;
+        horizontalDirection = ((CamForwardDirection * movementInput.y) + (CamRightDirection * movementInput.x)).normalized;
+        horizontalMovement = horizontalDirection * Data.Speed;
     }
 
     void HandleVerticalMovement()
