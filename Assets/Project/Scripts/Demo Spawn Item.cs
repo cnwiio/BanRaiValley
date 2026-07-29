@@ -7,6 +7,13 @@ public class DemoSpawnItem : MonoBehaviour
 
     public void SpawnItem(int id)
     {
-        inventoryManager?.AddItem(itemToSpawn[id]);
+        bool result = inventoryManager.AddItem(itemToSpawn[id]);
+        if (result)
+        {
+            Debug.Log("Inventory added");
+        } else
+        {
+            Debug.Log("Inventory is full");
+        }
     }
 }

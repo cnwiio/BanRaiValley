@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -7,7 +8,9 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     [Header("UI")]
     [SerializeField] private Image image;
+    [SerializeField] private TextMeshProUGUI countText;
 
+    [HideInInspector] public int count = 1;
     [HideInInspector] public Item item;
     [HideInInspector] public Transform parentAfterDrag;
 
@@ -19,6 +22,15 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     {
         item = newItem;
         image.sprite = newItem.image;
+
+        RefreshCount();
+    }
+
+    public void RefreshCount()
+    {
+        countText.text = count.ToString();
+        bool textActive = count > 1;
+        countText.gameObject.SetActive(textActive);
     }
     public void OnBeginDrag(PointerEventData eventData)
     {

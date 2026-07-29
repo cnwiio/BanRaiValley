@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Item
   type: 3
   range: {x: 5, y: 4}
-  stackable: 1
+  stackable: 0
   image: {fileID: -311182402, guid: d0605ad740c06ba409403bec1d4acd18, type: 3}

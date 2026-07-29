@@ -2,11 +2,31 @@ using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
+    public int MaxStackItem = 4;
     public InventorySlot[] inventorySlots;
+    public InventorySlot[] HotbarSlots;
+    public InventorySlot[] InventoryHotbarSlots;
     public GameObject inventoryPrefab;
 
-    public void AddItem(Item item)
+    public bool AddItem(Item item)
     {
+        // Check if any slot has the same item with count lower than max
+        for (int i = 0; i < inventorySlots.Length; i++)
+        {
+            InventorySlot slot = inventorySlots[i];
+            InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
+            if (itemInSlot != null &&
+                itemInSlot.item == item &&
+                itemInSlot.count < MaxStackItem &&
+                itemInSlot.item.stackable == true)
+            {
+                itemInSlot.count++;
+                itemInSlot.RefreshCount();
+                return true;
+            }
+        }
+
+        // Find empty slot
         for (int i = 0; i < inventorySlots.Length; i++)
         {
             InventorySlot slot = inventorySlots[i];
@@ -14,9 +34,10 @@ public class InventoryManager : MonoBehaviour
             if (itemInSlot == null)
             {
                 SpawnNewItem(item, slot);
-                return;
+                return true;
             }
         }
+        return false;
     }
 
     void SpawnNewItem(Item item, InventorySlot slot)
@@ -24,5 +45,30 @@ public class InventoryManager : MonoBehaviour
         GameObject newItemGo = Instantiate(inventoryPrefab, slot.transform); 
         InventoryItem inventoryItem = newItemGo.GetComponent<InventoryItem>();
         inventoryItem.InitialiseItem(item);
+    }
+
+    public void SyncInventoryToHotbarSlot()
+    {
+        for (int i = 0; i < InventoryHotbarSlots.Length; i++)
+        {
+            InventorySlot slot = InventoryHotbarSlots[i];
+            InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
+            if (itemInSlot != null)
+            {
+                itemInSlot.transform.SetParent(HotbarSlots[i].transform);
+            }
+        }
+    }
+    public void SyncHotbarToInventorySlot()
+    {
+        for (int i = 0; i < HotbarSlots.Length; i++)
+        {
+            InventorySlot slot = HotbarSlots[i];
+            InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
+            if (itemInSlot != null)
+            {
+                itemInSlot.transform.SetParent(InventoryHotbarSlots[i].transform);
+            }
+        }
     }
 }
