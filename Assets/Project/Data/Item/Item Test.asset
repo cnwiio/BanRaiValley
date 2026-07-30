@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Item Test
   m_EditorClassIdentifier: Assembly-CSharp::Item
   type: 3
-  range: {x: 5, y: 4}
   stackable: 1
+  MaxStack: 20
   image: {fileID: 957467715, guid: d0605ad740c06ba409403bec1d4acd18, type: 3}

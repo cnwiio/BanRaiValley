@@ -10,9 +10,19 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     [SerializeField] private Image image;
     [SerializeField] private TextMeshProUGUI countText;
 
-    [HideInInspector] public int count = 1;
+    [HideInInspector] public int count
+    {
+        get => _count;
+        set {
+            _count = value;
+            RefreshCount();
+        }
+    }
     [HideInInspector] public Item item;
     [HideInInspector] public Transform parentAfterDrag;
+
+    private int _count = 1;
+
 
     public void Start()
     {

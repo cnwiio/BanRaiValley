@@ -2,11 +2,26 @@ using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
-    public int MaxStackItem = 4;
     public InventorySlot[] inventorySlots;
     public InventorySlot[] HotbarSlots;
     public InventorySlot[] InventoryHotbarSlots;
     public GameObject inventoryPrefab;
+
+    int selectSlot = -1;
+
+    private void Start()
+    {
+        ChangeSelectSlot(0); 
+    }
+
+    void ChangeSelectSlot(int value)
+    {
+        if (selectSlot >= 0)
+            HotbarSlots[selectSlot].DeSelect();
+
+        HotbarSlots[value].Select();
+        selectSlot = value;
+    }
 
     public bool AddItem(Item item)
     {
@@ -17,11 +32,10 @@ public class InventoryManager : MonoBehaviour
             InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
             if (itemInSlot != null &&
                 itemInSlot.item == item &&
-                itemInSlot.count < MaxStackItem &&
+                itemInSlot.count < itemInSlot.item.MaxStack &&
                 itemInSlot.item.stackable == true)
             {
                 itemInSlot.count++;
-                itemInSlot.RefreshCount();
                 return true;
             }
         }
