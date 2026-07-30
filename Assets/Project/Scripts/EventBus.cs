@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 
 public interface IEvent {}
 
@@ -33,3 +34,21 @@ public static class EventBus<T> where T : struct, IEvent
 //public struct GameStartedEvent : IEvent { }
 
 public struct OnJumpEvent : IEvent { }
+
+#region Inventory UI
+public struct OnUIBeginDragEvent : IEvent 
+{
+    public int Index;
+}
+public struct OnUIDragEvent : IEvent 
+{
+    public UnityEngine.Vector2 Position;
+}
+public struct OnUIEndDragEvent : IEvent 
+{
+}
+public struct OnUIDropEvent : IEvent 
+{
+    public int Index;
+}
+#endregion
