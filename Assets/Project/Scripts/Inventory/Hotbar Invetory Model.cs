@@ -1,13 +1,24 @@
+using Lean.Pool;
 using UnityEngine;
 
-public class HotbarInvetoryModel : MonoBehaviour
+public class HotbarInvetoryModel : MonoBehaviour, IInventory
 {
     [SerializeField] private int HotbarSlotsSize;
+    [SerializeField] private InventorySlotUI SlotUI;
+    [SerializeField] private Transform SlotUI_Parent;
+    [SerializeField] private GameObject SlotUI_Prefabs;
+    private InventorySlotUI[] _SlotUI;
     private SlotData[] HotbarSlots;
+
+    public int TotalSlot
+    {
+        get => HotbarSlotsSize;
+        set => HotbarSlotsSize = value;
+    }
 
     private void Awake()
     {
-        Initialize(HotbarSlotsSize);
+        Initialize(TotalSlot);
     }
 
     public void Initialize(int totalSlots)
@@ -16,6 +27,20 @@ public class HotbarInvetoryModel : MonoBehaviour
         for (int i = 0; i < totalSlots; i++)
         {
             HotbarSlots[i].Clear();
+        }
+
+        CreateUI(this, totalSlots);
+    }
+
+    private void CreateUI(IInventory inventoy, int SlotsSize)
+    {
+        _SlotUI = new InventorySlotUI[SlotsSize];
+        for (int i = 0; i < SlotsSize; i++)
+        {
+            //var go = Instantiate(inventorySlot_Prefabs, InventoryTransform);
+            var go = LeanPool.Spawn(SlotUI_Prefabs, SlotUI_Parent);
+            _SlotUI[i] = go.GetComponent<InventorySlotUI>();
+            _SlotUI[i].Setup(i, inventoy);
         }
     }
 
@@ -27,6 +52,13 @@ public class HotbarInvetoryModel : MonoBehaviour
         _tempSlot = HotbarSlots[indexA];
         HotbarSlots[indexA] = HotbarSlots[indexB];
         HotbarSlots[indexB] = _tempSlot;
+    }
+
+    public void SwapSlotWithOther(SlotData data, int indexToSwap)
+    {
+        if (!IsValidIndex(indexToSwap)) return;
+
+        HotbarSlots[indexToSwap] = data;
     }
 
     public SlotData GetSlotData(int index)

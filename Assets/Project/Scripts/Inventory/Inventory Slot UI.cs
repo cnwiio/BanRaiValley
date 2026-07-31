@@ -1,9 +1,10 @@
+using Lean.Pool;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
+public class InventorySlotUI : MonoBehaviour, IPoolable,IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
 {
     [Header("Model Reference")]
     [SerializeField] private IInventory inventoryModel;
@@ -25,10 +26,14 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         inventoryModel = inventory;
     }
 
-    public void RenderVisual(Sprite icon, int count)
+    public void RenderVisual()
     {
-        if (icon != null && count > 0)
+        var SlotData = inventoryModel.GetSlotData(SlotIndex);
+        if (!SlotData.IsEmpty)
         {
+            var icon = SlotData.item.image;
+            var count = SlotData.count;
+
             iconImage.sprite = icon;
             iconImage.enabled = true;
 
@@ -49,6 +54,12 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         }
     }
 
+    public void ImageInvicible()
+    {
+        iconImage.enabled = false;
+        countText.enabled = false;
+    }
+
     public void SetHighlight(bool isSelected)
     {
         if (boarderImage == null) return;
@@ -58,7 +69,7 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        EventBus<OnUIBeginDragEvent>.Raise(new OnUIBeginDragEvent() { Index = SlotIndex , Inventory = inventoryModel});
+        EventBus<OnUIBeginDragEvent>.Raise(new OnUIBeginDragEvent() { Index = SlotIndex , Inventory = inventoryModel, SlotUI = this});
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -67,12 +78,19 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     }
     public void OnEndDrag(PointerEventData eventData)
     {
-        EventBus<OnUIEndDragEvent>.Raise(new OnUIEndDragEvent() { Inventory = inventoryModel });
+        EventBus<OnUIEndDragEvent>.Raise(new OnUIEndDragEvent() { Inventory = inventoryModel , SlotUI = this });
     }
 
     public void OnDrop(PointerEventData eventData)
     {
-        EventBus<OnUIDropEvent>.Raise(new OnUIDropEvent() { Index = SlotIndex, Inventory = inventoryModel });
+        EventBus<OnUIDropEvent>.Raise(new OnUIDropEvent() { Index = SlotIndex, Inventory = inventoryModel , SlotUI = this });
     }
 
+    public void OnSpawn()
+    {
+    }
+
+    public void OnDespawn()
+    {
+    }
 }

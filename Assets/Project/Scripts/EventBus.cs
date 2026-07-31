@@ -40,6 +40,7 @@ public struct OnUIBeginDragEvent : IEvent
 {
     public int Index;
     public IInventory Inventory;
+    public InventorySlotUI SlotUI;
 }
 public struct OnUIDragEvent : IEvent 
 {
@@ -48,11 +49,19 @@ public struct OnUIDragEvent : IEvent
 public struct OnUIEndDragEvent : IEvent 
 {
     public IInventory Inventory;
+    public InventorySlotUI SlotUI;
 }
 public struct OnUIDropEvent : IEvent 
 {
     public int Index;
     public IInventory Inventory;
+    public InventorySlotUI SlotUI;
 
+}
+
+public struct InventoryRefreshEvent : IEvent
+{
+    public IInventory inventory;
+    public InventorySlotUI[] slotUI;
 }
 #endregion

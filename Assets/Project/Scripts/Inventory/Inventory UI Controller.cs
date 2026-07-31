@@ -1,3 +1,4 @@
+using Lean.Pool;
 using System;
 using TMPro;
 using UnityEngine;
@@ -10,7 +11,9 @@ public class InventoryUIController : MonoBehaviour
     [SerializeField] private InventoyModel inventoyModel;
     [SerializeField] private GameObject inventorySlot_Prefabs;
     [SerializeField] private Transform InventoryTransform;
+    [SerializeField] private GameObject InventoryUIPanel;
     private InventorySlotUI[] inventorySlotUI;
+
 
     [Header("Drag UI")]
     [SerializeField] private Image DragImage;
@@ -41,51 +44,67 @@ public class InventoryUIController : MonoBehaviour
 
     private void Start()
     {
-        Initailize();
-        RefreshUI();
+        //RefreshUI();
     }
 
-    void Initailize()
+    void Initailize(IInventory inventory, int SlotsSize)
     {
-        inventorySlotUI = new InventorySlotUI[inventoyModel.InventorySlotsSize];
-        for (int i = 0; i < inventoyModel.InventorySlotsSize; i++)
+        inventorySlotUI = new InventorySlotUI[SlotsSize];
+        for (int i = 0; i < SlotsSize; i++)
         {
-            var go = Instantiate(inventorySlot_Prefabs, InventoryTransform);
+            //var go = Instantiate(inventorySlot_Prefabs, InventoryTransform);
+            var go = LeanPool.Spawn(inventorySlot_Prefabs, InventoryTransform);
             inventorySlotUI[i] = go.GetComponent<InventorySlotUI>();
-            inventorySlotUI[i].Setup(i, inventoyModel);
+            inventorySlotUI[i].Setup(i, inventory);
         }
     }
 
-    public void RefreshUI()
+    public void RefreshUI(IInventory inventory)
     {
-        for (int i = 0; i < inventorySlotUI.Length; i++)
+        for (int i = 0; i < slotUI.Length; i++)
         {
-            SlotData slotData = inventoyModel.GetSlotData(i);
+            SlotData slotData = inventory.GetSlotData(i);
             if (!slotData.IsEmpty)
             {
-                inventorySlotUI[i].RenderVisual(slotData.item.image, slotData.count);
+                slotUI[i].RenderVisual();
             } else
             {
-                inventorySlotUI[i].RenderVisual(null, 0);
+                slotUI[i].ImageInvicible();
             }
         }
     }
 
+    public void ToggleInventoryUI(bool value)
+    {
+        if (value) 
+        {
+            Initailize(inventoyModel, inventoyModel.TotalSlot);
+            RefreshUI(inventoyModel, inventorySlotUI);
+        }
+        else
+        {
+            for (int i = 0; i < inventorySlotUI.Length; i++)
+            {
+                LeanPool.Despawn(inventorySlotUI[i]);
+            }
+        }
+
+        InventoryUIPanel.SetActive(value);
+    }
+
     private int _indexA, _indexB;
+    private IInventory _inventoryA, _inventoryB;
+    private InventorySlotUI _slotA, _slotB;
     void OnBeginDrag(OnUIBeginDragEvent evt)
     {
         _indexA = evt.Index;
-        var slot = evt.Inventory.GetSlotData(_indexA);
-        if (slot.IsEmpty) return;
+        _inventoryA = evt.Inventory;
+        _slotA = evt.SlotUI;
+        var slotData = _inventoryA.GetSlotData(_indexA);
+        if (slotData.IsEmpty) return;
 
-        inventorySlotUI[_indexA].RenderVisual(null, 0);
-        DragImage.sprite = slot.item.image;
-        DragImage.enabled = true;
-        if (slot.count > 1)
-        {
-            DragText.SetText($"{slot.count}");
-            DragText.enabled = true;
-        }
+        _slotA.ImageInvicible();
+        EnableDragIcon(slotData);
     }
 
     void OnDrag(OnUIDragEvent evt)
@@ -96,19 +115,66 @@ public class InventoryUIController : MonoBehaviour
     void OnEndDrag(OnUIEndDragEvent evt)
     {
         //RefreshUI();
-        var slot = evt.Inventory.GetSlotData(_indexA);
-        if (!slot.IsEmpty)
-            inventorySlotUI[_indexA].RenderVisual(slot.item.image, slot.count);
+        var slotData = _inventoryA.GetSlotData(_indexA);
+        if (!slotData.IsEmpty)
+            _slotA.RenderVisual();
 
-        DragImage.enabled = false;
-        DragText.enabled = false;
+        DisableDragIcon();
     }
 
     void OnDrop(OnUIDropEvent evt)
     {
         _indexB = evt.Index;
-        evt.Inventory.SwapSlot(_indexA, _indexB);
-        RefreshUI();
+        _inventoryB = evt.Inventory;
+        _slotB = evt.SlotUI;
+        if (_inventoryA == _inventoryB)
+        {
+            _inventoryA.SwapSlot(_indexA, _indexB);
+            var slotDataA = _inventoryA.GetSlotData(_indexA);
+            var slotDataB = _inventoryA.GetSlotData(_indexB);
+            if (!slotDataA.IsEmpty)
+            {
+                _slotA.RenderVisual();
+            }
+            if (!slotDataB.IsEmpty)
+            {
+                _slotB.RenderVisual();
+            }
+        }
+        else
+        {
+            _inventoryA.SwapSlotWithOther(_inventoryB.GetSlotData(_indexB), _indexA);
+            _inventoryB.SwapSlotWithOther(_inventoryA.GetSlotData(_indexA), _indexB);
+
+            var slotDataA = _inventoryA.GetSlotData(_indexA);
+            var slotDataB = _inventoryB.GetSlotData(_indexB);
+            if (!slotDataA.IsEmpty)
+            {
+                _slotA.RenderVisual();
+            }
+            if (!slotDataB.IsEmpty)
+            {
+                _slotB.RenderVisual();
+            }
+        }
+        
+        //RefreshUI(evt.Inventory, inventorySlotUI);
     }
 
+    private void EnableDragIcon(SlotData slot)
+    {
+        DragImage.sprite = slot.item.image;
+        DragImage.enabled = true;
+        if (slot.count > 1)
+        {
+            DragText.SetText($"{slot.count}");
+            DragText.enabled = true;
+        }
+    }
+
+    private void DisableDragIcon()
+    {
+        DragImage.enabled = false;
+        DragText.enabled = false;
+    }
 }

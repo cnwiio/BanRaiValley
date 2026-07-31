@@ -40,6 +40,7 @@
   <Project Path="Unity.Burst.Editor.csproj" />
   <Project Path="Unity.Rider.Editor.csproj" />
   <Project Path="Unity.VisualScripting.State.csproj" />
+  <Project Path="Assembly-CSharp.csproj" />
   <Project Path="Unity.AI.Navigation.Updater.csproj" />
   <Project Path="UnityEditor.UI.csproj" />
   <Project Path="Unity.RenderPipelines.Universal.2D.Editor.Overrides.csproj" />
@@ -54,7 +55,6 @@
   <Project Path="Unity.Collections.CodeGen.csproj" />
   <Project Path="Unity.Mathematics.Editor.csproj" />
   <Project Path="Unity.VisualScripting.SettingsProvider.Editor.csproj" />
-  <Project Path="Assembly-CSharp.csproj" />
   <Project Path="UnityEditor.UI.Analytics.csproj" />
   <Project Path="Unity.Settings.Editor.csproj" />
   <Project Path="Unity.InputSystem.TestFramework.csproj" />
