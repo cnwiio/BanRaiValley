@@ -20,10 +20,24 @@ public class InventorySlotUI : MonoBehaviour, IPoolable,IBeginDragHandler, IDrag
 
     private int SlotIndex;
 
+    public void OnEnable()
+    {
+        EventBus<InventoryUIRefreshEvent>.Subscribe(RenderVisual);
+    }
+    public void OnDisable()
+    {
+        EventBus<InventoryUIRefreshEvent>.Unsubscribe(RenderVisual);
+    }
+
     public void Setup(int index, IInventory inventory)
     {
         SlotIndex = index;
         inventoryModel = inventory;
+    }
+
+    public void RenderVisual(InventoryUIRefreshEvent evt)
+    {
+        RenderVisual();
     }
 
     public void RenderVisual()

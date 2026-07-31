@@ -122,7 +122,7 @@ public class InventoyModel : MonoBehaviour, IInventory
         if (!CanAddItem(itemToAdd, amount)) return false;
 
         AddItem(itemToAdd, amount);
-        EventBus<InventoryRefreshEvent>.Raise(new InventoryRefreshEvent() { inventory = this });
+        EventBus<InventoryUIRefreshEvent>.Raise(new InventoryUIRefreshEvent() {});
         return true;
     }
 

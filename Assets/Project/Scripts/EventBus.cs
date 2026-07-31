@@ -59,9 +59,7 @@ public struct OnUIDropEvent : IEvent
 
 }
 
-public struct InventoryRefreshEvent : IEvent
+public struct InventoryUIRefreshEvent : IEvent
 {
-    public IInventory inventory;
-    public InventorySlotUI[] slotUI;
 }
 #endregion

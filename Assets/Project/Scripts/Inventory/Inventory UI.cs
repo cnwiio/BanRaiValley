@@ -10,8 +10,8 @@ public class InventoryUI : MonoBehaviour
     [SerializeField] private GameObject UIPanel;
 
     [Header("Inventory Model")]
-    [SerializeField] private IInventory inventoryModel;
-    [SerializeField] private IInventory hotbarModel;
+    [SerializeField] private InventoyModel inventoryModel;
+    [SerializeField] private HotbarInvetoryModel hotbarModel;
 
     private InventorySlotUI[] _inventorySlotUI, _hotSlotUI;
 
@@ -47,6 +47,7 @@ public class InventoryUI : MonoBehaviour
                 LeanPool.Despawn(_hotSlotUI[i]);
             }
         }
+        EventBus<InventoryUIRefreshEvent>.Raise(new InventoryUIRefreshEvent() { });
         UIPanel.SetActive(value);
     }
 }

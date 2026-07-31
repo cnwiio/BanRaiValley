@@ -7,12 +7,12 @@ using UnityEngine.UI;
 
 public class InventoryUIController : MonoBehaviour
 {
-    [Header("Inventory Reference")]
-    [SerializeField] private InventoyModel inventoyModel;
-    [SerializeField] private GameObject inventorySlot_Prefabs;
-    [SerializeField] private Transform InventoryTransform;
-    [SerializeField] private GameObject InventoryUIPanel;
-    private InventorySlotUI[] inventorySlotUI;
+    //[Header("Inventory Reference")]
+    //[SerializeField] private InventoyModel inventoyModel;
+    //[SerializeField] private GameObject inventorySlot_Prefabs;
+    //[SerializeField] private Transform InventoryTransform;
+    //[SerializeField] private GameObject InventoryUIPanel;
+    //private InventorySlotUI[] inventorySlotUI;
 
 
     [Header("Drag UI")]
@@ -42,56 +42,6 @@ public class InventoryUIController : MonoBehaviour
         DragTransform = DragImage.transform;
     }
 
-    private void Start()
-    {
-        //RefreshUI();
-    }
-
-    void Initailize(IInventory inventory, int SlotsSize)
-    {
-        inventorySlotUI = new InventorySlotUI[SlotsSize];
-        for (int i = 0; i < SlotsSize; i++)
-        {
-            //var go = Instantiate(inventorySlot_Prefabs, InventoryTransform);
-            var go = LeanPool.Spawn(inventorySlot_Prefabs, InventoryTransform);
-            inventorySlotUI[i] = go.GetComponent<InventorySlotUI>();
-            inventorySlotUI[i].Setup(i, inventory);
-        }
-    }
-
-    public void RefreshUI(IInventory inventory)
-    {
-        for (int i = 0; i < slotUI.Length; i++)
-        {
-            SlotData slotData = inventory.GetSlotData(i);
-            if (!slotData.IsEmpty)
-            {
-                slotUI[i].RenderVisual();
-            } else
-            {
-                slotUI[i].ImageInvicible();
-            }
-        }
-    }
-
-    public void ToggleInventoryUI(bool value)
-    {
-        if (value) 
-        {
-            Initailize(inventoyModel, inventoyModel.TotalSlot);
-            RefreshUI(inventoyModel, inventorySlotUI);
-        }
-        else
-        {
-            for (int i = 0; i < inventorySlotUI.Length; i++)
-            {
-                LeanPool.Despawn(inventorySlotUI[i]);
-            }
-        }
-
-        InventoryUIPanel.SetActive(value);
-    }
-
     private int _indexA, _indexB;
     private IInventory _inventoryA, _inventoryB;
     private InventorySlotUI _slotA, _slotB;
@@ -114,7 +64,6 @@ public class InventoryUIController : MonoBehaviour
 
     void OnEndDrag(OnUIEndDragEvent evt)
     {
-        //RefreshUI();
         var slotData = _inventoryA.GetSlotData(_indexA);
         if (!slotData.IsEmpty)
             _slotA.RenderVisual();
@@ -157,8 +106,6 @@ public class InventoryUIController : MonoBehaviour
                 _slotB.RenderVisual();
             }
         }
-        
-        //RefreshUI(evt.Inventory, inventorySlotUI);
     }
 
     private void EnableDragIcon(SlotData slot)

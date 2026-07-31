@@ -4,7 +4,7 @@ using UnityEngine;
 public class HotbarInvetoryModel : MonoBehaviour, IInventory
 {
     [SerializeField] private int HotbarSlotsSize;
-    [SerializeField] private InventorySlotUI SlotUI;
+    /*[SerializeField]*/ private InventorySlotUI SlotUI;
     [SerializeField] private Transform SlotUI_Parent;
     [SerializeField] private GameObject SlotUI_Prefabs;
     private InventorySlotUI[] _SlotUI;
