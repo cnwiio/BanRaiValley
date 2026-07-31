@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
 {
+    [Header("Model Reference")]
+    [SerializeField] private IInventory inventoryModel;
+
     [Header("UI Component References")]
     [SerializeField] private Image boarderImage;
     [SerializeField] private Image iconImage;
@@ -16,9 +19,10 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     private int SlotIndex;
 
-    public void Setup(int index)
+    public void Setup(int index, IInventory inventory)
     {
         SlotIndex = index;
+        inventoryModel = inventory;
     }
 
     public void RenderVisual(Sprite icon, int count)
@@ -54,7 +58,7 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        EventBus<OnUIBeginDragEvent>.Raise(new OnUIBeginDragEvent() { Index = SlotIndex });
+        EventBus<OnUIBeginDragEvent>.Raise(new OnUIBeginDragEvent() { Index = SlotIndex , Inventory = inventoryModel});
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -63,12 +67,12 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     }
     public void OnEndDrag(PointerEventData eventData)
     {
-        EventBus<OnUIEndDragEvent>.Raise(new OnUIEndDragEvent() { });
+        EventBus<OnUIEndDragEvent>.Raise(new OnUIEndDragEvent() { Inventory = inventoryModel });
     }
 
     public void OnDrop(PointerEventData eventData)
     {
-        EventBus<OnUIDropEvent>.Raise(new OnUIDropEvent() { Index = SlotIndex });
+        EventBus<OnUIDropEvent>.Raise(new OnUIDropEvent() { Index = SlotIndex, Inventory = inventoryModel });
     }
 
 }

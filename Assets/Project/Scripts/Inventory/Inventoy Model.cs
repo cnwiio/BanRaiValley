@@ -2,7 +2,7 @@ using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 
 
-public class InventoyModel : MonoBehaviour
+public class InventoyModel : MonoBehaviour, IInventory
 {
     [SerializeField] private int inventorySlotsSize;
     private SlotData[] inventorySlots;

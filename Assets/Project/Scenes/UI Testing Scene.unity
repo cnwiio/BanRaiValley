@@ -150,7 +150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 326859bad33c0174fac979e0fc663ba4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventoyModel
-  slotsSize: 20
+  inventorySlotsSize: 16
 --- !u!114 &30289761
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164,10 +164,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventoryUIController
   inventoyModel: {fileID: 30289760}
-  inventorySlotUI: []
   inventorySlot_Prefabs: {fileID: 4545213469665757567, guid: c92bb9fb63bb76f43859fedbab4460e3, type: 3}
   InventoryTransform: {fileID: 953380178}
   DragImage: {fileID: 1370261070}
+  DragText: {fileID: 1895787333}
 --- !u!4 &30289762
 Transform:
   m_ObjectHideFlags: 0
@@ -3178,7 +3178,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1895787331}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 

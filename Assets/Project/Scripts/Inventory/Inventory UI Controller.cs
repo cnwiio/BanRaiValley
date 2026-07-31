@@ -52,7 +52,7 @@ public class InventoryUIController : MonoBehaviour
         {
             var go = Instantiate(inventorySlot_Prefabs, InventoryTransform);
             inventorySlotUI[i] = go.GetComponent<InventorySlotUI>();
-            inventorySlotUI[i].Setup(i);
+            inventorySlotUI[i].Setup(i, inventoyModel);
         }
     }
 
@@ -61,7 +61,7 @@ public class InventoryUIController : MonoBehaviour
         for (int i = 0; i < inventorySlotUI.Length; i++)
         {
             SlotData slotData = inventoyModel.GetSlotData(i);
-            if (slotData.item != null)
+            if (!slotData.IsEmpty)
             {
                 inventorySlotUI[i].RenderVisual(slotData.item.image, slotData.count);
             } else
@@ -75,8 +75,8 @@ public class InventoryUIController : MonoBehaviour
     void OnBeginDrag(OnUIBeginDragEvent evt)
     {
         _indexA = evt.Index;
-        var slot = inventoyModel.GetSlotData(_indexA);
-        if (slot.item == null) return;
+        var slot = evt.Inventory.GetSlotData(_indexA);
+        if (slot.IsEmpty) return;
 
         inventorySlotUI[_indexA].RenderVisual(null, 0);
         DragImage.sprite = slot.item.image;
@@ -96,8 +96,8 @@ public class InventoryUIController : MonoBehaviour
     void OnEndDrag(OnUIEndDragEvent evt)
     {
         //RefreshUI();
-        var slot = inventoyModel.GetSlotData(_indexA);
-        if (slot.item != null)
+        var slot = evt.Inventory.GetSlotData(_indexA);
+        if (!slot.IsEmpty)
             inventorySlotUI[_indexA].RenderVisual(slot.item.image, slot.count);
 
         DragImage.enabled = false;
@@ -107,7 +107,7 @@ public class InventoryUIController : MonoBehaviour
     void OnDrop(OnUIDropEvent evt)
     {
         _indexB = evt.Index;
-        inventoyModel.SwapSlot(_indexA, _indexB);
+        evt.Inventory.SwapSlot(_indexA, _indexB);
         RefreshUI();
     }
 

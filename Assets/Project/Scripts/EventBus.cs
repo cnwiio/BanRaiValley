@@ -39,6 +39,7 @@ public struct OnJumpEvent : IEvent { }
 public struct OnUIBeginDragEvent : IEvent 
 {
     public int Index;
+    public IInventory Inventory;
 }
 public struct OnUIDragEvent : IEvent 
 {
@@ -46,9 +47,12 @@ public struct OnUIDragEvent : IEvent
 }
 public struct OnUIEndDragEvent : IEvent 
 {
+    public IInventory Inventory;
 }
 public struct OnUIDropEvent : IEvent 
 {
     public int Index;
+    public IInventory Inventory;
+
 }
 #endregion
