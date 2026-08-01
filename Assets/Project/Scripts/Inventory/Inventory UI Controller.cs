@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using static UnityEngine.Rendering.VolumeComponent;
 
 public class InventoryUIController : MonoBehaviour
 {
@@ -64,9 +65,7 @@ public class InventoryUIController : MonoBehaviour
 
     void OnEndDrag(OnUIEndDragEvent evt)
     {
-        var slotData = _inventoryA.GetSlotData(_indexA);
-        if (!slotData.IsEmpty)
-            _slotA.RenderVisual();
+        _slotA.RenderVisual();
 
         DisableDragIcon();
     }
@@ -76,35 +75,23 @@ public class InventoryUIController : MonoBehaviour
         _indexB = evt.Index;
         _inventoryB = evt.Inventory;
         _slotB = evt.SlotUI;
+        if(_inventoryA.GetSlotData(_indexA).IsEmpty) return;
+
         if (_inventoryA == _inventoryB)
         {
             _inventoryA.SwapSlot(_indexA, _indexB);
-            var slotDataA = _inventoryA.GetSlotData(_indexA);
-            var slotDataB = _inventoryA.GetSlotData(_indexB);
-            if (!slotDataA.IsEmpty)
-            {
-                _slotA.RenderVisual();
-            }
-            if (!slotDataB.IsEmpty)
-            {
-                _slotB.RenderVisual();
-            }
+            _slotA.RenderVisual();
+            _slotB.RenderVisual();
         }
         else
         {
-            _inventoryA.SwapSlotWithOther(_inventoryB.GetSlotData(_indexB), _indexA);
-            _inventoryB.SwapSlotWithOther(_inventoryA.GetSlotData(_indexA), _indexB);
+            SlotData itemA = _inventoryA.GetSlotData(_indexA);
+            SlotData itemB = _inventoryB.GetSlotData(_indexB);
+            _inventoryA.SwapSlotWithOther(itemB, _indexA);
+            _inventoryB.SwapSlotWithOther(itemA, _indexB);
 
-            var slotDataA = _inventoryA.GetSlotData(_indexA);
-            var slotDataB = _inventoryB.GetSlotData(_indexB);
-            if (!slotDataA.IsEmpty)
-            {
-                _slotA.RenderVisual();
-            }
-            if (!slotDataB.IsEmpty)
-            {
-                _slotB.RenderVisual();
-            }
+            _slotA.RenderVisual();
+            _slotB.RenderVisual();
         }
     }
 

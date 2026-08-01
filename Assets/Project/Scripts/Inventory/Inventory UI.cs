@@ -5,7 +5,9 @@ public class InventoryUI : MonoBehaviour
 {
     [Header("UI Reference")]
     [SerializeField] private Transform HotbarUITransform;
+    [SerializeField] private CanvasGroup HotbarUICanvasGroup;
     [SerializeField] private Transform InventoryUITransform;
+    [SerializeField] private CanvasGroup InventoryUICanvasGroup;
     [SerializeField] private GameObject SlotPrefabs;
     [SerializeField] private GameObject UIPanel;
 
@@ -29,7 +31,10 @@ public class InventoryUI : MonoBehaviour
     }
 
     public void ToggleInventoryUI(bool value)
-    { 
+    {
+        HotbarUICanvasGroup.alpha = 0;
+        InventoryUICanvasGroup.alpha = 0;
+
         if (value)
         {
             _inventorySlotUI = CreatSlotUI(inventoryModel.TotalSlot, inventoryModel, SlotPrefabs, InventoryUITransform);
@@ -47,7 +52,10 @@ public class InventoryUI : MonoBehaviour
                 LeanPool.Despawn(_hotSlotUI[i]);
             }
         }
+
         EventBus<InventoryUIRefreshEvent>.Raise(new InventoryUIRefreshEvent() { });
+        HotbarUICanvasGroup.alpha = 1;
+        InventoryUICanvasGroup.alpha = 1;
         UIPanel.SetActive(value);
     }
 }

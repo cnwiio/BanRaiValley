@@ -20,15 +20,6 @@ public class InventorySlotUI : MonoBehaviour, IPoolable,IBeginDragHandler, IDrag
 
     private int SlotIndex;
 
-    public void OnEnable()
-    {
-        EventBus<InventoryUIRefreshEvent>.Subscribe(RenderVisual);
-    }
-    public void OnDisable()
-    {
-        EventBus<InventoryUIRefreshEvent>.Unsubscribe(RenderVisual);
-    }
-
     public void Setup(int index, IInventory inventory)
     {
         SlotIndex = index;
@@ -53,7 +44,7 @@ public class InventorySlotUI : MonoBehaviour, IPoolable,IBeginDragHandler, IDrag
 
             if (count > 1)
             {
-                countText.text = count.ToString();
+                countText.SetText($"{count}");
                 countText.enabled = true;
             }
             else
@@ -102,9 +93,12 @@ public class InventorySlotUI : MonoBehaviour, IPoolable,IBeginDragHandler, IDrag
 
     public void OnSpawn()
     {
+        EventBus<InventoryUIRefreshEvent>.Subscribe(RenderVisual);
     }
 
     public void OnDespawn()
     {
+        EventBus<InventoryUIRefreshEvent>.Unsubscribe(RenderVisual);
+
     }
 }

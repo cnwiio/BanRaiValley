@@ -211,11 +211,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventoryUI
   HotbarUITransform: {fileID: 1255187174}
+  HotbarUICanvasGroup: {fileID: 1255187176}
   InventoryUITransform: {fileID: 953380178}
+  InventoryUICanvasGroup: {fileID: 953380180}
   SlotPrefabs: {fileID: 4545213469665757567, guid: c92bb9fb63bb76f43859fedbab4460e3, type: 3}
   UIPanel: {fileID: 860934387}
-  inventoryModel: {fileID: 0}
-  hotbarModel: {fileID: 0}
+  inventoryModel: {fileID: 30289760}
+  hotbarModel: {fileID: 746627250}
 --- !u!1 &74302953
 GameObject:
   m_ObjectHideFlags: 0
@@ -1021,7 +1023,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c7e70e362000ec4aafcf2e2d74f5604, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HotbarInvetoryModel
-  HotbarSlotsSize: 0
+  HotbarSlotsSize: 6
   SlotUI_Parent: {fileID: 746627246}
   SlotUI_Prefabs: {fileID: 4545213469665757567, guid: c92bb9fb63bb76f43859fedbab4460e3, type: 3}
 --- !u!1 &765814181
@@ -1311,8 +1313,9 @@ GameObject:
   m_Component:
   - component: {fileID: 953380178}
   - component: {fileID: 953380179}
+  - component: {fileID: 953380180}
   m_Layer: 5
-  m_Name: Grid
+  m_Name: Inventory
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1361,6 +1364,18 @@ MonoBehaviour:
   m_Spacing: {x: 25, y: 25}
   m_Constraint: 0
   m_ConstraintCount: 2
+--- !u!225 &953380180
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 953380177}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &959922574
 GameObject:
   m_ObjectHideFlags: 0
@@ -1979,6 +1994,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1255187174}
   - component: {fileID: 1255187175}
+  - component: {fileID: 1255187176}
   m_Layer: 5
   m_Name: Hotbar
   m_TagString: Untagged
@@ -2029,6 +2045,18 @@ MonoBehaviour:
   m_Spacing: {x: 25, y: 25}
   m_Constraint: 0
   m_ConstraintCount: 2
+--- !u!225 &1255187176
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1255187173}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1370261069
 GameObject:
   m_ObjectHideFlags: 0
