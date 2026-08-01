@@ -23,6 +23,8 @@ public class PlayerInputReader : MonoBehaviour
     [SerializeField] private InputActionReference JumpAction;
     [SerializeField] private InputActionReference InventoryToggleAction_PlayerMap;
     [SerializeField] private InputActionReference InventoryToggleAction_UIMap;
+    [SerializeField] private InputActionReference HotbarSelectAction;
+    [SerializeField] private InputActionReference HotbarScrollAction;
 
     private ActionMapType currentActionMaptype;
     public ActionMapType CurrentActionMaptype
@@ -58,6 +60,10 @@ public class PlayerInputReader : MonoBehaviour
         InventoryToggleAction_PlayerMap.action.performed += OnInventoryToggle;
         InventoryToggleAction_UIMap.action.performed += OnInventoryToggle;
 
+        HotbarSelectAction.action.performed += OnHotBarSelect;
+
+        HotbarScrollAction.action.performed += OnHotBarScroll;
+
         EventBus<ChangeActionMap>.Subscribe(ChangeActionMap);
 
         SwitchToPlayerActionMap();
@@ -72,6 +78,10 @@ public class PlayerInputReader : MonoBehaviour
 
         InventoryToggleAction_PlayerMap.action.performed -= OnInventoryToggle;
         InventoryToggleAction_UIMap.action.performed -= OnInventoryToggle;
+
+        HotbarSelectAction.action.performed -= OnHotBarSelect;
+
+        HotbarScrollAction.action.performed -= OnHotBarScroll;
 
         EventBus<ChangeActionMap>.Unsubscribe(ChangeActionMap);
 
@@ -103,6 +113,14 @@ public class PlayerInputReader : MonoBehaviour
         EventBus<InventoryToggleEvent>.Raise(new InventoryToggleEvent() { });
     }
 
+    private void OnHotBarSelect(InputAction.CallbackContext ctx)
+    {
+        EventBus<ChangeHotbarSlotEvent>.Raise(new ChangeHotbarSlotEvent() { Index = (int)ctx.ReadValue<float>() });
+    }
+    private void OnHotBarScroll(InputAction.CallbackContext ctx)
+    {
+        EventBus<OnHotbarScrollActionEvent>.Raise(new OnHotbarScrollActionEvent() { value = (int)ctx.ReadValue<float>() });
+    }
     private void OnMove(InputAction.CallbackContext ctx)
     {
         MovementInput = ctx.ReadValue<Vector2>();

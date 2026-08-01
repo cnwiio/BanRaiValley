@@ -41,6 +41,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Hotbar Select",
+                    "type": "Value",
+                    "id": "91765231-2754-42bf-b3e7-53384f499d9d",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Hotbar Scroll",
+                    "type": "Value",
+                    "id": "1df5070c-7878-4a65-b33b-ffc5fd1918c7",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -129,6 +147,83 @@
                     "processors": "",
                     "groups": ";KeyBoard&Mouse",
                     "action": "Toggle Inventory",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cc99d688-5d55-40ce-bf29-2f2f5a8d3421",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "Clamp(min=1,max=1)",
+                    "groups": ";KeyBoard&Mouse",
+                    "action": "Hotbar Select",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f16a12e9-e149-4319-957c-a7141aac856f",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "Clamp(min=2,max=2)",
+                    "groups": ";KeyBoard&Mouse",
+                    "action": "Hotbar Select",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8a4d1eec-6695-4893-b210-4c9f518e7d88",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "Clamp(min=3,max=3)",
+                    "groups": ";KeyBoard&Mouse",
+                    "action": "Hotbar Select",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ec602fba-a369-4c9d-b49f-df7767cfb5b5",
+                    "path": "<Keyboard>/4",
+                    "interactions": "",
+                    "processors": "Clamp(min=4,max=4)",
+                    "groups": ";KeyBoard&Mouse",
+                    "action": "Hotbar Select",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "55705821-0076-44ff-a79e-ddd7ec498ae0",
+                    "path": "<Keyboard>/5",
+                    "interactions": "",
+                    "processors": "Clamp(min=5,max=5)",
+                    "groups": ";KeyBoard&Mouse",
+                    "action": "Hotbar Select",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "918a8af3-4e51-4e4d-964a-15381e9f9611",
+                    "path": "<Keyboard>/6",
+                    "interactions": "",
+                    "processors": "Clamp(min=6,max=6)",
+                    "groups": ";KeyBoard&Mouse",
+                    "action": "Hotbar Select",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7a54e6f7-3700-448b-8e9d-0d177c34ee68",
+                    "path": "<Mouse>/scroll/y",
+                    "interactions": "",
+                    "processors": "Invert",
+                    "groups": ";KeyBoard&Mouse",
+                    "action": "Hotbar Scroll",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -1629,6 +1629,7 @@ MonoBehaviour:
   JumpAction: {fileID: -8779479877502676536, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
   InventoryToggleAction_PlayerMap: {fileID: -2231613874261945677, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
   InventoryToggleAction_UIMap: {fileID: -8967117750965259324, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
+  HotbarSelectAction: {fileID: -2026497242213518920, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
 --- !u!4 &967893271
 Transform:
   m_ObjectHideFlags: 0

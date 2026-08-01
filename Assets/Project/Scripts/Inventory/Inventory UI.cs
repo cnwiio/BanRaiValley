@@ -53,8 +53,10 @@ public class InventoryUI : MonoBehaviour
 
         
         CreateAndDestroyUI(!IsInventoryUIActive);
-        SetCursorState(!IsInventoryUIActive);
+        //SetCursorState(!IsInventoryUIActive);
         SetActionMapType(!IsInventoryUIActive);
+
+        EventBus<InventoryUIRefreshEvent>.Raise(new InventoryUIRefreshEvent() { });
 
         HotbarUICanvasGroup.alpha = 1;
         InventoryUICanvasGroup.alpha = 1;
@@ -68,7 +70,6 @@ public class InventoryUI : MonoBehaviour
         {
             _inventorySlotUI = CreatSlotUI(inventoryModel.TotalSlot, inventoryModel, SlotPrefabs, InventoryUITransform);
             _hotSlotUI = CreatSlotUI(hotbarModel.TotalSlot, hotbarModel, SlotPrefabs, HotbarUITransform);
-            EventBus<InventoryUIRefreshEvent>.Raise(new InventoryUIRefreshEvent() { });
         }
         else
         {
