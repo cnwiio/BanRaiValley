@@ -216,6 +216,7 @@ MonoBehaviour:
   InventoryUICanvasGroup: {fileID: 953380180}
   SlotPrefabs: {fileID: 4545213469665757567, guid: c92bb9fb63bb76f43859fedbab4460e3, type: 3}
   UIPanel: {fileID: 860934387}
+  HotbarUIPanel: {fileID: 746627245}
   inventoryModel: {fileID: 30289760}
   hotbarModel: {fileID: 746627250}
 --- !u!1 &74302953
@@ -251,9 +252,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 765814185}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 600, y: -445}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 1568, y: 101}
   m_SizeDelta: {x: 150, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &74302955
@@ -303,7 +304,7 @@ MonoBehaviour:
       - m_Target: {fileID: 30289764}
         m_TargetAssemblyTypeName: InventoryUI, Assembly-CSharp
         m_MethodName: ToggleInventoryUI
-        m_Mode: 6
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1592,6 +1593,57 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &967893269
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 967893271}
+  - component: {fileID: 967893270}
+  m_Layer: 0
+  m_Name: PlayerInputReader
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &967893270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 967893269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01ec244b108694a40a75cc4721bdec9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInputReader
+  inputActionAsset: {fileID: -944628639613478452, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
+  PlayerActionMapName: Player
+  UIActionMapName: UI
+  MoveAction: {fileID: -1512740482752264585, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
+  JumpAction: {fileID: -8779479877502676536, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
+  InventoryToggleAction_PlayerMap: {fileID: -2231613874261945677, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
+  InventoryToggleAction_UIMap: {fileID: -8967117750965259324, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
+--- !u!4 &967893271
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 967893269}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 363.39893, y: 154.53165, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1033454469
 GameObject:
   m_ObjectHideFlags: 0
@@ -1937,7 +1989,7 @@ MonoBehaviour:
       - m_Target: {fileID: 30289764}
         m_TargetAssemblyTypeName: InventoryUI, Assembly-CSharp
         m_MethodName: ToggleInventoryUI
-        m_Mode: 6
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2282,3 +2334,4 @@ SceneRoots:
   - {fileID: 959922577}
   - {fileID: 906866099}
   - {fileID: 30289762}
+  - {fileID: 967893271}

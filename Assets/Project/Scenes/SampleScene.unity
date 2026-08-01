@@ -1312,7 +1312,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1492116651}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
   m_Name: 
@@ -1378,6 +1378,14 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: adeb3235-c42d-4855-89e7-11cdf9d14aa4
     m_ActionName: 'Player/Look[/Mouse/delta]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: a64694cd-6d2b-4bd0-83c0-d7b8b7734ebf
+    m_ActionName: 'Player/Toggle Inventory[/Keyboard/tab]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 02a4c2ed-bac5-400c-a4ac-03907dd5a790
+    m_ActionName: 'UI/Toggle Inventory[/Keyboard/tab]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: KeyBoard&Mouse
   m_DefaultActionMap: Player
@@ -1395,8 +1403,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01ec244b108694a40a75cc4721bdec9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInputReader
+  inputActionAsset: {fileID: -944628639613478452, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
+  PlayerActionMapName: Player
+  UIActionMapName: UI
   MoveAction: {fileID: -1512740482752264585, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
   JumpAction: {fileID: -8779479877502676536, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
+  InventoryToggleAction_PlayerMap: {fileID: -2231613874261945677, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
+  InventoryToggleAction_UIMap: {fileID: -8967117750965259324, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
 --- !u!1 &2091949058
 GameObject:
   m_ObjectHideFlags: 0

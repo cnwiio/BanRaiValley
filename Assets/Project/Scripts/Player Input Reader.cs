@@ -2,31 +2,105 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+public enum ActionMapType
+{
+    Player,
+    UI
+}
+
 public class PlayerInputReader : MonoBehaviour
 {
+    // return value
     public Vector2 MovementInput { get; private set;  }
 
+    [Header("Input Action Asset Reference")]
+    [SerializeField] private InputActionAsset inputActionAsset;
+    [SerializeField] private String PlayerActionMapName;
+    [SerializeField] private String UIActionMapName;
+
+    [Header("Input Action Reference")]
     [SerializeField] private InputActionReference MoveAction;
     [SerializeField] private InputActionReference JumpAction;
+    [SerializeField] private InputActionReference InventoryToggleAction_PlayerMap;
+    [SerializeField] private InputActionReference InventoryToggleAction_UIMap;
+
+    private ActionMapType currentActionMaptype;
+    public ActionMapType CurrentActionMaptype
+    {
+        get => currentActionMaptype;
+        set
+        {
+            currentActionMaptype = value;
+            switch (value)
+            {
+                case ActionMapType.Player:
+                    SwitchToPlayerActionMap();
+                    break;
+                case ActionMapType.UI:
+                    SwitchToUIActionMap();
+                    break;
+            }
+        }
+    }
+    private InputActionMap playerActionMap;
+    private InputActionMap UIActionMap;
 
     private void OnEnable()
     {
+        playerActionMap = inputActionAsset.FindActionMap(PlayerActionMapName);
+        UIActionMap = inputActionAsset.FindActionMap(UIActionMapName);
+
         MoveAction.action.performed += OnMove;
         MoveAction.action.canceled += OnStopMove;
-        MoveAction.action.Enable();
 
         JumpAction.action.performed += OnJump;
-        JumpAction.action.Enable();
+
+        InventoryToggleAction_PlayerMap.action.performed += OnInventoryToggle;
+        InventoryToggleAction_UIMap.action.performed += OnInventoryToggle;
+
+        EventBus<ChangeActionMap>.Subscribe(ChangeActionMap);
+
+        SwitchToPlayerActionMap();
     }
 
     private void OnDisable()
     {
         MoveAction.action.performed -= OnMove;
         MoveAction.action.canceled -= OnStopMove;
-        MoveAction.action.Disable();
 
         JumpAction.action.performed -= OnJump;
-        JumpAction.action.Disable();
+
+        InventoryToggleAction_PlayerMap.action.performed -= OnInventoryToggle;
+        InventoryToggleAction_UIMap.action.performed -= OnInventoryToggle;
+
+        EventBus<ChangeActionMap>.Unsubscribe(ChangeActionMap);
+
+        UIActionMap?.Disable();
+        playerActionMap?.Disable();
+        inputActionAsset.Disable();
+    }
+
+    public void ChangeActionMap(ChangeActionMap evt)
+    {
+        CurrentActionMaptype = evt.MapType;
+    }
+
+    public void SwitchToPlayerActionMap()
+    {
+        UIActionMap?.Disable();
+        playerActionMap?.Enable();
+    }
+
+    public void SwitchToUIActionMap()
+    {
+        playerActionMap?.Disable();
+        UIActionMap?.Enable();
+    }
+
+    
+    private void OnInventoryToggle(InputAction.CallbackContext ctx)
+    {
+        EventBus<InventoryToggleEvent>.Raise(new InventoryToggleEvent() { });
     }
 
     private void OnMove(InputAction.CallbackContext ctx)
@@ -47,7 +121,7 @@ public class PlayerInputReader : MonoBehaviour
     private void Start()
     {
         // cursor
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        //Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.visible = false;
     }
 }

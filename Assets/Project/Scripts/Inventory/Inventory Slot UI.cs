@@ -99,6 +99,10 @@ public class InventorySlotUI : MonoBehaviour, IPoolable,IBeginDragHandler, IDrag
     public void OnDespawn()
     {
         EventBus<InventoryUIRefreshEvent>.Unsubscribe(RenderVisual);
+    }
 
+    private void OnDestroy()
+    {
+        EventBus<InventoryUIRefreshEvent>.Unsubscribe(RenderVisual);
     }
 }

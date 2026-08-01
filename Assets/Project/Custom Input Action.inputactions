@@ -32,6 +32,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Toggle Inventory",
+                    "type": "Button",
+                    "id": "a64694cd-6d2b-4bd0-83c0-d7b8b7734ebf",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -109,6 +118,45 @@
                     "processors": "",
                     "groups": "KeyBoard&Mouse",
                     "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c7589630-a878-4fbd-b040-3432576244e1",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KeyBoard&Mouse",
+                    "action": "Toggle Inventory",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "UI",
+            "id": "256727d4-b679-46cf-8f63-62b814df7dad",
+            "actions": [
+                {
+                    "name": "Toggle Inventory",
+                    "type": "Button",
+                    "id": "02a4c2ed-bac5-400c-a4ac-03907dd5a790",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "e6058c9d-9dbe-493c-ad81-09b6934d6b1f",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KeyBoard&Mouse",
+                    "action": "Toggle Inventory",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
