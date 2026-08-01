@@ -1,8 +1,11 @@
 using Lean.Pool;
 using System;
+using System.Collections;
 using TMPro;
+using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using static UnityEngine.Rendering.VolumeComponent;
 
@@ -21,6 +24,7 @@ public class InventoryUIController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI DragText;
 
     private Transform DragTransform;
+    private Coroutine updateDragIconPosCoroutine;
 
     private void OnEnable()
     {
@@ -54,6 +58,7 @@ public class InventoryUIController : MonoBehaviour
         var slotData = _inventoryA.GetSlotData(_indexA);
         if (slotData.IsEmpty) return;
 
+        //updateDragIconPosCoroutine = StartCoroutine(UpdateDragIconPosCoroutine());
         _slotA.ImageInvicible();
         EnableDragIcon(slotData);
     }
@@ -68,6 +73,7 @@ public class InventoryUIController : MonoBehaviour
         _slotA.RenderVisual();
 
         DisableDragIcon();
+        //StopCoroutine(updateDragIconPosCoroutine);
     }
 
     void OnDrop(OnUIDropEvent evt)
@@ -75,7 +81,26 @@ public class InventoryUIController : MonoBehaviour
         _indexB = evt.Index;
         _inventoryB = evt.Inventory;
         _slotB = evt.SlotUI;
-        if(_inventoryA.GetSlotData(_indexA).IsEmpty) return;
+        SlotData itemA = _inventoryA.GetSlotData(_indexA);
+        SlotData itemB = _inventoryB.GetSlotData(_indexB); 
+        if (itemA.IsEmpty) return;
+
+        if (itemA.item == itemB.item && itemA.item.stackable)
+        {
+            int remainingAmount = _inventoryB.AddStackItemToSlot(_indexB, itemA.item, itemA.count);
+            if (remainingAmount > 0)
+            {
+                itemB.count = remainingAmount;
+                _inventoryA.SetSlotData(itemB, _indexA);
+            }
+            else
+            {
+                _inventoryA.ClearSlot(_indexA);
+            }
+            _slotA.RenderVisual();
+            _slotB.RenderVisual();
+            return;
+        }
 
         if (_inventoryA == _inventoryB)
         {
@@ -85,13 +110,21 @@ public class InventoryUIController : MonoBehaviour
         }
         else
         {
-            SlotData itemA = _inventoryA.GetSlotData(_indexA);
-            SlotData itemB = _inventoryB.GetSlotData(_indexB);
-            _inventoryA.SwapSlotWithOther(itemB, _indexA);
-            _inventoryB.SwapSlotWithOther(itemA, _indexB);
+            
+            _inventoryA.SetSlotData(itemB, _indexA);
+            _inventoryB.SetSlotData(itemA, _indexB);
 
             _slotA.RenderVisual();
             _slotB.RenderVisual();
+        }
+    }
+
+    private IEnumerator UpdateDragIconPosCoroutine()
+    {
+        while (true)
+        {
+            DragTransform.position = Mouse.current.position.ReadValue();
+            yield return null;
         }
     }
 

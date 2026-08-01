@@ -22,11 +22,11 @@ public class DemoSpawnItem : MonoBehaviour
         bool result = inventoyModel.TryAddItem(itemToSpawn[id], 3);
         if (result)
         {
-            Debug.Log("Inventory added");
+            //Debug.Log("Inventory added");
             //EventBus<InventoryRefreshEvent>.Raise(new InventoryRefreshEvent() { });
         } else
         {
-            Debug.Log("Inventory is full");
+            //Debug.Log("Inventory is full");
         }
     }
 }

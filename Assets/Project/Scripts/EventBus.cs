@@ -59,9 +59,7 @@ public struct OnUIDropEvent : IEvent
 
 }
 
-public struct InventoryUIRefreshEvent : IEvent
-{
-}
+public struct InventoryUIRefreshEvent : IEvent { }
 
 public struct InventoryToggleEvent : IEvent { }
 

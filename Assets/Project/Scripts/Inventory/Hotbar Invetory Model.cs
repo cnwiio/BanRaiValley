@@ -1,32 +1,22 @@
 using Lean.Pool;
 using UnityEngine;
 
-public class HotbarInvetoryModel : MonoBehaviour, IInventory
+public class HotbarInvetoryModel : BaseInventory
 {
-    [SerializeField] private int HotbarSlotsSize;
-    /*[SerializeField]*/ private InventorySlotUI SlotUI;
     [SerializeField] private Transform SlotUI_Parent;
     [SerializeField] private GameObject SlotUI_Prefabs;
 
     private InventorySlotUI[] _SlotUI;
-    private SlotData[] HotbarSlots;
-    private SlotData SelectedSlots;
     private int selectedIndex = 0;
     public int SelectedIndex
     {
         get => selectedIndex;
         set
         {
-            if (value < 0 || value >= HotbarSlots.Length || selectedIndex == value) return;
+            if (value < 0 || value >= inventorySlots.Length || selectedIndex == value) return;
             selectedIndex = value;
             UpdateSelectedHotbarSlotUI(value);
         }
-    }
-
-    public int TotalSlot
-    {
-        get => HotbarSlotsSize;
-        set => HotbarSlotsSize = value;
     }
 
     private void Awake()
@@ -48,10 +38,10 @@ public class HotbarInvetoryModel : MonoBehaviour, IInventory
 
     public void Initialize(int totalSlots)
     {
-        HotbarSlots = new SlotData[totalSlots];
+        inventorySlots = new SlotData[totalSlots];
         for (int i = 0; i < totalSlots; i++)
         {
-            HotbarSlots[i].Clear();
+            inventorySlots[i].Clear();
         }
 
         CreateUI(this, totalSlots);
@@ -96,12 +86,12 @@ public class HotbarInvetoryModel : MonoBehaviour, IInventory
     [ContextMenu("Next Select Slot")]
     private void NextSelectSlot()
     {
-        SelectedIndex = (SelectedIndex + 1) % HotbarSlots.Length;   
+        SelectedIndex = (SelectedIndex + 1) % inventorySlots.Length;   
     }
     [ContextMenu("Previous Select Slot")]
     private void PrevSelectSlot()
     {
-        SelectedIndex = (SelectedIndex - 1 + HotbarSlots.Length) % HotbarSlots.Length;   
+        SelectedIndex = (SelectedIndex - 1 + inventorySlots.Length) % inventorySlots.Length;   
     }
 
     private InventorySlotUI _oldHotslotUI;
@@ -112,32 +102,4 @@ public class HotbarInvetoryModel : MonoBehaviour, IInventory
         _oldHotslotUI = _SlotUI[index];
     }
     #endregion
-
-    private SlotData _tempSlot;
-    public void SwapSlot(int indexA, int indexB)
-    {
-        if (!IsValidIndex(indexA) || !IsValidIndex(indexB) || indexA == indexB) return;
-
-        _tempSlot = HotbarSlots[indexA];
-        HotbarSlots[indexA] = HotbarSlots[indexB];
-        HotbarSlots[indexB] = _tempSlot;
-    }
-
-    public void SwapSlotWithOther(SlotData data, int indexToSwap)
-    {
-        if (!IsValidIndex(indexToSwap)) return;
-
-        HotbarSlots[indexToSwap] = data;
-    }
-
-    public SlotData GetSlotData(int index)
-    {
-        if (!IsValidIndex(index)) return default;
-        return HotbarSlots[index];
-    }
-
-    private bool IsValidIndex(int index)
-    {
-        return index >= 0 && index < HotbarSlots.Length;
-    }
 }
