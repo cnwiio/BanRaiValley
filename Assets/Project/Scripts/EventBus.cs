@@ -63,13 +63,18 @@ public struct InventoryUIRefreshEvent : IEvent { }
 
 public struct InventoryToggleEvent : IEvent { }
 
-public struct ChangeHotbarSlotEvent : IEvent
+public struct OnHotbarSelectEvent : IEvent
 {
     public int Index;
 }
 public struct OnHotbarScrollActionEvent : IEvent
 {
     public int value;
+}
+
+public struct OnHotbarChangeEvent : IEvent
+{
+    public SlotData slotData;
 }
 #endregion
 

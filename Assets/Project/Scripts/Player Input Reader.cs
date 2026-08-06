@@ -115,7 +115,7 @@ public class PlayerInputReader : MonoBehaviour
 
     private void OnHotBarSelect(InputAction.CallbackContext ctx)
     {
-        EventBus<ChangeHotbarSlotEvent>.Raise(new ChangeHotbarSlotEvent() { Index = (int)ctx.ReadValue<float>() });
+        EventBus<OnHotbarSelectEvent>.Raise(new OnHotbarSelectEvent() { Index = (int)ctx.ReadValue<float>() });
     }
     private void OnHotBarScroll(InputAction.CallbackContext ctx)
     {

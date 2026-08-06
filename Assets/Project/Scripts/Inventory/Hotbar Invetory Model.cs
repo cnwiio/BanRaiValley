@@ -15,6 +15,7 @@ public class HotbarInvetoryModel : BaseInventory
         {
             if (value < 0 || value >= inventorySlots.Length || selectedIndex == value) return;
             selectedIndex = value;
+            EventBus<OnHotbarChangeEvent>.Raise(new OnHotbarChangeEvent() { slotData = GetCurrentSelectSlotData() });
             UpdateSelectedHotbarSlotUI(value);
         }
     }
@@ -27,12 +28,12 @@ public class HotbarInvetoryModel : BaseInventory
 
     private void OnEnable()
     {
-        EventBus<ChangeHotbarSlotEvent>.Subscribe(SetSelectSlot);
+        EventBus<OnHotbarSelectEvent>.Subscribe(SetSelectSlot);
         EventBus<OnHotbarScrollActionEvent>.Subscribe(OnScrollAction);
     }
     private void OnDisable()
     {
-        EventBus<ChangeHotbarSlotEvent>.Unsubscribe(SetSelectSlot);
+        EventBus<OnHotbarSelectEvent>.Unsubscribe(SetSelectSlot);
         EventBus<OnHotbarScrollActionEvent>.Unsubscribe(OnScrollAction);
     }
 
@@ -59,13 +60,31 @@ public class HotbarInvetoryModel : BaseInventory
         }
     }
 
+    public override void SetSlotData(SlotData data, int indexToSwap)
+    {
+        base.SetSlotData(data, indexToSwap);
+        if (indexToSwap == SelectedIndex)
+        {
+            EventBus<OnHotbarChangeEvent>.Raise(new OnHotbarChangeEvent() { slotData = GetCurrentSelectSlotData() });
+        }
+    }
+
+    public override void SwapSlot(int indexA, int indexB)
+    {
+        base.SwapSlot(indexA, indexB);
+        if (indexA == SelectedIndex || indexB == SelectedIndex)
+        {
+            EventBus<OnHotbarChangeEvent>.Raise(new OnHotbarChangeEvent() { slotData = GetCurrentSelectSlotData() });
+        }
+    }
+
     #region Selected Slot
     public SlotData GetCurrentSelectSlotData()
     {
         return GetSlotData(SelectedIndex);
     }
 
-    private void SetSelectSlot(ChangeHotbarSlotEvent evt)
+    private void SetSelectSlot(OnHotbarSelectEvent evt)
     {
         SetSelectSlot(evt.Index - 1);
     }

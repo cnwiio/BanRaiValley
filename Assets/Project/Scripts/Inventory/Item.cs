@@ -13,6 +13,7 @@ public class Item : ScriptableObject
 
     [Header("Both")]
     public Sprite image;
+    public GameObject prefab;
 }
 
 public enum ItemType

@@ -32,6 +32,7 @@ public class InventoryUIController : MonoBehaviour
         EventBus<OnUIDragEvent>.Subscribe(OnDrag);
         EventBus<OnUIEndDragEvent>.Subscribe(OnEndDrag);
         EventBus<OnUIDropEvent>.Subscribe(OnDrop);
+        EventBus<InventoryToggleEvent>.Subscribe(OnToggleInventoryUI);
     }
     private void OnDisable()
     {
@@ -39,7 +40,7 @@ public class InventoryUIController : MonoBehaviour
         EventBus<OnUIDragEvent>.Unsubscribe(OnDrag);
         EventBus<OnUIEndDragEvent>.Unsubscribe(OnEndDrag);
         EventBus<OnUIDropEvent>.Unsubscribe(OnDrop);
-
+        EventBus<InventoryToggleEvent>.Unsubscribe(OnToggleInventoryUI);
     }
 
     private void Awake()
@@ -70,7 +71,9 @@ public class InventoryUIController : MonoBehaviour
 
     void OnEndDrag(OnUIEndDragEvent evt)
     {
-        _slotA.RenderVisual();
+        if (_slotA != null) 
+            _slotA.RenderVisual();
+
 
         DisableDragIcon();
         //StopCoroutine(updateDragIconPosCoroutine);
@@ -78,6 +81,7 @@ public class InventoryUIController : MonoBehaviour
 
     void OnDrop(OnUIDropEvent evt)
     {
+        if (_slotA == null) return;
         _indexB = evt.Index;
         _inventoryB = evt.Inventory;
         _slotB = evt.SlotUI;
@@ -144,4 +148,20 @@ public class InventoryUIController : MonoBehaviour
         DragImage.enabled = false;
         DragText.enabled = false;
     }
+
+    private void OnToggleInventoryUI(InventoryToggleEvent evt)
+    {
+        if (_slotA != null)
+        {
+            _slotA.RenderVisual();
+            _slotA = null;
+        }
+
+        DisableDragIcon();
+    }
+
+    //private void OnDestroy()
+    //{
+    //    EventBus<InventoryToggleEvent>.Unsubscribe(OnToggleInventoryUI);
+    //}
 }

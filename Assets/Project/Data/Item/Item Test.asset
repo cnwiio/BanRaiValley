@@ -16,3 +16,4 @@ MonoBehaviour:
   stackable: 1
   MaxStack: 20
   image: {fileID: 957467715, guid: d0605ad740c06ba409403bec1d4acd18, type: 3}
+  prefab: {fileID: 2509925977032215398, guid: 4301633a26934f54687769cf5614424c, type: 3}

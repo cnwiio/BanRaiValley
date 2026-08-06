@@ -131,7 +131,7 @@ public abstract class BaseInventory : MonoBehaviour, IInventory
     }
 
     private SlotData _tempSlot;
-    public void SwapSlot(int indexA, int indexB)
+    public virtual void SwapSlot(int indexA, int indexB)
     {
         if (!IsValidIndex(indexA) || !IsValidIndex(indexB) || indexA == indexB) return;
 
@@ -145,7 +145,7 @@ public abstract class BaseInventory : MonoBehaviour, IInventory
     /// </summary>
     /// <param name="data"> Slot that want to swap with</param>
     /// <param name="indexToSwap"> Slot index of this inventory to swap with</param>
-    public void SetSlotData(SlotData data, int indexToSwap)
+    public virtual void SetSlotData(SlotData data, int indexToSwap)
     {
         if (!IsValidIndex(indexToSwap)) return;
 
