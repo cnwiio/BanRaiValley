@@ -12,36 +12,42 @@ public class FarmingGrid : MonoBehaviour
 
     private void OnEnable()
     {
-        EventBus<OnHoeDoAction1Event>.Subscribe(OnHoeAction1);
-        EventBus<OnHoeFarmingMode>.Subscribe(OnHoeFarmingMode);
+        EventBus<OnHoePrimaryActionEvent>.Subscribe(OnHoePrimaryAction);
+        EventBus<OnHoeRaycastEvent>.Subscribe(OnHoeRaycast);
     }
 
     private void OnDisable()
     {
-        EventBus<OnHoeDoAction1Event>.Unsubscribe(OnHoeAction1);
-        EventBus<OnHoeFarmingMode>.Unsubscribe(OnHoeFarmingMode);
+        EventBus<OnHoePrimaryActionEvent>.Unsubscribe(OnHoePrimaryAction);
+        EventBus<OnHoeRaycastEvent>.Unsubscribe(OnHoeRaycast);
     }
 
-    void OnHoeAction1(OnHoeDoAction1Event evt)
+    void OnHoePrimaryAction(OnHoePrimaryActionEvent evt)
     {
         Grid(evt.Position);
     }
 
-    void OnHoeAction2()
-    {
+    //void OnHoeSecondaryAction()
+    //{
 
+    //}
+
+    void OnHoeRaycast(OnHoeRaycastEvent evt)
+    {
+        if (evt.IsHit)
+        {
+            Grid(evt.Position);
+        }
     }
 
-    void OnHoeFarmingMode(OnHoeFarmingMode evt)
-    {
-        Grid(evt.Position);
-    }
-
+    // cached
+    Vector3Int _cellPos;
+    Vector3 _cellWorldPos;
     void Grid(Vector3 selectedPos)
     {
-        Vector3Int cellPos = grid.WorldToCell(selectedPos);
-        PreviewPrefab.transform.position = grid.GetCellCenterWorld(cellPos);
-
+        _cellPos = grid.WorldToCell(selectedPos);
+        _cellWorldPos = grid.GetCellCenterWorld(_cellPos);
+        EventBus<PreviewingEvent>.Raise(new PreviewingEvent() { Position = _cellWorldPos });
         //LeanPool.Spawn(DirtPrefab, PreviewPrefab.transform.position, Quaternion.identity);
     }
 }

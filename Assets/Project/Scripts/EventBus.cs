@@ -83,19 +83,34 @@ public struct ChangeActionMap : IEvent
     public ActionMapType MapType;
 }
 
-public struct OnAction1Event : IEvent { }
-public struct OnAction2Event : IEvent { }
+public struct OnPrimaryActionEvent : IEvent { }
+public struct OnSecondaryActionEvent : IEvent { }
 
-public struct OnHoeDoAction1Event : IEvent 
+public struct OnHoePrimaryActionEvent : IEvent 
 {
     public Vector3 Position;
 }
 
-public struct OnHoeDoAction2Event : IEvent
+public struct OnHoeSecondaryActionEvent : IEvent
 {
 }
 
-public struct OnHoeFarmingMode : IEvent
+public struct OnHoeRaycastEvent : IEvent
 {
     public Vector3 Position;
+    public bool IsHit;
+}
+
+public struct StartPreviewEvent : IEvent
+{
+    public GameObject prefabs;
+}
+public struct PreviewingEvent : IEvent
+{
+    public Vector3 Position;
+}
+
+public struct EndPreviewEvent : IEvent
+{
+
 }

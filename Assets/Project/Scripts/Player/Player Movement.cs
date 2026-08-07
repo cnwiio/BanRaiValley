@@ -115,7 +115,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
 
-    [SerializeField] private float turnSpeed = 15f;
+    //[SerializeField] private float turnSpeed = 15f;
 
     // cached
     Vector3 _forward;
@@ -128,6 +128,7 @@ public class PlayerMovement : MonoBehaviour
         if (_forward.sqrMagnitude > MinForwardSqrMagnitude)
         {
             transform.rotation = Quaternion.LookRotation(_forward);
+            //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(_forward), 15 * Time.deltaTime);
         }
     }
 }

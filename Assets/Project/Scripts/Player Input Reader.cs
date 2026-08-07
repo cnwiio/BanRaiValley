@@ -25,8 +25,8 @@ public class PlayerInputReader : MonoBehaviour
     [SerializeField] private InputActionReference InventoryToggleAction_UIMap;
     [SerializeField] private InputActionReference HotbarSelectAction;
     [SerializeField] private InputActionReference HotbarScrollAction;
-    [SerializeField] private InputActionReference Action1Action;
-    [SerializeField] private InputActionReference Action2Action;
+    [SerializeField] private InputActionReference PrimaryAction;
+    [SerializeField] private InputActionReference SecondaryAction;
 
     private ActionMapType currentActionMaptype;
     public ActionMapType CurrentActionMaptype
@@ -66,9 +66,9 @@ public class PlayerInputReader : MonoBehaviour
 
         HotbarScrollAction.action.performed += OnHotBarScroll;
 
-        Action1Action.action.performed += OnAction1;
+        PrimaryAction.action.performed += OnPrimaryAction;
 
-        Action2Action.action.performed += OnAction2;
+        SecondaryAction.action.performed += OnSecondaryAction;
 
         EventBus<ChangeActionMap>.Subscribe(ChangeActionMap);
 
@@ -89,9 +89,9 @@ public class PlayerInputReader : MonoBehaviour
 
         HotbarScrollAction.action.performed -= OnHotBarScroll;
 
-        Action1Action.action.performed -= OnAction1;
+        PrimaryAction.action.performed -= OnPrimaryAction;
 
-        Action2Action.action.performed -= OnAction2;
+        SecondaryAction.action.performed -= OnSecondaryAction;
 
         EventBus<ChangeActionMap>.Unsubscribe(ChangeActionMap);
 
@@ -146,13 +146,13 @@ public class PlayerInputReader : MonoBehaviour
             EventBus<OnJumpEvent>.Raise(new OnJumpEvent() { });
     }
 
-    private void OnAction1(InputAction.CallbackContext ctx)
+    private void OnPrimaryAction(InputAction.CallbackContext ctx)
     {
-        EventBus<OnAction1Event>.Raise(new OnAction1Event() { });
+        EventBus<OnPrimaryActionEvent>.Raise(new OnPrimaryActionEvent() { });
     }
 
-    private void OnAction2(InputAction.CallbackContext ctx)
+    private void OnSecondaryAction(InputAction.CallbackContext ctx)
     {
-        EventBus<OnAction2Event>.Raise(new OnAction2Event() { });
+        EventBus<OnSecondaryActionEvent>.Raise(new OnSecondaryActionEvent() { });
     }
 }

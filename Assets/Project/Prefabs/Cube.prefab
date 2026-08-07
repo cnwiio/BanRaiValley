@@ -125,3 +125,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 120da745e531d5d49be40dab7e79ea8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DemoItem
+  dirtHologramPrefabs: {fileID: 6940088763359480455, guid: 9913c6916dc2ed44296d0667c8f28a30, type: 3}

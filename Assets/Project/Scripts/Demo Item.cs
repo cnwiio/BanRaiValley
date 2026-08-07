@@ -5,12 +5,15 @@ using UnityEngine.InputSystem;
 public enum HoeState
 {
     Idle,
-    Farming
+    Farming,
+    Tilling
 }
 
 
 public class DemoItem : MonoBehaviour
 {
+    [SerializeField] private GameObject dirtHologramPrefabs;
+
     private Camera sceneCamera;
     private HoeState currentState = HoeState.Idle;
     public HoeState CurrentState
@@ -18,21 +21,23 @@ public class DemoItem : MonoBehaviour
         get => currentState;
         set
         {
+            // on exit state
+            if (currentState != value)
+            {
+                switch (currentState)
+                {
+                    case HoeState.Idle:
+                        break;
+                    case HoeState.Farming:
+                        EventBus<EndPreviewEvent>.Raise(new EndPreviewEvent() { });
+                        break;
+                }
+            }
             currentState = value;
-            //switch (value)
-            //{
-            //    case HoeState.Idle:
-            //        PreviewPrefab.SetActive(false);
-            //        break;
-            //    case HoeState.Farming:
-            //        PreviewPrefab.SetActive(true);
-            //        break;
-            //}
         }
     }
 
-    private Coroutine sendRayCoroutine;
-    private int BuildDistance = 10;
+    private int HoeRange = 10;
 
     // cached
     private Vector3 _mousePos;
@@ -47,68 +52,44 @@ public class DemoItem : MonoBehaviour
 
     private void OnEnable()
     {
-        EventBus<OnAction1Event>.Subscribe(OnAction1);
-        EventBus<OnAction2Event>.Subscribe(OnAction2);
+        EventBus<OnPrimaryActionEvent>.Subscribe(OnPrimaryAction);
+        EventBus<OnSecondaryActionEvent>.Subscribe(OnSecondaryAction);
     }
 
     private void OnDisable()
     {
-        EventBus<OnAction1Event>.Unsubscribe(OnAction1);
-        EventBus<OnAction2Event>.Unsubscribe(OnAction2);
+        EventBus<OnPrimaryActionEvent>.Unsubscribe(OnPrimaryAction);
+        EventBus<OnSecondaryActionEvent>.Unsubscribe(OnSecondaryAction);
     }
 
-    void OnAction1(OnAction1Event evt)
+    void OnPrimaryAction(OnPrimaryActionEvent evt)
     {
-        Action1();
+        PrimaryAction();
     }
-    void OnAction2(OnAction2Event evt)
+    void OnSecondaryAction(OnSecondaryActionEvent evt)
     {
-        Action2();
+        SecondaryAction();
     }
 
-    void Action1()
+    void PrimaryAction()
     {
         Debug.Log("Action 1");
 
-        //if (currentState == HoeState.Farming)
-        //{
-        //    RayCastAtCursor(_ray);
-        //    if (Physics.Raycast(_ray, out _hit, 100))
-        //    {
-        //        EventBus<OnHoeDoAction1Event>.Raise(new OnHoeDoAction1Event { Position = _hit.point });
-        //    }
-        //}
     }
 
-    void Action2()
+    void SecondaryAction()
     {
         Debug.Log("Action 2");
-        if (currentState != HoeState.Farming)
+        if (CurrentState != HoeState.Farming)
         {
-            currentState = HoeState.Farming;
-            //sendRayCoroutine = StartCoroutine(SendRayCoroutine());
+            CurrentState = HoeState.Farming;
         }
         else
         {
-            currentState = HoeState.Idle;
-            //StopCoroutine(sendRayCoroutine);
+            CurrentState = HoeState.Idle;
         }
     }
 
-    private IEnumerator SendRayCoroutine()
-    {
-        while (currentState == HoeState.Farming)
-        {
-            _ray = RayCastAtCursor();
-            if (Physics.Raycast(_ray, out _hit, 100))
-            {
-                //Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.red, 2f);
-
-                EventBus<OnHoeFarmingMode>.Raise(new OnHoeFarmingMode { Position = _hit.point });
-            }
-            yield return null;
-        }
-    }
 
     private Ray RayCastAtCursor()
     {
@@ -119,13 +100,66 @@ public class DemoItem : MonoBehaviour
 
     void Update()
     {
-        if (currentState == HoeState.Farming)
+        if (CurrentState == HoeState.Farming)
         {
             _ray = RayCastAtCursor();
-            if (Physics.Raycast(_ray, out _hit, 10))
+            if (Physics.Raycast(_ray, out _hit, HoeRange))
             {
-                EventBus<OnHoeFarmingMode>.Raise(new OnHoeFarmingMode { Position = _hit.point });
+                EventBus<StartPreviewEvent>.Raise(new StartPreviewEvent() { prefabs = dirtHologramPrefabs });
+                EventBus<OnHoeRaycastEvent>.Raise(new OnHoeRaycastEvent { Position = _hit.point , IsHit = true});
+            } 
+            else
+            {
+                EventBus<OnHoeRaycastEvent>.Raise(new OnHoeRaycastEvent { IsHit = false });
+                EventBus<EndPreviewEvent>.Raise(new EndPreviewEvent() { });
             }
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//if (currentState == HoeState.Farming)
+//{
+//    RayCastAtCursor(_ray);
+//    if (Physics.Raycast(_ray, out _hit, 100))
+//    {
+//        EventBus<OnHoePrimaryActionEvent>.Raise(new OnHoePrimaryActionEvent { Position = _hit.point });
+//    }
+//}
+
+
+
+
+
+//private IEnumerator SendRayCoroutine()
+//{
+//    while (currentState == HoeState.Farming)
+//    {
+//        _ray = RayCastAtCursor();
+//        if (Physics.Raycast(_ray, out _hit, 100))
+//        {
+//            //Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.red, 2f);
+
+//            EventBus<OnHoeRaycastEvent>.Raise(new OnHoeRaycastEvent { Position = _hit.point });
+//        }
+//        yield return null;
+//    }
+//}
