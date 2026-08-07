@@ -1,5 +1,12 @@
 fileFormatVersion: 2
 guid: 989f414ad2edb3d47bd3dd0fba5b34d8
+AssetOrigin:
+  serializedVersion: 1
+  productId: 320557
+  packageName: PieTabs
+  packageVersion: 2.2.0
+  assetPath: Assets/PinePie/PieTabs/editor/Core/Scripts/Navigator.cs
+  uploadId: 924888
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
@@ -9,10 +16,3 @@ MonoImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 320557
-  packageName: PieTabs
-  packageVersion: 2.2.0
-  assetPath: Assets/PinePie/PieTabs/editor/Core/Scripts/Navigator.cs
-  uploadId: 924888

@@ -89,6 +89,24 @@ public class InventoryUIController : MonoBehaviour
         SlotData itemB = _inventoryB.GetSlotData(_indexB); 
         if (itemA.IsEmpty) return;
 
+        if (_inventoryA == _inventoryB)
+        {
+            if (_indexA == _indexB) return; 
+
+            _inventoryA.SwapSlot(_indexA, _indexB);
+            _slotA.RenderVisual();
+            _slotB.RenderVisual();
+        }
+        else
+        {
+            
+            _inventoryA.SetSlotData(itemB, _indexA);
+            _inventoryB.SetSlotData(itemA, _indexB);
+
+            _slotA.RenderVisual();
+            _slotB.RenderVisual();
+        }
+
         if (itemA.item == itemB.item && itemA.item.stackable)
         {
             int remainingAmount = _inventoryB.AddStackItemToSlot(_indexB, itemA.item, itemA.count);
@@ -104,22 +122,6 @@ public class InventoryUIController : MonoBehaviour
             _slotA.RenderVisual();
             _slotB.RenderVisual();
             return;
-        }
-
-        if (_inventoryA == _inventoryB)
-        {
-            _inventoryA.SwapSlot(_indexA, _indexB);
-            _slotA.RenderVisual();
-            _slotB.RenderVisual();
-        }
-        else
-        {
-            
-            _inventoryA.SetSlotData(itemB, _indexA);
-            _inventoryB.SetSlotData(itemA, _indexB);
-
-            _slotA.RenderVisual();
-            _slotB.RenderVisual();
         }
     }
 

@@ -53,3 +53,5 @@ MonoBehaviour:
   InventoryToggleAction_UIMap: {fileID: -8967117750965259324, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
   HotbarSelectAction: {fileID: -2026497242213518920, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
   HotbarScrollAction: {fileID: 6159760854695240758, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
+  Action1Action: {fileID: 519036140131763763, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
+  Action2Action: {fileID: 643901133655292448, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}

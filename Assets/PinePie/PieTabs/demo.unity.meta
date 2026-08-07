@@ -1,10 +1,5 @@
 fileFormatVersion: 2
 guid: 55529131ee634504b93c3bf293fa5094
-DefaultImporter:
-  externalObjects: {}
-  userData: 
-  assetBundleName: 
-  assetBundleVariant: 
 AssetOrigin:
   serializedVersion: 1
   productId: 320557
@@ -12,3 +7,8 @@ AssetOrigin:
   packageVersion: 2.2.0
   assetPath: Assets/PinePie/PieTabs/demo.unity
   uploadId: 924888
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

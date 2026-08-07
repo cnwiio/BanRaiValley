@@ -47,11 +47,14 @@ public class PlayerMovement : MonoBehaviour
     {
         // cached
         _camTransform = PlayerCam.transform;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     void Update()
     {
         CalculateRotation();
+        UpdateCamRotateToPlayer();
     }
 
     // Update is called once per frame
@@ -62,6 +65,7 @@ public class PlayerMovement : MonoBehaviour
         ApplyMovement();
     }
 
+    #region Handle Movement
     void HandleHorizontalMovement()
     {
         movementInput = InputReader.MovementInput;
@@ -97,6 +101,7 @@ public class PlayerMovement : MonoBehaviour
 
         characterController.Move(FinalMovement * Time.fixedDeltaTime);
     }
+    #endregion
 
     void CalculateRotation()
     {
@@ -107,5 +112,22 @@ public class PlayerMovement : MonoBehaviour
         CamRightDirection = _camTransform.right;
         CamRightDirection.y = 0;
         CamRightDirection.Normalize();
+    }
+
+
+    [SerializeField] private float turnSpeed = 15f;
+
+    // cached
+    Vector3 _forward;
+    private const float MinForwardSqrMagnitude = 0.001f;
+
+    void UpdateCamRotateToPlayer()
+    {
+        _forward = Vector3.ProjectOnPlane(CamForwardDirection, Vector3.up);
+
+        if (_forward.sqrMagnitude > MinForwardSqrMagnitude)
+        {
+            transform.rotation = Quaternion.LookRotation(_forward);
+        }
     }
 }

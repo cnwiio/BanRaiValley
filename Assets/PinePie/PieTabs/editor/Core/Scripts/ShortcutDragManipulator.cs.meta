@@ -1,5 +1,12 @@
 fileFormatVersion: 2
 guid: 7e6a8eaad42f33241ab961af160c5d34
+AssetOrigin:
+  serializedVersion: 1
+  productId: 320557
+  packageName: PieTabs
+  packageVersion: 2.2.0
+  assetPath: Assets/PinePie/PieTabs/editor/Core/Scripts/ShortcutDragManipulator.cs
+  uploadId: 924888
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
@@ -9,10 +16,3 @@ MonoImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 320557
-  packageName: PieTabs
-  packageVersion: 2.2.0
-  assetPath: Assets/PinePie/PieTabs/editor/Core/Scripts/ShortcutDragManipulator.cs
-  uploadId: 924888

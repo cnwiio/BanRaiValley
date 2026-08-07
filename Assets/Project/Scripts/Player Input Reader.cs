@@ -25,6 +25,8 @@ public class PlayerInputReader : MonoBehaviour
     [SerializeField] private InputActionReference InventoryToggleAction_UIMap;
     [SerializeField] private InputActionReference HotbarSelectAction;
     [SerializeField] private InputActionReference HotbarScrollAction;
+    [SerializeField] private InputActionReference Action1Action;
+    [SerializeField] private InputActionReference Action2Action;
 
     private ActionMapType currentActionMaptype;
     public ActionMapType CurrentActionMaptype
@@ -64,6 +66,10 @@ public class PlayerInputReader : MonoBehaviour
 
         HotbarScrollAction.action.performed += OnHotBarScroll;
 
+        Action1Action.action.performed += OnAction1;
+
+        Action2Action.action.performed += OnAction2;
+
         EventBus<ChangeActionMap>.Subscribe(ChangeActionMap);
 
         SwitchToPlayerActionMap();
@@ -82,6 +88,10 @@ public class PlayerInputReader : MonoBehaviour
         HotbarSelectAction.action.performed -= OnHotBarSelect;
 
         HotbarScrollAction.action.performed -= OnHotBarScroll;
+
+        Action1Action.action.performed -= OnAction1;
+
+        Action2Action.action.performed -= OnAction2;
 
         EventBus<ChangeActionMap>.Unsubscribe(ChangeActionMap);
 
@@ -136,10 +146,13 @@ public class PlayerInputReader : MonoBehaviour
             EventBus<OnJumpEvent>.Raise(new OnJumpEvent() { });
     }
 
-    private void Start()
+    private void OnAction1(InputAction.CallbackContext ctx)
     {
-        // cursor
-        //Cursor.lockState = CursorLockMode.Locked;
-        //Cursor.visible = false;
+        EventBus<OnAction1Event>.Raise(new OnAction1Event() { });
+    }
+
+    private void OnAction2(InputAction.CallbackContext ctx)
+    {
+        EventBus<OnAction2Event>.Raise(new OnAction2Event() { });
     }
 }

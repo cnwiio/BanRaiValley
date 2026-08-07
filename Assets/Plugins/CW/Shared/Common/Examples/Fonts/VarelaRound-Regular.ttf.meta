@@ -1,5 +1,12 @@
 fileFormatVersion: 2
 guid: da9a51ce28f0d7443a5bcbdbe04c4f4b
+AssetOrigin:
+  serializedVersion: 1
+  productId: 35666
+  packageName: Lean Pool
+  packageVersion: 2.1.0
+  assetPath: Assets/Plugins/CW/Shared/Common/Examples/Fonts/VarelaRound-Regular.ttf
+  uploadId: 653650
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -8,7 +15,6 @@ TrueTypeFontImporter:
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
-  fontName: Varela Round
   fontNames:
   - Varela Round
   fallbackFontReferences:
@@ -26,10 +32,3 @@ TrueTypeFontImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 35666
-  packageName: Lean Pool
-  packageVersion: 2.1.0
-  assetPath: Assets/Plugins/CW/Shared/Common/Examples/Fonts/VarelaRound-Regular.ttf
-  uploadId: 653650

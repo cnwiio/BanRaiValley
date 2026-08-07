@@ -1,5 +1,12 @@
 fileFormatVersion: 2
 guid: 014b1cc62cb244ecb925cb7806b589fe
+AssetOrigin:
+  serializedVersion: 1
+  productId: 332206
+  packageName: Nice Transform Copy/Paste
+  packageVersion: 1.0
+  assetPath: Assets/REUN/TransformCopyPaste/Editor/copy.png
+  uploadId: 786144
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -106,6 +113,32 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites: []
@@ -128,10 +161,3 @@ TextureImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 332206
-  packageName: Nice Transform Copy/Paste
-  packageVersion: 1.0
-  assetPath: Assets/REUN/TransformCopyPaste/Editor/copy.png
-  uploadId: 786144

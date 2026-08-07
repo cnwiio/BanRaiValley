@@ -1,5 +1,12 @@
 fileFormatVersion: 2
 guid: fbb4d9a834e3b5b43801419bceffc9cb
+AssetOrigin:
+  serializedVersion: 1
+  productId: 35666
+  packageName: Lean Pool
+  packageVersion: 2.1.0
+  assetPath: Assets/Plugins/CW/Shared/Common/Required/Scripts/CwInput.cs
+  uploadId: 653650
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
@@ -9,10 +16,3 @@ MonoImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 35666
-  packageName: Lean Pool
-  packageVersion: 2.1.0
-  assetPath: Assets/Plugins/CW/Shared/Common/Required/Scripts/CwInput.cs
-  uploadId: 653650

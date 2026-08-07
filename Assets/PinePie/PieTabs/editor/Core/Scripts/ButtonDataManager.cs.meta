@@ -1,5 +1,12 @@
 fileFormatVersion: 2
 guid: bfed8c56458a1ec4a88ce6a36425b7b0
+AssetOrigin:
+  serializedVersion: 1
+  productId: 320557
+  packageName: PieTabs
+  packageVersion: 2.2.0
+  assetPath: Assets/PinePie/PieTabs/editor/Core/Scripts/ButtonDataManager.cs
+  uploadId: 924888
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
@@ -9,10 +16,3 @@ MonoImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 320557
-  packageName: PieTabs
-  packageVersion: 2.2.0
-  assetPath: Assets/PinePie/PieTabs/editor/Core/Scripts/ButtonDataManager.cs
-  uploadId: 924888

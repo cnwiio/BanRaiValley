@@ -1,5 +1,12 @@
 fileFormatVersion: 2
 guid: b100098c9bd5c4db49bab8a0541d46e6
+AssetOrigin:
+  serializedVersion: 1
+  productId: 332206
+  packageName: Nice Transform Copy/Paste
+  packageVersion: 1.0
+  assetPath: Assets/REUN/TransformCopyPaste/Editor/TransformCopyPasteEditor.cs
+  uploadId: 786144
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
@@ -9,10 +16,3 @@ MonoImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 332206
-  packageName: Nice Transform Copy/Paste
-  packageVersion: 1.0
-  assetPath: Assets/REUN/TransformCopyPaste/Editor/TransformCopyPasteEditor.cs
-  uploadId: 786144

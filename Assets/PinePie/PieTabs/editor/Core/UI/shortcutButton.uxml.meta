@@ -1,5 +1,12 @@
 fileFormatVersion: 2
 guid: 85c5988639717a442bd4981eb13f5d93
+AssetOrigin:
+  serializedVersion: 1
+  productId: 320557
+  packageName: PieTabs
+  packageVersion: 2.2.0
+  assetPath: Assets/PinePie/PieTabs/editor/Core/UI/shortcutButton.uxml
+  uploadId: 924888
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -8,10 +15,3 @@ ScriptedImporter:
   assetBundleName: 
   assetBundleVariant: 
   script: {fileID: 13804, guid: 0000000000000000e000000000000000, type: 0}
-AssetOrigin:
-  serializedVersion: 1
-  productId: 320557
-  packageName: PieTabs
-  packageVersion: 2.2.0
-  assetPath: Assets/PinePie/PieTabs/editor/Core/UI/shortcutButton.uxml
-  uploadId: 924888

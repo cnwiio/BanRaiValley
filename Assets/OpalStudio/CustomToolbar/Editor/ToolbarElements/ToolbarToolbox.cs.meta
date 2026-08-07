@@ -1,6 +1,5 @@
-﻿fileFormatVersion: 2
+fileFormatVersion: 2
 guid: 633fb99fa50b4435bcddefe23a77d56b
-timeCreated: 1752863040
 AssetOrigin:
   serializedVersion: 1
   productId: 327041
@@ -8,3 +7,12 @@ AssetOrigin:
   packageVersion: 2.9.4
   assetPath: Assets/OpalStudio/CustomToolbar/Editor/ToolbarElements/ToolbarToolbox.cs
   uploadId: 885756
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

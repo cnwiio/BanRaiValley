@@ -1,12 +1,5 @@
 fileFormatVersion: 2
 guid: c55a8fe4b61dcfb41a8aaa1869b89fed
-ShaderImporter:
-  externalObjects: {}
-  defaultTextures: []
-  nonModifiableTextures: []
-  userData: 
-  assetBundleName: 
-  assetBundleVariant: 
 AssetOrigin:
   serializedVersion: 1
   productId: 35666
@@ -14,3 +7,10 @@ AssetOrigin:
   packageVersion: 2.1.0
   assetPath: Assets/Plugins/CW/Shared/Common/Required/Shaders/ShapeOutline.shader
   uploadId: 653650
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

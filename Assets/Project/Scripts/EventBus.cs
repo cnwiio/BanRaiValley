@@ -1,5 +1,5 @@
 using System;
-using System.Numerics;
+using UnityEngine;
 
 public interface IEvent {}
 
@@ -81,4 +81,21 @@ public struct OnHotbarChangeEvent : IEvent
 public struct ChangeActionMap : IEvent
 {
     public ActionMapType MapType;
+}
+
+public struct OnAction1Event : IEvent { }
+public struct OnAction2Event : IEvent { }
+
+public struct OnHoeDoAction1Event : IEvent 
+{
+    public Vector3 Position;
+}
+
+public struct OnHoeDoAction2Event : IEvent
+{
+}
+
+public struct OnHoeFarmingMode : IEvent
+{
+    public Vector3 Position;
 }
