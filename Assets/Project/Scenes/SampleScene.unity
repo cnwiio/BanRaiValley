@@ -832,7 +832,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 380003555}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1617,7 +1617,7 @@ Grid:
   m_GameObject: {fileID: 1157062037}
   m_Enabled: 1
   m_CellSize: {x: 5, y: 1, z: 5}
-  m_CellGap: {x: 0, y: 1, z: 0}
+  m_CellGap: {x: 0, y: 5, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
 --- !u!4 &1157062039
@@ -1648,6 +1648,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FarmingGrid
   grid: {fileID: 1157062038}
+  prefabs: {fileID: 6940088763359480455, guid: cef253dafc2779a42a9788388501108e, type: 3}
 --- !u!1 &1202154868
 GameObject:
   m_ObjectHideFlags: 0
@@ -2039,7 +2040,7 @@ GameObject:
   - component: {fileID: 1492116654}
   - component: {fileID: 1492116652}
   - component: {fileID: 1492116657}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2056,7 +2057,7 @@ CharacterController:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -2379,7 +2380,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1745594786}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Hand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2745,7 +2746,7 @@ GameObject:
   - component: {fileID: 2144816402}
   - component: {fileID: 2144816401}
   - component: {fileID: 2144816400}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}

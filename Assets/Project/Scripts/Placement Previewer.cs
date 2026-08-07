@@ -13,6 +13,7 @@ public class PlacementPreviewer : MonoBehaviour
         EventBus<StartPreviewEvent>.Subscribe(OnStartPreview);
         EventBus<PreviewingEvent>.Subscribe(OnPreviewing);
         EventBus<EndPreviewEvent>.Subscribe(OnEndPreview);
+
     }
 
     private void OnDisable()
@@ -20,6 +21,7 @@ public class PlacementPreviewer : MonoBehaviour
         EventBus<StartPreviewEvent>.Unsubscribe(OnStartPreview);
         EventBus<PreviewingEvent>.Unsubscribe(OnPreviewing);
         EventBus<EndPreviewEvent>.Unsubscribe(OnEndPreview);
+
     }
 
     private void OnStartPreview(StartPreviewEvent evt)
@@ -49,10 +51,7 @@ public class PlacementPreviewer : MonoBehaviour
         }
     }
 
-    private void TogglePreview(bool value)
-    {
 
-    }
 
     private void UpdateMeterial(bool isValid)
     {

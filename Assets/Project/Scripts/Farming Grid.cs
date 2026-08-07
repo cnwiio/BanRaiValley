@@ -1,4 +1,5 @@
 using Lean.Pool;
+using Unity.Cinemachine;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -14,6 +15,7 @@ public class FarmingGrid : MonoBehaviour
 
 
     [SerializeField] private Grid grid;
+    [SerializeField] private GameObject prefabs;
     LayerMask obstacleLayerMask;
 
 
@@ -21,28 +23,35 @@ public class FarmingGrid : MonoBehaviour
     {
         EventBus<OnHoePrimaryActionEvent>.Subscribe(OnHoePrimaryAction);
         EventBus<OnHoeRaycastEvent>.Subscribe(OnHoeRaycast);
+        EventBus<OnHoeTillingEvent>.Subscribe(OnHoeTilling);
     }
 
     private void OnDisable()
     {
         EventBus<OnHoePrimaryActionEvent>.Unsubscribe(OnHoePrimaryAction);
         EventBus<OnHoeRaycastEvent>.Unsubscribe(OnHoeRaycast);
+        EventBus<OnHoeTillingEvent>.Unsubscribe(OnHoeTilling);
     }
 
     private void Awake()
     {
-        obstacleLayerMask = LayerMask.GetMask("Obstacle");
+        //obstacleLayerMask = LayerMask.GetMask("Obstacle");
+        obstacleLayerMask = ~LayerMask.GetMask("Ground", "Player");
     }
 
     void OnHoePrimaryAction(OnHoePrimaryActionEvent evt)
     {
-        Grid(evt.Position);
+        //Grid(evt.Position);
     }
 
-    //void OnHoeSecondaryAction()
-    //{
-
-    //}
+    private void OnHoeTilling(OnHoeTillingEvent evt)
+    {
+        if (IsValidForTilling(_cellWorldPos))
+        {
+            LeanPool.Spawn(prefabs, _cellWorldPos, Quaternion.identity);
+            //Instantiate(prefabs, _cellWorldPos, Quaternion.identity);
+        } 
+    }
 
     void OnHoeRaycast(OnHoeRaycastEvent evt)
     {
@@ -62,21 +71,20 @@ public class FarmingGrid : MonoBehaviour
         if (IsValidForTilling(_cellWorldPos))
         {
             EventBus<PreviewingEvent>.Raise(new PreviewingEvent() { Position = _cellWorldPos , IsValid = true});
-
         }
         else
         {
             EventBus<PreviewingEvent>.Raise(new PreviewingEvent() { Position = _cellWorldPos , IsValid = false});
-
         }
     }
 
+    private const float CELL_SIZE_MODIFIER = 0.45f;
 
     /// <summary>
     /// คืนค่า true ถ้าช่องนี้อยู่ในโซนและยังไม่ได้พรวน / ไม่มีสิ่งกีดขวาง
     /// </summary>
     public bool IsValidForTilling(Vector3 cellWorldPos)
     {
-        return !Physics.CheckBox(cellWorldPos, grid.cellSize * 0.5f, Quaternion.identity, obstacleLayerMask);
+        return !Physics.CheckBox(cellWorldPos, grid.cellSize * CELL_SIZE_MODIFIER, Quaternion.identity, obstacleLayerMask);
     }
 }

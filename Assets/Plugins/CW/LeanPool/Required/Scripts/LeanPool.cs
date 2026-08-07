@@ -53,7 +53,7 @@ namespace Lean.Pool
 		/// <summary>This allows you to spawn a prefab via GameObject.</summary>
 		public static GameObject Spawn(GameObject prefab, Vector3 position, Quaternion rotation, Transform parent = null)
 		{
-			if (prefab == null) { Debug.LogError("Attempting to spawn a null prefab."); return null; }
+			if (prefab == null) { Debug.LogError("Attempting to spawn a null prefab."); return null; }	
 			if (parent != null)
 			{
 				position = parent.InverseTransformPoint(position);

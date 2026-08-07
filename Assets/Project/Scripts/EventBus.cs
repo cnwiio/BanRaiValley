@@ -86,6 +86,7 @@ public struct ChangeActionMap : IEvent
 public struct OnPrimaryActionEvent : IEvent { }
 public struct OnSecondaryActionEvent : IEvent { }
 
+#region Hoe Event
 public struct OnHoePrimaryActionEvent : IEvent 
 {
     public Vector3 Position;
@@ -100,6 +101,11 @@ public struct OnHoeRaycastEvent : IEvent
     public Vector3 Position;
     public bool IsHit;
 }
+public struct OnHoeTillingEvent : IEvent
+{
+
+}
+#endregion
 
 public struct StartPreviewEvent : IEvent
 {

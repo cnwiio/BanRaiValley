@@ -15,16 +15,16 @@ public class Hoe : MonoBehaviour
     [SerializeField] private GameObject dirtHologramPrefabs;
 
     private Camera sceneCamera;
-    private HoeState currentState = HoeState.Idle;
+    private HoeState _currentState = HoeState.Idle;
     public HoeState CurrentState
     {
-        get => currentState;
+        get => _currentState;
         set
         {
             // on exit state
-            if (currentState != value)
+            if (_currentState != value)
             {
-                switch (currentState)
+                switch (_currentState)
                 {
                     case HoeState.Idle:
                         break;
@@ -33,7 +33,7 @@ public class Hoe : MonoBehaviour
                         break;
                 }
             }
-            currentState = value;
+            _currentState = value;
         }
     }
 
@@ -54,12 +54,24 @@ public class Hoe : MonoBehaviour
     {
         EventBus<OnPrimaryActionEvent>.Subscribe(OnPrimaryAction);
         EventBus<OnSecondaryActionEvent>.Subscribe(OnSecondaryAction);
+        EventBus<ChangeActionMap>.Subscribe(OnChangeActionMap);
     }
 
     private void OnDisable()
     {
         EventBus<OnPrimaryActionEvent>.Unsubscribe(OnPrimaryAction);
         EventBus<OnSecondaryActionEvent>.Unsubscribe(OnSecondaryAction);
+        EventBus<ChangeActionMap>.Unsubscribe(OnChangeActionMap);
+
+        CurrentState = HoeState.Idle;
+    }
+
+    void OnChangeActionMap(ChangeActionMap evt)
+    {
+        if (evt.MapType != ActionMapType.Player)
+        {
+            CurrentState = HoeState.Idle;
+        }
     }
 
     void OnPrimaryAction(OnPrimaryActionEvent evt)
@@ -74,7 +86,10 @@ public class Hoe : MonoBehaviour
     void PrimaryAction()
     {
         Debug.Log("Action 1");
-
+        if (CurrentState == HoeState.Farming)
+        {
+            EventBus<OnHoeTillingEvent>.Raise(new OnHoeTillingEvent() { });
+        }
     }
 
     void SecondaryAction()
