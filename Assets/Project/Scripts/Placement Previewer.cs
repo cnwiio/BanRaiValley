@@ -4,6 +4,9 @@ using UnityEngine;
 public class PlacementPreviewer : MonoBehaviour
 {
     GameObject _hologramPrefabs;
+    MeshRenderer _meshRenderer;
+    [SerializeField] Material validMaterial;
+    [SerializeField] Material inValidMaterial;
 
     private void OnEnable()
     {
@@ -25,6 +28,7 @@ public class PlacementPreviewer : MonoBehaviour
         {
             _hologramPrefabs = LeanPool.Spawn(evt.prefabs);
             _hologramPrefabs.SetActive(false);
+            _meshRenderer = _hologramPrefabs.GetComponent<MeshRenderer>();
         }
     }
 
@@ -32,6 +36,7 @@ public class PlacementPreviewer : MonoBehaviour
     {
         if (!_hologramPrefabs.activeSelf)
             _hologramPrefabs.SetActive(true);
+        UpdateMeterial(evt.IsValid);
         UpdatePreview(evt.Position);
     }
 
@@ -48,8 +53,20 @@ public class PlacementPreviewer : MonoBehaviour
     {
 
     }
+
+    private void UpdateMeterial(bool isValid)
+    {
+        if (isValid)
+        {
+            _meshRenderer.material = validMaterial;
+        }
+        else
+        {
+            _meshRenderer.material = inValidMaterial;
+        }
+    }
     private void UpdatePreview(Vector3 pos)
     {
         _hologramPrefabs.transform.position = pos;
-    }
+    }   
 }

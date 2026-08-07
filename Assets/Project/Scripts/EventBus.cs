@@ -108,6 +108,7 @@ public struct StartPreviewEvent : IEvent
 public struct PreviewingEvent : IEvent
 {
     public Vector3 Position;
+    public bool IsValid;
 }
 
 public struct EndPreviewEvent : IEvent

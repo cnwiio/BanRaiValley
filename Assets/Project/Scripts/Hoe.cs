@@ -10,7 +10,7 @@ public enum HoeState
 }
 
 
-public class DemoItem : MonoBehaviour
+public class Hoe : MonoBehaviour
 {
     [SerializeField] private GameObject dirtHologramPrefabs;
 

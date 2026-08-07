@@ -5,9 +5,16 @@ using UnityEngine;
 
 public class FarmingGrid : MonoBehaviour
 {
+    public enum TileState
+    {
+        Untillable,   // พื้นที่นอกโซน / มีสิ่งกีดขวาง ปลูกไม่ได้
+        Tillable,     // ดินว่าง พรวนได้
+        Tilled        // พรวนแล้ว
+    }
+
+
     [SerializeField] private Grid grid;
-    [SerializeField] private GameObject DirtPrefab;
-    [SerializeField] private GameObject PreviewPrefab;
+    LayerMask obstacleLayerMask;
 
 
     private void OnEnable()
@@ -20,6 +27,11 @@ public class FarmingGrid : MonoBehaviour
     {
         EventBus<OnHoePrimaryActionEvent>.Unsubscribe(OnHoePrimaryAction);
         EventBus<OnHoeRaycastEvent>.Unsubscribe(OnHoeRaycast);
+    }
+
+    private void Awake()
+    {
+        obstacleLayerMask = LayerMask.GetMask("Obstacle");
     }
 
     void OnHoePrimaryAction(OnHoePrimaryActionEvent evt)
@@ -47,7 +59,24 @@ public class FarmingGrid : MonoBehaviour
     {
         _cellPos = grid.WorldToCell(selectedPos);
         _cellWorldPos = grid.GetCellCenterWorld(_cellPos);
-        EventBus<PreviewingEvent>.Raise(new PreviewingEvent() { Position = _cellWorldPos });
-        //LeanPool.Spawn(DirtPrefab, PreviewPrefab.transform.position, Quaternion.identity);
+        if (IsValidForTilling(_cellWorldPos))
+        {
+            EventBus<PreviewingEvent>.Raise(new PreviewingEvent() { Position = _cellWorldPos , IsValid = true});
+
+        }
+        else
+        {
+            EventBus<PreviewingEvent>.Raise(new PreviewingEvent() { Position = _cellWorldPos , IsValid = false});
+
+        }
+    }
+
+
+    /// <summary>
+    /// คืนค่า true ถ้าช่องนี้อยู่ในโซนและยังไม่ได้พรวน / ไม่มีสิ่งกีดขวาง
+    /// </summary>
+    public bool IsValidForTilling(Vector3 cellWorldPos)
+    {
+        return !Physics.CheckBox(cellWorldPos, grid.cellSize * 0.5f, Quaternion.identity, obstacleLayerMask);
     }
 }
