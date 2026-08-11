@@ -27,6 +27,7 @@ public class PlayerInputReader : MonoBehaviour
     [SerializeField] private InputActionReference HotbarScrollAction;
     [SerializeField] private InputActionReference PrimaryAction;
     [SerializeField] private InputActionReference SecondaryAction;
+    [SerializeField] private InputActionReference RotateAction;
 
     private ActionMapType currentActionMaptype;
     public ActionMapType CurrentActionMaptype
@@ -70,6 +71,8 @@ public class PlayerInputReader : MonoBehaviour
 
         SecondaryAction.action.performed += OnSecondaryAction;
 
+        RotateAction.action.performed += OnRotateAction;
+
         EventBus<ChangeActionMap>.Subscribe(ChangeActionMap);
 
         SwitchToPlayerActionMap();
@@ -92,6 +95,8 @@ public class PlayerInputReader : MonoBehaviour
         PrimaryAction.action.performed -= OnPrimaryAction;
 
         SecondaryAction.action.performed -= OnSecondaryAction;
+
+        RotateAction.action.performed -= OnRotateAction;
 
         EventBus<ChangeActionMap>.Unsubscribe(ChangeActionMap);
 
@@ -154,5 +159,10 @@ public class PlayerInputReader : MonoBehaviour
     private void OnSecondaryAction(InputAction.CallbackContext ctx)
     {
         EventBus<OnSecondaryActionEvent>.Raise(new OnSecondaryActionEvent() { });
+    }
+
+    private void OnRotateAction(InputAction.CallbackContext ctx)
+    {
+        EventBus<OnRotateActionEvent>.Raise(new OnRotateActionEvent() { });
     }
 }

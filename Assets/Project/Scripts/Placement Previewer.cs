@@ -39,7 +39,7 @@ public class PlacementPreviewer : MonoBehaviour
         if (!_hologramPrefabs.activeSelf)
             _hologramPrefabs.SetActive(true);
         UpdateMeterial(evt.IsValid);
-        UpdatePreview(evt.Position);
+        UpdatePreview(evt.Position, evt.YRotation);
     }
 
     private void OnEndPreview(EndPreviewEvent evt)
@@ -64,8 +64,9 @@ public class PlacementPreviewer : MonoBehaviour
             _meshRenderer.material = inValidMaterial;
         }
     }
-    private void UpdatePreview(Vector3 pos)
+    private void UpdatePreview(Vector3 pos, float Yrotation)
     {
         _hologramPrefabs.transform.position = pos;
+        _hologramPrefabs.transform.rotation = Quaternion.Euler(0, Yrotation, 0);
     }   
 }

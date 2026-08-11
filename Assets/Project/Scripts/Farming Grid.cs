@@ -1,4 +1,5 @@
 using Lean.Pool;
+using System.Collections.Generic;
 using Unity.Cinemachine;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -15,41 +16,41 @@ public class FarmingGrid : MonoBehaviour
 
 
     [SerializeField] private Grid grid;
-    [SerializeField] private GameObject prefabs;
     LayerMask obstacleLayerMask;
 
+    private readonly Dictionary<Vector3Int, TileState> _overrides = new Dictionary<Vector3Int, TileState>();
+
+    private const float CELL_SIZE_MODIFIER = 0.48f;
+
+    private float currentYRotation = 0;
+    #region SubscribeEvent
 
     private void OnEnable()
     {
-        EventBus<OnHoePrimaryActionEvent>.Subscribe(OnHoePrimaryAction);
         EventBus<OnHoeRaycastEvent>.Subscribe(OnHoeRaycast);
         EventBus<OnHoeTillingEvent>.Subscribe(OnHoeTilling);
+        EventBus<OnRotateFarmEvent>.Subscribe(OnRotateFarm);
     }
 
     private void OnDisable()
     {
-        EventBus<OnHoePrimaryActionEvent>.Unsubscribe(OnHoePrimaryAction);
         EventBus<OnHoeRaycastEvent>.Unsubscribe(OnHoeRaycast);
         EventBus<OnHoeTillingEvent>.Unsubscribe(OnHoeTilling);
+        EventBus<OnRotateFarmEvent>.Unsubscribe(OnRotateFarm);
     }
 
     private void Awake()
     {
-        //obstacleLayerMask = LayerMask.GetMask("Obstacle");
         obstacleLayerMask = ~LayerMask.GetMask("Ground", "Player");
     }
-
-    void OnHoePrimaryAction(OnHoePrimaryActionEvent evt)
-    {
-        //Grid(evt.Position);
-    }
+    #endregion
 
     private void OnHoeTilling(OnHoeTillingEvent evt)
     {
-        if (IsValidForTilling(_cellWorldPos))
+        if (IsValidForTilling(_cellPos, _cellWorldPos))
         {
-            LeanPool.Spawn(prefabs, _cellWorldPos, Quaternion.identity);
-            //Instantiate(prefabs, _cellWorldPos, Quaternion.identity);
+            RegisterTilledSoil(_cellPos);
+            EventBus<OnValidGridEvent>.Raise(new OnValidGridEvent() { Position = _cellWorldPos});
         } 
     }
 
@@ -61,6 +62,11 @@ public class FarmingGrid : MonoBehaviour
         }
     }
 
+    private void OnRotateFarm(OnRotateFarmEvent evt)
+    {
+        currentYRotation = evt.YRotation;
+    }
+
     // cached
     Vector3Int _cellPos;
     Vector3 _cellWorldPos;
@@ -68,23 +74,33 @@ public class FarmingGrid : MonoBehaviour
     {
         _cellPos = grid.WorldToCell(selectedPos);
         _cellWorldPos = grid.GetCellCenterWorld(_cellPos);
-        if (IsValidForTilling(_cellWorldPos))
+        if (IsValidForTilling(_cellPos, _cellWorldPos))
         {
-            EventBus<PreviewingEvent>.Raise(new PreviewingEvent() { Position = _cellWorldPos , IsValid = true});
+            EventBus<PreviewingEvent>.Raise(new PreviewingEvent() { Position = _cellWorldPos , IsValid = true, YRotation = currentYRotation });
         }
         else
         {
-            EventBus<PreviewingEvent>.Raise(new PreviewingEvent() { Position = _cellWorldPos , IsValid = false});
+            EventBus<PreviewingEvent>.Raise(new PreviewingEvent() { Position = _cellWorldPos , IsValid = false, YRotation = currentYRotation });
         }
     }
-
-    private const float CELL_SIZE_MODIFIER = 0.45f;
 
     /// <summary>
     /// คืนค่า true ถ้าช่องนี้อยู่ในโซนและยังไม่ได้พรวน / ไม่มีสิ่งกีดขวาง
     /// </summary>
-    public bool IsValidForTilling(Vector3 cellWorldPos)
+    public bool IsValidForTilling(Vector3Int cellPos,Vector3 cellWorldPos)
     {
+        if (GetTileState(cellPos) != TileState.Tillable) return false;
         return !Physics.CheckBox(cellWorldPos, grid.cellSize * CELL_SIZE_MODIFIER, Quaternion.identity, obstacleLayerMask);
+    }
+
+    /// <summary>บันทึกว่าช่องนี้ถูกพรวนดินเรียบร้อยแล้ว เรียกจาก FarmingActionBehaviour</summary>
+    public void RegisterTilledSoil(Vector3Int gridPos)
+    {
+        _overrides[gridPos] = TileState.Tilled;
+    }
+
+    public TileState GetTileState(Vector3Int gridPos)
+    {
+        return _overrides.TryGetValue(gridPos, out var state) ? state : TileState.Tillable;
     }
 }

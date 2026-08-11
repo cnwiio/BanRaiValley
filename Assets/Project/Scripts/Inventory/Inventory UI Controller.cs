@@ -97,17 +97,7 @@ public class InventoryUIController : MonoBehaviour
             _slotA.RenderVisual();
             _slotB.RenderVisual();
         }
-        else
-        {
-            
-            _inventoryA.SetSlotData(itemB, _indexA);
-            _inventoryB.SetSlotData(itemA, _indexB);
-
-            _slotA.RenderVisual();
-            _slotB.RenderVisual();
-        }
-
-        if (itemA.item == itemB.item && itemA.item.stackable)
+        else if (itemA.item == itemB.item && itemA.item.stackable)
         {
             int remainingAmount = _inventoryB.AddStackItemToSlot(_indexB, itemA.item, itemA.count);
             if (remainingAmount > 0)
@@ -122,6 +112,15 @@ public class InventoryUIController : MonoBehaviour
             _slotA.RenderVisual();
             _slotB.RenderVisual();
             return;
+        }
+        else
+        {
+            
+            _inventoryA.SetSlotData(itemB, _indexA);
+            _inventoryB.SetSlotData(itemA, _indexB);
+
+            _slotA.RenderVisual();
+            _slotB.RenderVisual();
         }
     }
 

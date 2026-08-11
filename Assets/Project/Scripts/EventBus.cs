@@ -101,9 +101,10 @@ public struct OnHoeRaycastEvent : IEvent
     public Vector3 Position;
     public bool IsHit;
 }
-public struct OnHoeTillingEvent : IEvent
+public struct OnHoeTillingEvent : IEvent {}
+public struct OnValidGridEvent : IEvent 
 {
-
+    public Vector3 Position;
 }
 #endregion
 
@@ -115,9 +116,16 @@ public struct PreviewingEvent : IEvent
 {
     public Vector3 Position;
     public bool IsValid;
+    public float YRotation;
 }
 
 public struct EndPreviewEvent : IEvent
 {
 
+}
+
+public struct OnRotateActionEvent : IEvent { }
+public struct OnRotateFarmEvent : IEvent 
+{
+    public float YRotation;
 }

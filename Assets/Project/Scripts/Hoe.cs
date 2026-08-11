@@ -1,3 +1,5 @@
+using Lean.Pool;
+using NUnit.Framework;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -13,6 +15,8 @@ public enum HoeState
 public class Hoe : MonoBehaviour
 {
     [SerializeField] private GameObject dirtHologramPrefabs;
+    [SerializeField] private GameObject dirtPrefabs;
+    [SerializeField] private Animator hoeAnimator;
 
     private Camera sceneCamera;
     private HoeState _currentState = HoeState.Idle;
@@ -29,7 +33,8 @@ public class Hoe : MonoBehaviour
                     case HoeState.Idle:
                         break;
                     case HoeState.Farming:
-                        EventBus<EndPreviewEvent>.Raise(new EndPreviewEvent() { });
+                        if (value != HoeState.Tilling)
+                            EventBus<EndPreviewEvent>.Raise(new EndPreviewEvent() { });
                         break;
                 }
             }
@@ -38,12 +43,15 @@ public class Hoe : MonoBehaviour
     }
 
     private int HoeRange = 10;
+    private float currentYRotate;
+    //private System.Collections.Generic.List<GameObject> spawnedPrefabsList;
 
     // cached
     private Vector3 _mousePos;
     private Mouse _currentMouse;
     private Ray _ray;
     private RaycastHit _hit;
+    private Vector3 _dirtPos;
     private void Awake()
     {
         sceneCamera = Camera.main;
@@ -55,6 +63,8 @@ public class Hoe : MonoBehaviour
         EventBus<OnPrimaryActionEvent>.Subscribe(OnPrimaryAction);
         EventBus<OnSecondaryActionEvent>.Subscribe(OnSecondaryAction);
         EventBus<ChangeActionMap>.Subscribe(OnChangeActionMap);
+        EventBus<OnValidGridEvent>.Subscribe(OnValidGrid);
+        EventBus<OnRotateActionEvent>.Subscribe(OnRotateAction);
     }
 
     private void OnDisable()
@@ -62,6 +72,8 @@ public class Hoe : MonoBehaviour
         EventBus<OnPrimaryActionEvent>.Unsubscribe(OnPrimaryAction);
         EventBus<OnSecondaryActionEvent>.Unsubscribe(OnSecondaryAction);
         EventBus<ChangeActionMap>.Unsubscribe(OnChangeActionMap);
+        EventBus<OnValidGridEvent>.Unsubscribe(OnValidGrid);
+        EventBus<OnRotateActionEvent>.Unsubscribe(OnRotateAction);
 
         CurrentState = HoeState.Idle;
     }
@@ -83,18 +95,39 @@ public class Hoe : MonoBehaviour
         SecondaryAction();
     }
 
+    void OnValidGrid(OnValidGridEvent evt)
+    {
+        _dirtPos = evt.Position;
+        StartTilling();
+    }
+
+    void OnRotateAction(OnRotateActionEvent evt)
+    {
+        if (CurrentState == HoeState.Farming)
+        {
+            currentYRotate += 90;
+            EventBus<OnRotateFarmEvent>.Raise(new OnRotateFarmEvent() { YRotation = currentYRotate }); 
+        }
+    }
+
     void PrimaryAction()
     {
-        Debug.Log("Action 1");
+        //Debug.Log("Action 1");
         if (CurrentState == HoeState.Farming)
         {
             EventBus<OnHoeTillingEvent>.Raise(new OnHoeTillingEvent() { });
         }
     }
 
+    private void StartTilling()
+    {
+        CurrentState = HoeState.Tilling;
+        hoeAnimator.SetTrigger("Tilling");
+    }
+
     void SecondaryAction()
     {
-        Debug.Log("Action 2");
+        //Debug.Log("Action 2");
         if (CurrentState != HoeState.Farming)
         {
             CurrentState = HoeState.Farming;
@@ -113,6 +146,13 @@ public class Hoe : MonoBehaviour
         return sceneCamera.ScreenPointToRay(_mousePos);
     }
 
+    public void OnTillingAnimationFinish()
+    {
+        //Debug.Log("Finish");
+        LeanPool.Spawn(dirtPrefabs, _dirtPos, Quaternion.Euler(0, currentYRotate, 0));
+        CurrentState = HoeState.Farming;
+    }
+
     void Update()
     {
         if (CurrentState == HoeState.Farming)
@@ -121,7 +161,7 @@ public class Hoe : MonoBehaviour
             if (Physics.Raycast(_ray, out _hit, HoeRange))
             {
                 EventBus<StartPreviewEvent>.Raise(new StartPreviewEvent() { prefabs = dirtHologramPrefabs });
-                EventBus<OnHoeRaycastEvent>.Raise(new OnHoeRaycastEvent { Position = _hit.point , IsHit = true});
+                EventBus<OnHoeRaycastEvent>.Raise(new OnHoeRaycastEvent { Position = _hit.point , IsHit = true, });
             } 
             else
             {
