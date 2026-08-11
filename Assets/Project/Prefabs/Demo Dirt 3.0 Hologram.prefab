@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8209775890507910426}
   - component: {fileID: 2290102815593137865}
   m_Layer: 2
-  m_Name: Demo Dirt 3.0
+  m_Name: Demo Dirt 3.0 Hologram
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

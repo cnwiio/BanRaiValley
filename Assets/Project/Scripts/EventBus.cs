@@ -100,9 +100,15 @@ public struct OnHoeRaycastEvent : IEvent
 {
     public Vector3 Position;
     public bool IsHit;
+    public PreviewState PreviewState;
 }
 public struct OnHoeTillingEvent : IEvent {}
+public struct OnHoeDeletingEvent : IEvent {}
 public struct OnValidGridEvent : IEvent 
+{
+    public Vector3 Position;
+}
+public struct OnTiledGridEvent : IEvent 
 {
     public Vector3 Position;
 }
@@ -111,6 +117,7 @@ public struct OnValidGridEvent : IEvent
 public struct StartPreviewEvent : IEvent
 {
     public GameObject prefabs;
+    public PreviewState previewState;
 }
 public struct PreviewingEvent : IEvent
 {
@@ -129,3 +136,5 @@ public struct OnRotateFarmEvent : IEvent
 {
     public float YRotation;
 }
+
+public struct OnDeleteActionEvent : IEvent { }

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 645588689138124821}
   - component: {fileID: 6404239459280813260}
   - component: {fileID: 5625796973869643645}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Demo Dirt Hologram
   m_TagString: Untagged
   m_Icon: {fileID: 0}

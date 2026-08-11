@@ -280,6 +280,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3662581223436763076, guid: 0f943a2f9837cdc45ad1c25893b81985, type: 3}
+      propertyPath: DeleteAction
+      value: 
+      objectReference: {fileID: -7107962338177228098, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
+    - target: {fileID: 3662581223436763076, guid: 0f943a2f9837cdc45ad1c25893b81985, type: 3}
       propertyPath: RotateAction
       value: 
       objectReference: {fileID: -9209676354564583197, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}

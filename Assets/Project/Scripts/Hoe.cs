@@ -1,20 +1,24 @@
 using Lean.Pool;
 using NUnit.Framework;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static FarmingGrid;
 
 public enum HoeState
 {
     Idle,
     Farming,
-    Tilling
+    Tilling,
+    Deleting
 }
 
 
 public class Hoe : MonoBehaviour
 {
     [SerializeField] private GameObject dirtHologramPrefabs;
+    [SerializeField] private GameObject deleteHologramPrefabs;
     [SerializeField] private GameObject dirtPrefabs;
     [SerializeField] private Animator hoeAnimator;
 
@@ -36,15 +40,21 @@ public class Hoe : MonoBehaviour
                         if (value != HoeState.Tilling)
                             EventBus<EndPreviewEvent>.Raise(new EndPreviewEvent() { });
                         break;
+                    case HoeState.Deleting:
+                            EventBus<EndPreviewEvent>.Raise(new EndPreviewEvent() { });
+                        break;
                 }
             }
             _currentState = value;
+            //Debug.Log(_currentState);
         }
     }
 
     private int HoeRange = 10;
     private float currentYRotate;
+    //private LayerMask raycastLayerMask;
     //private System.Collections.Generic.List<GameObject> spawnedPrefabsList;
+    private Dictionary<Vector3, GameObject> _spawnedPrefabs = new Dictionary<Vector3, GameObject>();
 
     // cached
     private Vector3 _mousePos;
@@ -65,6 +75,8 @@ public class Hoe : MonoBehaviour
         EventBus<ChangeActionMap>.Subscribe(OnChangeActionMap);
         EventBus<OnValidGridEvent>.Subscribe(OnValidGrid);
         EventBus<OnRotateActionEvent>.Subscribe(OnRotateAction);
+        EventBus<OnDeleteActionEvent>.Subscribe(OnDeleteAction);
+        EventBus<OnTiledGridEvent>.Subscribe(OnTileGrid);
     }
 
     private void OnDisable()
@@ -73,7 +85,8 @@ public class Hoe : MonoBehaviour
         EventBus<OnSecondaryActionEvent>.Unsubscribe(OnSecondaryAction);
         EventBus<ChangeActionMap>.Unsubscribe(OnChangeActionMap);
         EventBus<OnValidGridEvent>.Unsubscribe(OnValidGrid);
-        EventBus<OnRotateActionEvent>.Unsubscribe(OnRotateAction);
+        EventBus<OnDeleteActionEvent>.Unsubscribe(OnDeleteAction);
+        EventBus<OnTiledGridEvent>.Unsubscribe(OnTileGrid);
 
         CurrentState = HoeState.Idle;
     }
@@ -101,6 +114,12 @@ public class Hoe : MonoBehaviour
         StartTilling();
     }
 
+    void OnTileGrid(OnTiledGridEvent evt)
+    {
+        _dirtPos = evt.Position;
+        DeleteTile(_dirtPos);
+    }
+
     void OnRotateAction(OnRotateActionEvent evt)
     {
         if (CurrentState == HoeState.Farming)
@@ -110,14 +129,12 @@ public class Hoe : MonoBehaviour
         }
     }
 
-    void PrimaryAction()
+    void OnDeleteAction(OnDeleteActionEvent evt)
     {
-        //Debug.Log("Action 1");
-        if (CurrentState == HoeState.Farming)
-        {
-            EventBus<OnHoeTillingEvent>.Raise(new OnHoeTillingEvent() { });
-        }
+        if (CurrentState != HoeState.Tilling)
+            CurrentState = CurrentState == HoeState.Deleting ? HoeState.Idle : HoeState.Deleting;
     }
+
 
     private void StartTilling()
     {
@@ -125,17 +142,27 @@ public class Hoe : MonoBehaviour
         hoeAnimator.SetTrigger("Tilling");
     }
 
+    private void DeleteTile(Vector3 pos)
+    {
+        LeanPool.Despawn(GetSpawnedPrefab(pos));
+    }
+    void PrimaryAction()
+    {
+        //Debug.Log("Action 1");
+        if (CurrentState == HoeState.Farming)
+        {
+            EventBus<OnHoeTillingEvent>.Raise(new OnHoeTillingEvent() { });
+        } else if (CurrentState == HoeState.Deleting)
+        {
+            EventBus<OnHoeDeletingEvent>.Raise(new OnHoeDeletingEvent() { });
+        }
+    }
+
     void SecondaryAction()
     {
         //Debug.Log("Action 2");
-        if (CurrentState != HoeState.Farming)
-        {
-            CurrentState = HoeState.Farming;
-        }
-        else
-        {
-            CurrentState = HoeState.Idle;
-        }
+        if (CurrentState != HoeState.Tilling)
+            CurrentState = CurrentState == HoeState.Farming ? HoeState.Idle : HoeState.Farming;
     }
 
 
@@ -149,8 +176,21 @@ public class Hoe : MonoBehaviour
     public void OnTillingAnimationFinish()
     {
         //Debug.Log("Finish");
-        LeanPool.Spawn(dirtPrefabs, _dirtPos, Quaternion.Euler(0, currentYRotate, 0));
+        RegisterSpawnedPrefabs(
+            _dirtPos,
+            LeanPool.Spawn(dirtPrefabs, _dirtPos, Quaternion.Euler(0, currentYRotate, 0))
+            );
         CurrentState = HoeState.Farming;
+    }
+
+    private void RegisterSpawnedPrefabs(Vector3 pos, GameObject prefabs)
+    {
+        _spawnedPrefabs[pos] = prefabs;
+    }
+
+    private GameObject GetSpawnedPrefab(Vector3 pos)
+    {
+        return _spawnedPrefabs[pos];
     }
 
     void Update()
@@ -160,8 +200,22 @@ public class Hoe : MonoBehaviour
             _ray = RayCastAtCursor();
             if (Physics.Raycast(_ray, out _hit, HoeRange))
             {
-                EventBus<StartPreviewEvent>.Raise(new StartPreviewEvent() { prefabs = dirtHologramPrefabs });
-                EventBus<OnHoeRaycastEvent>.Raise(new OnHoeRaycastEvent { Position = _hit.point , IsHit = true, });
+                EventBus<StartPreviewEvent>.Raise(new StartPreviewEvent() { prefabs = dirtHologramPrefabs , previewState = PreviewState.Build});
+                EventBus<OnHoeRaycastEvent>.Raise(new OnHoeRaycastEvent { Position = _hit.point , IsHit = true, PreviewState = PreviewState.Build });
+            } 
+            else
+            {
+                EventBus<OnHoeRaycastEvent>.Raise(new OnHoeRaycastEvent { IsHit = false });
+                EventBus<EndPreviewEvent>.Raise(new EndPreviewEvent() { });
+            }
+        }
+        else if (CurrentState == HoeState.Deleting)
+        {
+            _ray = RayCastAtCursor();
+            if (Physics.Raycast(_ray, out _hit, HoeRange))
+            {
+                EventBus<StartPreviewEvent>.Raise(new StartPreviewEvent() { prefabs = deleteHologramPrefabs , previewState = PreviewState.Delete});
+                EventBus<OnHoeRaycastEvent>.Raise(new OnHoeRaycastEvent { Position = _hit.point , IsHit = true, PreviewState = PreviewState.Delete});
             } 
             else
             {

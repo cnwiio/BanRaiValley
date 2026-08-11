@@ -1,12 +1,20 @@
 using Lean.Pool;
 using UnityEngine;
 
+public enum PreviewState
+{
+    Build,
+    Delete
+}
+
 public class PlacementPreviewer : MonoBehaviour
 {
     GameObject _hologramPrefabs;
     MeshRenderer _meshRenderer;
     [SerializeField] Material validMaterial;
     [SerializeField] Material inValidMaterial;
+
+    private PreviewState currentState;
 
     private void OnEnable()
     {
@@ -31,14 +39,24 @@ public class PlacementPreviewer : MonoBehaviour
             _hologramPrefabs = LeanPool.Spawn(evt.prefabs);
             _hologramPrefabs.SetActive(false);
             _meshRenderer = _hologramPrefabs.GetComponent<MeshRenderer>();
+            currentState = evt.previewState;
         }
     }
 
     private void OnPreviewing(PreviewingEvent evt)
     {
-        if (!_hologramPrefabs.activeSelf)
-            _hologramPrefabs.SetActive(true);
-        UpdateMeterial(evt.IsValid);
+
+        if (currentState == PreviewState.Build)
+        {
+            UpdateBuildMeterial(evt.IsValid);
+            if (!_hologramPrefabs.activeSelf)
+                _hologramPrefabs.SetActive(true);
+        } 
+        else if (currentState == PreviewState.Delete)
+        {
+            UpdateDeleteMeterial(evt.IsValid);
+        }
+
         UpdatePreview(evt.Position, evt.YRotation);
     }
 
@@ -51,9 +69,7 @@ public class PlacementPreviewer : MonoBehaviour
         }
     }
 
-
-
-    private void UpdateMeterial(bool isValid)
+    private void UpdateBuildMeterial(bool isValid)
     {
         if (isValid)
         {
@@ -64,6 +80,22 @@ public class PlacementPreviewer : MonoBehaviour
             _meshRenderer.material = inValidMaterial;
         }
     }
+
+    private void UpdateDeleteMeterial(bool isValid)
+    {
+        if (isValid)
+        {
+            if (_hologramPrefabs.activeSelf)
+                _hologramPrefabs.SetActive(false);
+        } 
+        else
+        {
+            if (!_hologramPrefabs.activeSelf)
+                _hologramPrefabs.SetActive(true);
+            _meshRenderer.material = inValidMaterial;
+        }
+    }
+
     private void UpdatePreview(Vector3 pos, float Yrotation)
     {
         _hologramPrefabs.transform.position = pos;

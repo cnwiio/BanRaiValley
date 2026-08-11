@@ -1,5 +1,7 @@
 using Lean.Pool;
 using System.Collections.Generic;
+using System.Xml;
+using TMPro;
 using Unity.Cinemachine;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -29,6 +31,7 @@ public class FarmingGrid : MonoBehaviour
     {
         EventBus<OnHoeRaycastEvent>.Subscribe(OnHoeRaycast);
         EventBus<OnHoeTillingEvent>.Subscribe(OnHoeTilling);
+        EventBus<OnHoeDeletingEvent>.Subscribe(OnHoeDeleting);
         EventBus<OnRotateFarmEvent>.Subscribe(OnRotateFarm);
     }
 
@@ -36,6 +39,7 @@ public class FarmingGrid : MonoBehaviour
     {
         EventBus<OnHoeRaycastEvent>.Unsubscribe(OnHoeRaycast);
         EventBus<OnHoeTillingEvent>.Unsubscribe(OnHoeTilling);
+        EventBus<OnHoeDeletingEvent>.Unsubscribe(OnHoeDeleting);
         EventBus<OnRotateFarmEvent>.Unsubscribe(OnRotateFarm);
     }
 
@@ -53,13 +57,28 @@ public class FarmingGrid : MonoBehaviour
             EventBus<OnValidGridEvent>.Raise(new OnValidGridEvent() { Position = _cellWorldPos});
         } 
     }
+    private void OnHoeDeleting(OnHoeDeletingEvent evt)
+    {
+        if (GetTileState(_cellPos) == TileState.Tilled)
+        {
+            UnrefisterTiledSoil(_cellPos);
+            EventBus<OnTiledGridEvent>.Raise(new OnTiledGridEvent() { Position = _cellWorldPos });
+        }
+    }
 
     void OnHoeRaycast(OnHoeRaycastEvent evt)
     {
-        if (evt.IsHit)
+        if (!evt.IsHit) return;
+
+        switch (evt.PreviewState)
         {
-            Grid(evt.Position);
-        }
+            case PreviewState.Build:
+                CheckValidGrid(evt.Position);
+                break;
+            case PreviewState.Delete:
+                CheckTiledGrid(evt.Position);
+                break;
+        }    
     }
 
     private void OnRotateFarm(OnRotateFarmEvent evt)
@@ -70,7 +89,7 @@ public class FarmingGrid : MonoBehaviour
     // cached
     Vector3Int _cellPos;
     Vector3 _cellWorldPos;
-    void Grid(Vector3 selectedPos)
+    void CheckValidGrid(Vector3 selectedPos)
     {
         _cellPos = grid.WorldToCell(selectedPos);
         _cellWorldPos = grid.GetCellCenterWorld(_cellPos);
@@ -81,6 +100,20 @@ public class FarmingGrid : MonoBehaviour
         else
         {
             EventBus<PreviewingEvent>.Raise(new PreviewingEvent() { Position = _cellWorldPos , IsValid = false, YRotation = currentYRotation });
+        }
+    }
+
+    void CheckTiledGrid(Vector3 selectedPos)
+    {
+        _cellPos = grid.WorldToCell(selectedPos);
+        _cellWorldPos = grid.GetCellCenterWorld(_cellPos);
+        if (GetTileState(_cellPos) == TileState.Tilled)
+        {
+            EventBus<PreviewingEvent>.Raise(new PreviewingEvent() { Position = _cellWorldPos, IsValid = false, YRotation = currentYRotation });
+        }
+        else
+        {
+            EventBus<PreviewingEvent>.Raise(new PreviewingEvent() { Position = _cellWorldPos, IsValid = true, YRotation = currentYRotation });
         }
     }
 
@@ -97,6 +130,11 @@ public class FarmingGrid : MonoBehaviour
     public void RegisterTilledSoil(Vector3Int gridPos)
     {
         _overrides[gridPos] = TileState.Tilled;
+    }
+
+    public void UnrefisterTiledSoil(Vector3Int gridPos)
+    {
+        _overrides[gridPos] = TileState.Tillable;
     }
 
     public TileState GetTileState(Vector3Int gridPos)

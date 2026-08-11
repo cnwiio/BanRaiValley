@@ -86,6 +86,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Delete Action",
+                    "type": "Button",
+                    "id": "8d449c84-bba0-4ac5-ae6a-d7667f8951aa",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -284,6 +293,17 @@
                     "processors": "",
                     "groups": ";KeyBoard&Mouse",
                     "action": "Rotate Action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0acef391-3f5a-4a69-a0e1-4c337c8a580f",
+                    "path": "<Keyboard>/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Delete Action",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
