@@ -3,7 +3,13 @@ using UnityEngine;
 public class DemoSpawnItem : MonoBehaviour
 {
     public InventoyModel inventoyModel;
+    public HotbarInventoryModel hotbarModel;
     public Item[] itemToSpawn;
+
+    public void Start()
+    {
+        hotbarModel.TryAddItem(itemToSpawn[0], 3);
+    }
 
     public void SpawnItem2(int id)
     {

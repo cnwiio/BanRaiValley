@@ -1437,6 +1437,10 @@ PrefabInstance:
       propertyPath: DragImage
       value: 
       objectReference: {fileID: 1390206921}
+    - target: {fileID: 5644196794530264836, guid: 89db41b87ff4853488876e9f06963ce6, type: 3}
+      propertyPath: hotbarModel
+      value: 
+      objectReference: {fileID: 713364116}
     - target: {fileID: 7667176755021999392, guid: 89db41b87ff4853488876e9f06963ce6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1610,7 +1614,7 @@ GameObject:
   - component: {fileID: 1157062038}
   - component: {fileID: 1157062040}
   m_Layer: 0
-  m_Name: Grid
+  m_Name: Farming Grid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1656,6 +1660,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FarmingGrid
   grid: {fileID: 1157062038}
+  obstacleLayerMask:
+    serializedVersion: 2
+    m_Bits: 631
 --- !u!1 &1202154868
 GameObject:
   m_ObjectHideFlags: 0

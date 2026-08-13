@@ -87,30 +87,16 @@ public struct OnPrimaryActionEvent : IEvent { }
 public struct OnSecondaryActionEvent : IEvent { }
 
 #region Hoe Event
-public struct OnHoePrimaryActionEvent : IEvent 
+public struct OnTillingImpactEvent : IEvent
 {
+    public GameObject prefabs;
     public Vector3 Position;
+    public float YRotation;
+    public Vector3Int CellPos;
 }
-
-public struct OnHoeSecondaryActionEvent : IEvent
+public struct OnTileClearEvent : IEvent 
 {
-}
-
-public struct OnHoeRaycastEvent : IEvent
-{
-    public Vector3 Position;
-    public bool IsHit;
-    public PreviewState PreviewState;
-}
-public struct OnHoeTillingEvent : IEvent {}
-public struct OnHoeDeletingEvent : IEvent {}
-public struct OnValidGridEvent : IEvent 
-{
-    public Vector3 Position;
-}
-public struct OnTiledGridEvent : IEvent 
-{
-    public Vector3 Position;
+    public Vector3Int CellPos;
 }
 #endregion
 

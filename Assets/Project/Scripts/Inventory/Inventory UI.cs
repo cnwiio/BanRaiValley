@@ -14,7 +14,7 @@ public class InventoryUI : MonoBehaviour
 
     [Header("Inventory Model")]
     [SerializeField] private InventoyModel inventoryModel;
-    [SerializeField] private HotbarInvetoryModel hotbarModel;
+    [SerializeField] private HotbarInventoryModel hotbarModel;
 
     private InventorySlotUI[] _inventorySlotUI, _hotSlotUI;
     private bool IsInventoryUIActive => UIPanel.activeSelf;

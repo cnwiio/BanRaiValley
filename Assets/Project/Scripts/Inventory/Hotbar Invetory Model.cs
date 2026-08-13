@@ -1,7 +1,7 @@
 using Lean.Pool;
 using UnityEngine;
 
-public class HotbarInvetoryModel : BaseInventory
+public class HotbarInventoryModel : BaseInventory
 {
     [SerializeField] private Transform SlotUI_Parent;
     [SerializeField] private GameObject SlotUI_Prefabs;

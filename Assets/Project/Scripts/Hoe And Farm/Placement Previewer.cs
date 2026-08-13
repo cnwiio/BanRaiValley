@@ -45,7 +45,8 @@ public class PlacementPreviewer : MonoBehaviour
 
     private void OnPreviewing(PreviewingEvent evt)
     {
-
+        if (_hologramPrefabs == null) return;
+        
         if (currentState == PreviewState.Build)
         {
             UpdateBuildMeterial(evt.IsValid);
@@ -73,26 +74,26 @@ public class PlacementPreviewer : MonoBehaviour
     {
         if (isValid)
         {
-            _meshRenderer.material = validMaterial;
+            _meshRenderer.sharedMaterial = validMaterial;
         }
         else
         {
-            _meshRenderer.material = inValidMaterial;
+            _meshRenderer.sharedMaterial = inValidMaterial;
         }
     }
 
-    private void UpdateDeleteMeterial(bool isValid)
+    private void UpdateDeleteMeterial(bool isTilled)
     {
-        if (isValid)
-        {
-            if (_hologramPrefabs.activeSelf)
-                _hologramPrefabs.SetActive(false);
-        } 
-        else
+        if (isTilled)
         {
             if (!_hologramPrefabs.activeSelf)
                 _hologramPrefabs.SetActive(true);
-            _meshRenderer.material = inValidMaterial;
+            _meshRenderer.sharedMaterial = inValidMaterial;
+        } 
+        else
+        {
+            if (_hologramPrefabs.activeSelf)
+                _hologramPrefabs.SetActive(false);
         }
     }
 

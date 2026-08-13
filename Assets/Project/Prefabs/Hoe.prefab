@@ -130,6 +130,7 @@ MonoBehaviour:
   deleteHologramPrefabs: {fileID: 6940088763359480455, guid: cef253dafc2779a42a9788388501108e, type: 3}
   dirtPrefabs: {fileID: 8209775890509911002, guid: 1697fe7afa530d4479db6aa37247aad6, type: 3}
   hoeAnimator: {fileID: 1287071345893912192}
+  farmingGridReference: {fileID: 11400000, guid: 5ea848fd122f7cd48a93832bd2e00c19, type: 2}
 --- !u!95 &1287071345893912192
 Animator:
   serializedVersion: 7

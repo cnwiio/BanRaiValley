@@ -2,6 +2,7 @@ using Lean.Pool;
 using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using static FarmingGrid;
@@ -22,6 +23,9 @@ public class Hoe : MonoBehaviour
     [SerializeField] private GameObject dirtPrefabs;
     [SerializeField] private Animator hoeAnimator;
 
+    [Header("Grid link - same asset must be assigned on the FarmingGrid")]
+    [SerializeField] private FarmingGridReference farmingGridReference;
+
     private Camera sceneCamera;
     private HoeState _currentState = HoeState.Idle;
     public HoeState CurrentState
@@ -29,32 +33,45 @@ public class Hoe : MonoBehaviour
         get => _currentState;
         set
         {
-            // on exit state
             if (_currentState != value)
             {
+                // on exit state    
                 switch (_currentState)
                 {
                     case HoeState.Idle:
                         break;
                     case HoeState.Farming:
                         if (value != HoeState.Tilling)
+                        {
+                            _lastCellWorldPos = Vector3.zero;
                             EventBus<EndPreviewEvent>.Raise(new EndPreviewEvent() { });
+                        }
+                        break;
+                    case HoeState.Tilling:
+                        _lastCellWorldPos = Vector3.zero;
+                        EventBus<EndPreviewEvent>.Raise(new EndPreviewEvent() { });
                         break;
                     case HoeState.Deleting:
-                            EventBus<EndPreviewEvent>.Raise(new EndPreviewEvent() { });
+                        EventBus<EndPreviewEvent>.Raise(new EndPreviewEvent() { });
+                        break;
+                }
+                // on enter state
+                switch (value)
+                {
+                    case HoeState.Farming:
+                        _lastCellWorldPos = Vector3.zero;
                         break;
                 }
             }
+            
             _currentState = value;
-            //Debug.Log(_currentState);
+
         }
     }
 
     private int HoeRange = 10;
     private float currentYRotate;
-    //private LayerMask raycastLayerMask;
-    //private System.Collections.Generic.List<GameObject> spawnedPrefabsList;
-    private Dictionary<Vector3, GameObject> _spawnedPrefabs = new Dictionary<Vector3, GameObject>();
+    private IFarmingGrid grid;
 
     // cached
     private Vector3 _mousePos;
@@ -62,10 +79,12 @@ public class Hoe : MonoBehaviour
     private Ray _ray;
     private RaycastHit _hit;
     private Vector3 _dirtPos;
+
     private void Awake()
     {
         sceneCamera = Camera.main;
         _currentMouse = Mouse.current;
+        grid = farmingGridReference.Grid;
     }
 
     private void OnEnable()
@@ -73,10 +92,8 @@ public class Hoe : MonoBehaviour
         EventBus<OnPrimaryActionEvent>.Subscribe(OnPrimaryAction);
         EventBus<OnSecondaryActionEvent>.Subscribe(OnSecondaryAction);
         EventBus<ChangeActionMap>.Subscribe(OnChangeActionMap);
-        EventBus<OnValidGridEvent>.Subscribe(OnValidGrid);
         EventBus<OnRotateActionEvent>.Subscribe(OnRotateAction);
         EventBus<OnDeleteActionEvent>.Subscribe(OnDeleteAction);
-        EventBus<OnTiledGridEvent>.Subscribe(OnTileGrid);
     }
 
     private void OnDisable()
@@ -84,9 +101,8 @@ public class Hoe : MonoBehaviour
         EventBus<OnPrimaryActionEvent>.Unsubscribe(OnPrimaryAction);
         EventBus<OnSecondaryActionEvent>.Unsubscribe(OnSecondaryAction);
         EventBus<ChangeActionMap>.Unsubscribe(OnChangeActionMap);
-        EventBus<OnValidGridEvent>.Unsubscribe(OnValidGrid);
+        EventBus<OnRotateActionEvent>.Unsubscribe(OnRotateAction);
         EventBus<OnDeleteActionEvent>.Unsubscribe(OnDeleteAction);
-        EventBus<OnTiledGridEvent>.Unsubscribe(OnTileGrid);
 
         CurrentState = HoeState.Idle;
     }
@@ -99,33 +115,15 @@ public class Hoe : MonoBehaviour
         }
     }
 
-    void OnPrimaryAction(OnPrimaryActionEvent evt)
-    {
-        PrimaryAction();
-    }
-    void OnSecondaryAction(OnSecondaryActionEvent evt)
-    {
-        SecondaryAction();
-    }
-
-    void OnValidGrid(OnValidGridEvent evt)
-    {
-        _dirtPos = evt.Position;
-        StartTilling();
-    }
-
-    void OnTileGrid(OnTiledGridEvent evt)
-    {
-        _dirtPos = evt.Position;
-        DeleteTile(_dirtPos);
-    }
+    void OnPrimaryAction(OnPrimaryActionEvent evt) => PrimaryAction();
+    void OnSecondaryAction(OnSecondaryActionEvent evt) => SecondaryAction();
 
     void OnRotateAction(OnRotateActionEvent evt)
     {
         if (CurrentState == HoeState.Farming)
         {
             currentYRotate += 90;
-            EventBus<OnRotateFarmEvent>.Raise(new OnRotateFarmEvent() { YRotation = currentYRotate }); 
+            EventBus<PreviewingEvent>.Raise(new PreviewingEvent() { Position = _lastCellWorldPos, IsValid = _isValid, YRotation = currentYRotate });
         }
     }
 
@@ -135,7 +133,38 @@ public class Hoe : MonoBehaviour
             CurrentState = CurrentState == HoeState.Deleting ? HoeState.Idle : HoeState.Deleting;
     }
 
+    void PrimaryAction()
+    {
+        if (CurrentState == HoeState.Farming)
+        {
+            if (grid.IsValidForTilling(_hit.point, out var cellWorldPos))
+            {
+                _dirtPos = cellWorldPos;
+                StartTilling();
+            }
+        }
+        else if (CurrentState == HoeState.Deleting)
+        {
+            if (grid.IsTilled(_hit.point, out var cellWorldPos))
+            {
+                _dirtPos = cellWorldPos;
+                DeleteTile(cellWorldPos);
+            }
+        }
+    }
 
+    void SecondaryAction()
+    {
+        if (CurrentState != HoeState.Tilling)
+            CurrentState = CurrentState == HoeState.Farming ? HoeState.Idle : HoeState.Farming;
+    }
+
+    private Ray RayCastAtCursor()
+    {
+        _mousePos = _currentMouse.position.ReadValue();
+        _mousePos.z = sceneCamera.nearClipPlane;
+        return sceneCamera.ScreenPointToRay(_mousePos);
+    }
     private void StartTilling()
     {
         CurrentState = HoeState.Tilling;
@@ -144,68 +173,45 @@ public class Hoe : MonoBehaviour
 
     private void DeleteTile(Vector3 pos)
     {
-        LeanPool.Despawn(GetSpawnedPrefab(pos));
-    }
-    void PrimaryAction()
-    {
-        //Debug.Log("Action 1");
-        if (CurrentState == HoeState.Farming)
-        {
-            EventBus<OnHoeTillingEvent>.Raise(new OnHoeTillingEvent() { });
-        } else if (CurrentState == HoeState.Deleting)
-        {
-            EventBus<OnHoeDeletingEvent>.Raise(new OnHoeDeletingEvent() { });
-        }
+        grid.TryUntill(_dirtPos, out var cellPos);
+        EventBus<OnTileClearEvent>.Raise(new OnTileClearEvent() { CellPos = cellPos });
+        EventBus<PreviewingEvent>.Raise(new PreviewingEvent() { Position = _lastCellWorldPos, IsValid = _isValid, YRotation = currentYRotate });
     }
 
-    void SecondaryAction()
-    {
-        //Debug.Log("Action 2");
-        if (CurrentState != HoeState.Tilling)
-            CurrentState = CurrentState == HoeState.Farming ? HoeState.Idle : HoeState.Farming;
-    }
-
-
-    private Ray RayCastAtCursor()
-    {
-        _mousePos = _currentMouse.position.ReadValue();
-        _mousePos.z = sceneCamera.nearClipPlane;
-        return sceneCamera.ScreenPointToRay(_mousePos);
-    }
 
     public void OnTillingAnimationFinish()
     {
-        //Debug.Log("Finish");
-        RegisterSpawnedPrefabs(
-            _dirtPos,
-            LeanPool.Spawn(dirtPrefabs, _dirtPos, Quaternion.Euler(0, currentYRotate, 0))
-            );
+        grid.TryTill(_dirtPos, out var cellPos);
+        EventBus<OnTillingImpactEvent>.Raise(new OnTillingImpactEvent() { prefabs = dirtPrefabs, Position = _dirtPos, YRotation = currentYRotate , CellPos = cellPos });
         CurrentState = HoeState.Farming;
     }
 
-    private void RegisterSpawnedPrefabs(Vector3 pos, GameObject prefabs)
-    {
-        _spawnedPrefabs[pos] = prefabs;
-    }
-
-    private GameObject GetSpawnedPrefab(Vector3 pos)
-    {
-        return _spawnedPrefabs[pos];
-    }
-
+    // cached 
+    bool _isValid;
+    bool _isTilled;
+    Vector3 _lastCellWorldPos;
     void Update()
     {
+        // Preview events (StartPreviewEvent/PreviewingEvent/EndPreviewEvent) are kept
+        // as broadcasts on purpose: several unrelated systems (hologram, VFX, audio)
+        // may want to react to "player is aiming at a valid/invalid tile" without
+        // Hoe or FarmingGrid needing to know about any of them.
         if (CurrentState == HoeState.Farming)
         {
             _ray = RayCastAtCursor();
             if (Physics.Raycast(_ray, out _hit, HoeRange))
             {
-                EventBus<StartPreviewEvent>.Raise(new StartPreviewEvent() { prefabs = dirtHologramPrefabs , previewState = PreviewState.Build});
-                EventBus<OnHoeRaycastEvent>.Raise(new OnHoeRaycastEvent { Position = _hit.point , IsHit = true, PreviewState = PreviewState.Build });
-            } 
+                _isValid = grid.IsValidForTilling(_hit.point, out var cellWorldPos);
+                if (_lastCellWorldPos != cellWorldPos)
+                {
+                    _lastCellWorldPos = cellWorldPos;
+                    EventBus<StartPreviewEvent>.Raise(new StartPreviewEvent() { prefabs = dirtHologramPrefabs, previewState = PreviewState.Build });
+                    EventBus<PreviewingEvent>.Raise(new PreviewingEvent() { Position = cellWorldPos, IsValid = _isValid, YRotation = currentYRotate });
+                }
+            }
             else
             {
-                EventBus<OnHoeRaycastEvent>.Raise(new OnHoeRaycastEvent { IsHit = false });
+                _lastCellWorldPos = Vector3.zero;
                 EventBus<EndPreviewEvent>.Raise(new EndPreviewEvent() { });
             }
         }
@@ -214,12 +220,17 @@ public class Hoe : MonoBehaviour
             _ray = RayCastAtCursor();
             if (Physics.Raycast(_ray, out _hit, HoeRange))
             {
-                EventBus<StartPreviewEvent>.Raise(new StartPreviewEvent() { prefabs = deleteHologramPrefabs , previewState = PreviewState.Delete});
-                EventBus<OnHoeRaycastEvent>.Raise(new OnHoeRaycastEvent { Position = _hit.point , IsHit = true, PreviewState = PreviewState.Delete});
-            } 
+                _isTilled = grid.IsTilled(_hit.point, out var cellWorldPos);
+                if (_lastCellWorldPos != cellWorldPos)
+                {
+                    _lastCellWorldPos = cellWorldPos;
+                    EventBus<StartPreviewEvent>.Raise(new StartPreviewEvent() { prefabs = deleteHologramPrefabs, previewState = PreviewState.Delete });
+                    EventBus<PreviewingEvent>.Raise(new PreviewingEvent() { Position = cellWorldPos, IsValid = _isTilled, YRotation = currentYRotate }); 
+                }
+            }
             else
             {
-                EventBus<OnHoeRaycastEvent>.Raise(new OnHoeRaycastEvent { IsHit = false });
+                _lastCellWorldPos = Vector3.zero;
                 EventBus<EndPreviewEvent>.Raise(new EndPreviewEvent() { });
             }
         }
