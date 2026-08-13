@@ -8,6 +8,7 @@ public class InventoryUI : MonoBehaviour
     [SerializeField] private CanvasGroup HotbarUICanvasGroup;
     [SerializeField] private Transform InventoryUITransform;
     [SerializeField] private CanvasGroup InventoryUICanvasGroup;
+    [Header("GameObject Reference")]
     [SerializeField] private GameObject SlotPrefabs;
     [SerializeField] private GameObject UIPanel;
     [SerializeField] private GameObject HotbarUIPanel;

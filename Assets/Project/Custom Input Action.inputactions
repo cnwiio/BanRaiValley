@@ -16,24 +16,6 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Move",
-                    "type": "Value",
-                    "id": "cc7e8cbf-f6ee-48f6-88b4-6715c73ce803",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "Jump",
-                    "type": "Button",
-                    "id": "88bc847a-01f5-45c1-9c09-97562ab61231",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Toggle Inventory",
                     "type": "Button",
                     "id": "a64694cd-6d2b-4bd0-83c0-d7b8b7734ebf",
@@ -41,24 +23,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "Hotbar Select",
-                    "type": "Value",
-                    "id": "91765231-2754-42bf-b3e7-53384f499d9d",
-                    "expectedControlType": "Axis",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "Hotbar Scroll",
-                    "type": "Value",
-                    "id": "1df5070c-7878-4a65-b33b-ffc5fd1918c7",
-                    "expectedControlType": "Axis",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
                 },
                 {
                     "name": "Primary Action",
@@ -79,18 +43,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Rotate Action",
+                    "name": "Delete Action",
                     "type": "Button",
-                    "id": "cde4c4a2-bb1b-46cc-9ccc-2f3edf7ee123",
+                    "id": "bdb7ef85-bbfd-49f4-b0d4-6447b7f95ab7",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Delete Action",
+                    "name": "Rotate Action",
                     "type": "Button",
-                    "id": "8d449c84-bba0-4ac5-ae6a-d7667f8951aa",
+                    "id": "6ed93bac-fb02-4644-bb6f-0b52c60f32b2",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -110,72 +74,6 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "WASD",
-                    "id": "2662bdf4-9dae-48af-a1d5-5b76a3cf0cb2",
-                    "path": "2DVector",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Move",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "up",
-                    "id": "2ca25118-3faf-4959-b61e-e57e564f3526",
-                    "path": "<Keyboard>/w",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyBoard&Mouse",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "down",
-                    "id": "fc3d8b8b-a687-42f7-b13a-41e8f1f23d98",
-                    "path": "<Keyboard>/s",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyBoard&Mouse",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "left",
-                    "id": "5d540ec8-eaa1-471b-93fe-4c9c75442dea",
-                    "path": "<Keyboard>/a",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyBoard&Mouse",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "right",
-                    "id": "b6c446d0-19b9-4e98-a012-7b5b2fd8cc70",
-                    "path": "<Keyboard>/d",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyBoard&Mouse",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "",
-                    "id": "21bc6f28-7ce7-47c4-a22f-ffaa555c5046",
-                    "path": "<Keyboard>/space",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyBoard&Mouse",
-                    "action": "Jump",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
                     "name": "",
                     "id": "c7589630-a878-4fbd-b040-3432576244e1",
                     "path": "<Keyboard>/tab",
@@ -183,83 +81,6 @@
                     "processors": "",
                     "groups": ";KeyBoard&Mouse",
                     "action": "Toggle Inventory",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "cc99d688-5d55-40ce-bf29-2f2f5a8d3421",
-                    "path": "<Keyboard>/1",
-                    "interactions": "",
-                    "processors": "Clamp(min=1,max=1)",
-                    "groups": ";KeyBoard&Mouse",
-                    "action": "Hotbar Select",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "f16a12e9-e149-4319-957c-a7141aac856f",
-                    "path": "<Keyboard>/2",
-                    "interactions": "",
-                    "processors": "Clamp(min=2,max=2)",
-                    "groups": ";KeyBoard&Mouse",
-                    "action": "Hotbar Select",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "8a4d1eec-6695-4893-b210-4c9f518e7d88",
-                    "path": "<Keyboard>/3",
-                    "interactions": "",
-                    "processors": "Clamp(min=3,max=3)",
-                    "groups": ";KeyBoard&Mouse",
-                    "action": "Hotbar Select",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "ec602fba-a369-4c9d-b49f-df7767cfb5b5",
-                    "path": "<Keyboard>/4",
-                    "interactions": "",
-                    "processors": "Clamp(min=4,max=4)",
-                    "groups": ";KeyBoard&Mouse",
-                    "action": "Hotbar Select",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "55705821-0076-44ff-a79e-ddd7ec498ae0",
-                    "path": "<Keyboard>/5",
-                    "interactions": "",
-                    "processors": "Clamp(min=5,max=5)",
-                    "groups": ";KeyBoard&Mouse",
-                    "action": "Hotbar Select",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "918a8af3-4e51-4e4d-964a-15381e9f9611",
-                    "path": "<Keyboard>/6",
-                    "interactions": "",
-                    "processors": "Clamp(min=6,max=6)",
-                    "groups": ";KeyBoard&Mouse",
-                    "action": "Hotbar Select",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "7a54e6f7-3700-448b-8e9d-0d177c34ee68",
-                    "path": "<Mouse>/scroll/y",
-                    "interactions": "",
-                    "processors": "Invert",
-                    "groups": ";KeyBoard&Mouse",
-                    "action": "Hotbar Scroll",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -287,23 +108,23 @@
                 },
                 {
                     "name": "",
-                    "id": "61633144-78a7-4608-a7eb-9f5c7d6d0bc1",
-                    "path": "<Keyboard>/r",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";KeyBoard&Mouse",
-                    "action": "Rotate Action",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "0acef391-3f5a-4a69-a0e1-4c337c8a580f",
+                    "id": "c4929102-514e-4cc7-a5ac-eacb9a9128ee",
                     "path": "<Keyboard>/x",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Delete Action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2dbf2473-6b1c-40b4-82c5-bddb02331b12",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KeyBoard&Mouse",
+                    "action": "Rotate Action",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -332,6 +153,201 @@
                     "processors": "",
                     "groups": ";KeyBoard&Mouse",
                     "action": "Toggle Inventory",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "HotBar",
+            "id": "9b4b33bf-3f48-4f63-a1de-78fe735ffbfb",
+            "actions": [
+                {
+                    "name": "Hotbar Select",
+                    "type": "Value",
+                    "id": "975f80b2-faf8-42c3-93d4-0aa2c6b22a52",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Hotbar Scroll",
+                    "type": "Value",
+                    "id": "f6414000-6da2-46b5-a6f2-9422edae659f",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "f450a27f-b239-482c-bba6-9aaa5e9d7ce6",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "Clamp(min=1,max=1)",
+                    "groups": ";KeyBoard&Mouse",
+                    "action": "Hotbar Select",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4616141e-6712-4ef0-bf43-076cedde5faa",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "Clamp(min=2,max=2)",
+                    "groups": ";KeyBoard&Mouse",
+                    "action": "Hotbar Select",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fc15bced-045e-4f0a-ae86-71680d135792",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "Clamp(min=3,max=3)",
+                    "groups": ";KeyBoard&Mouse",
+                    "action": "Hotbar Select",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d287e321-15c3-4f4b-8af7-5302aca9f78b",
+                    "path": "<Keyboard>/4",
+                    "interactions": "",
+                    "processors": "Clamp(min=4,max=4)",
+                    "groups": ";KeyBoard&Mouse",
+                    "action": "Hotbar Select",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e82561e0-77e2-4fa8-9e90-500c4bfe2e86",
+                    "path": "<Keyboard>/5",
+                    "interactions": "",
+                    "processors": "Clamp(min=5,max=5)",
+                    "groups": ";KeyBoard&Mouse",
+                    "action": "Hotbar Select",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a7b91fdd-0872-4cb7-8e1d-2d95c7c877dc",
+                    "path": "<Keyboard>/6",
+                    "interactions": "",
+                    "processors": "Clamp(min=6,max=6)",
+                    "groups": ";KeyBoard&Mouse",
+                    "action": "Hotbar Select",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bfc2664c-6c5d-41b7-9fbf-87dbbb8a54b4",
+                    "path": "<Mouse>/scroll/y",
+                    "interactions": "",
+                    "processors": "Invert",
+                    "groups": ";KeyBoard&Mouse",
+                    "action": "Hotbar Scroll",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Movement",
+            "id": "b0ba0538-0843-4b0e-8016-c10f03e73d67",
+            "actions": [
+                {
+                    "name": "Move",
+                    "type": "Value",
+                    "id": "f40cca06-8b56-416f-a45f-b855e53177f8",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Jump",
+                    "type": "Button",
+                    "id": "24253a10-53f6-4724-a16b-17ea07187a96",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "WASD",
+                    "id": "3919ff72-f7fb-4d5c-a5c8-0a4454a9714b",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "2130b088-aaa5-4cf5-9e50-167c9c4f5f55",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyBoard&Mouse",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "36a48327-79fb-479a-8d3e-c03de059c7a5",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyBoard&Mouse",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "d4f4cc10-5869-4f41-aa6f-c1903fb5bce8",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyBoard&Mouse",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "2f61b1ed-9392-45c0-960d-f212df80022b",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyBoard&Mouse",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "6d721652-9716-45d0-ad82-23e7d1e2da36",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyBoard&Mouse",
+                    "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

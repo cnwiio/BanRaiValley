@@ -22,7 +22,6 @@ public class FarmingGrid : MonoBehaviour, IFarmingGrid
 
     private readonly Dictionary<Vector3Int, TileState> _overrides = new Dictionary<Vector3Int, TileState>();
     private const float CELL_SIZE_MODIFIER = 0.48f;
-    private float currentYRotation = 0;
 
     #region Lifecycle
 
@@ -36,26 +35,15 @@ public class FarmingGrid : MonoBehaviour, IFarmingGrid
         {
             Debug.LogWarning($"{name}: FarmingGridReference not assigned - no Hoe will be able to find this grid.");
         }
-
-        // Rotation is display/preview feedback only (not core grid state), so it's
-        // still fine for this to stay a broadcast event.
-        //EventBus<OnRotateFarmEvent>.Subscribe(OnRotateFarm);
     }
 
     private void OnDisable()
     {
         if (farmingGridReference != null)
             farmingGridReference.Unregister(this);
-
-        //EventBus<OnRotateFarmEvent>.Unsubscribe(OnRotateFarm);
     }
 
     #endregion
-
-    //private void OnRotateFarm(OnRotateFarmEvent evt)
-    //{
-    //    currentYRotation = evt.YRotation;
-    //}
 
     #region IFarmingGrid
 

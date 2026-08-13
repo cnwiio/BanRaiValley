@@ -99,7 +99,7 @@ public abstract class BaseInventory : MonoBehaviour, IInventory
     /// <summary>
     /// Safe wrapper method to check capacity first, then add items if possible.
     /// </summary>
-    public bool TryAddItem(Item itemToAdd, int amount)
+    public virtual bool TryAddItem(Item itemToAdd, int amount)
     {
         if (!CanAddItem(itemToAdd, amount)) return false;
 
@@ -153,13 +153,14 @@ public abstract class BaseInventory : MonoBehaviour, IInventory
     }
 
     public SlotData GetSlotData(int index)
-    {
+    { 
         if (!IsValidIndex(index)) return default;
         return inventorySlots[index];
     }
 
     protected bool IsValidIndex(int index)
     {
+        if (inventorySlots == null) return false;
         return index >= 0 && index < inventorySlots.Length;
     }
 }

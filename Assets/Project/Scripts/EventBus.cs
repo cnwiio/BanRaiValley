@@ -98,6 +98,9 @@ public struct OnTileClearEvent : IEvent
 {
     public Vector3Int CellPos;
 }
+public struct OnStartTillingEvent : IEvent 
+{
+}
 #endregion
 
 public struct StartPreviewEvent : IEvent

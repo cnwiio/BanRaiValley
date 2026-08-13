@@ -10,9 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7667176755021999392}
   - component: {fileID: 4450658217161590978}
-  - component: {fileID: 3631447672241904619}
   - component: {fileID: 5644196794530264836}
-  - component: {fileID: 959369850565190921}
+  - component: {fileID: 2931476907865657034}
   m_Layer: 0
   m_Name: 'InventoryManager '
   m_TagString: Untagged
@@ -49,19 +48,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InventoryUIController
   DragImage: {fileID: 0}
   DragText: {fileID: 0}
---- !u!114 &3631447672241904619
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8085531038618211861}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 326859bad33c0174fac979e0fc663ba4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::InventoyModel
-  inventorySlotsSize: 16
 --- !u!114 &5644196794530264836
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -74,11 +60,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2cce3b3aa33e5140a53f200c15f595b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DemoSpawnItem
-  inventoyModel: {fileID: 3631447672241904619}
+  inventoyModel: {fileID: 0}
+  hotbarModel: {fileID: 0}
   itemToSpawn:
   - {fileID: 11400000, guid: ebee6fb1aca26cc4abe29de10b150911, type: 2}
   - {fileID: 11400000, guid: 6b8057243707dfe4e840304b82472816, type: 2}
---- !u!114 &959369850565190921
+--- !u!114 &2931476907865657034
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -97,5 +84,5 @@ MonoBehaviour:
   SlotPrefabs: {fileID: 4545213469665757567, guid: c92bb9fb63bb76f43859fedbab4460e3, type: 3}
   UIPanel: {fileID: 0}
   HotbarUIPanel: {fileID: 0}
-  inventoryModel: {fileID: 3631447672241904619}
+  inventoryModel: {fileID: 0}
   hotbarModel: {fileID: 0}

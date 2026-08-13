@@ -19,11 +19,13 @@ public class HotbarInventoryModel : BaseInventory
             UpdateSelectedHotbarSlotUI(value);
         }
     }
+    private Item _lastItem;
 
     private void Awake()
     {
         Initialize(TotalSlot);
         UpdateSelectedHotbarSlotUI(SelectedIndex);
+        CheckSelectedSlotChanged();
     }
 
     private void OnEnable()
@@ -78,6 +80,16 @@ public class HotbarInventoryModel : BaseInventory
         }
     }
 
+    public override bool TryAddItem(Item itemToAdd, int amount)
+    {
+        if (!CanAddItem(itemToAdd, amount)) return false;
+
+        AddItem(itemToAdd, amount);
+        EventBus<InventoryUIRefreshEvent>.Raise(new InventoryUIRefreshEvent() { });
+        CheckSelectedSlotChanged();
+        return true;
+    }
+
     #region Selected Slot
     public SlotData GetCurrentSelectSlotData()
     {
@@ -120,5 +132,13 @@ public class HotbarInventoryModel : BaseInventory
         _SlotUI[index].SetHighlight(true);
         _oldHotslotUI = _SlotUI[index];
     }
+
+    private void CheckSelectedSlotChanged()
+    {
+        if (inventorySlots[SelectedIndex].item == _lastItem) return;
+        _lastItem = inventorySlots[SelectedIndex].item;
+        EventBus<OnHotbarChangeEvent>.Raise(new OnHotbarChangeEvent() { slotData = GetCurrentSelectSlotData() });
+    }
     #endregion
+
 }

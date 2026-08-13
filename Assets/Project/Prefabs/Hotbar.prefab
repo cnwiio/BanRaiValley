@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 599632376569336205}
   - component: {fileID: 8705491871723989165}
   - component: {fileID: 5472965783520489704}
-  - component: {fileID: 7694067666008371699}
   m_Layer: 5
   m_Name: Hotbar
   m_TagString: Untagged
@@ -93,19 +92,6 @@ MonoBehaviour:
   inventorySlotsSize: 6
   SlotUI_Parent: {fileID: 4418237264986236370}
   SlotUI_Prefabs: {fileID: 4545213469665757567, guid: c92bb9fb63bb76f43859fedbab4460e3, type: 3}
---- !u!114 &7694067666008371699
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 659717989284011131}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e1c6b2b7560b264e9f79d0bd52ad708, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerHandVisualizer
-  spawnTransform: {fileID: 0}
 --- !u!1 &3067909739758493293
 GameObject:
   m_ObjectHideFlags: 0

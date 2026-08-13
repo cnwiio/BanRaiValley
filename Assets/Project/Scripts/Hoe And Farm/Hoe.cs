@@ -52,6 +52,7 @@ public class Hoe : MonoBehaviour
                         EventBus<EndPreviewEvent>.Raise(new EndPreviewEvent() { });
                         break;
                     case HoeState.Deleting:
+                        _lastCellWorldPos = Vector3.zero;
                         EventBus<EndPreviewEvent>.Raise(new EndPreviewEvent() { });
                         break;
                 }
@@ -59,6 +60,12 @@ public class Hoe : MonoBehaviour
                 switch (value)
                 {
                     case HoeState.Farming:
+                        _lastCellWorldPos = Vector3.zero;
+                        break;
+                    case HoeState.Tilling:
+                        EventBus<OnStartTillingEvent>.Raise(new OnStartTillingEvent() { });
+                        break;
+                    case HoeState.Deleting:
                         _lastCellWorldPos = Vector3.zero;
                         break;
                 }

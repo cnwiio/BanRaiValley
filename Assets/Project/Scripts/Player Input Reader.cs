@@ -17,6 +17,8 @@ public class PlayerInputReader : MonoBehaviour
     [SerializeField] private InputActionAsset inputActionAsset;
     [SerializeField] private String PlayerActionMapName;
     [SerializeField] private String UIActionMapName;
+    [SerializeField] private String HotbarActionMapName;
+    [SerializeField] private String MovementActionMapName;
 
     [Header("Input Action Reference")]
     [SerializeField] private InputActionReference MoveAction;
@@ -50,11 +52,15 @@ public class PlayerInputReader : MonoBehaviour
     }
     private InputActionMap playerActionMap;
     private InputActionMap UIActionMap;
+    private InputActionMap HotbarActionMap;
+    private InputActionMap MovementActionMap;
 
     private void OnEnable()
     {
         playerActionMap = inputActionAsset.FindActionMap(PlayerActionMapName);
         UIActionMap = inputActionAsset.FindActionMap(UIActionMapName);
+        HotbarActionMap = inputActionAsset.FindActionMap(HotbarActionMapName);
+        MovementActionMap = inputActionAsset.FindActionMap(MovementActionMapName);
 
         MoveAction.action.performed += OnMove;
         MoveAction.action.canceled += OnStopMove;
@@ -77,8 +83,10 @@ public class PlayerInputReader : MonoBehaviour
         DeleteAction.action.performed += OnDeleteAction;
 
         EventBus<ChangeActionMap>.Subscribe(ChangeActionMap);
+        EventBus<OnStartTillingEvent>.Subscribe(OnStartTilling);
+        EventBus<OnTillingImpactEvent>.Subscribe(OnTillingImpact);
 
-        SwitchToPlayerActionMap();
+        CurrentActionMaptype = ActionMapType.Player;
     }
 
     private void OnDisable()
@@ -104,9 +112,14 @@ public class PlayerInputReader : MonoBehaviour
         DeleteAction.action.performed -= OnDeleteAction;
 
         EventBus<ChangeActionMap>.Unsubscribe(ChangeActionMap);
+        EventBus<OnStartTillingEvent>.Unsubscribe(OnStartTilling);
+        EventBus<OnTillingImpactEvent>.Unsubscribe(OnTillingImpact);
 
         UIActionMap?.Disable();
         playerActionMap?.Disable();
+        HotbarActionMap?.Disable();
+        MovementActionMap?.Disable();
+
         inputActionAsset.Disable();
     }
 
@@ -114,16 +127,35 @@ public class PlayerInputReader : MonoBehaviour
     {
         CurrentActionMaptype = evt.MapType;
     }
+    public void OnStartTilling(OnStartTillingEvent evt)
+    {
+        HotbarActionMap?.Disable();
+        MovementActionMap?.Disable();
+        InventoryToggleAction_PlayerMap.action.Disable();
+    }
+
+    public void OnTillingImpact(OnTillingImpactEvent evt)
+    {
+        HotbarActionMap?.Enable();
+        MovementActionMap?.Enable();
+        InventoryToggleAction_PlayerMap.action.Enable();
+    }
 
     public void SwitchToPlayerActionMap()
     {
         UIActionMap?.Disable();
+
         playerActionMap?.Enable();
+        MovementActionMap?.Enable();
+        HotbarActionMap?.Enable();
     }
 
     public void SwitchToUIActionMap()
     {
         playerActionMap?.Disable();
+        MovementActionMap?.Disable();
+        HotbarActionMap?.Disable();
+
         UIActionMap?.Enable();
     }
 

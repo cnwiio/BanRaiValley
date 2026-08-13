@@ -127,7 +127,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DemoItem
   dirtHologramPrefabs: {fileID: 8209775890509911002, guid: 16125a66faf292249b94f0e5ea6b97a2, type: 3}
-  deleteHologramPrefabs: {fileID: 6940088763359480455, guid: cef253dafc2779a42a9788388501108e, type: 3}
+  deleteHologramPrefabs: {fileID: 6940088763359480455, guid: 9913c6916dc2ed44296d0667c8f28a30, type: 3}
   dirtPrefabs: {fileID: 8209775890509911002, guid: 1697fe7afa530d4479db6aa37247aad6, type: 3}
   hoeAnimator: {fileID: 1287071345893912192}
   farmingGridReference: {fileID: 11400000, guid: 5ea848fd122f7cd48a93832bd2e00c19, type: 2}

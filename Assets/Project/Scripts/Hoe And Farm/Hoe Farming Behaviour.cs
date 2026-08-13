@@ -5,11 +5,9 @@ using UnityEngine;
 
 public class HoeFarmingBehaviour : MonoBehaviour
 {
-    // [SerializeField] private GameObject DirtPrefabs;
     private readonly Dictionary<Vector3Int, GameObject> spawnedPrefabsList = new Dictionary<Vector3Int, GameObject>();
 
-    private Vector3Int _pos;
-    #region BindEvents
+    #region Bind Events
     private void OnEnable()
     {
         EventBus<OnTillingImpactEvent>.Subscribe(OnTillingImpact);
@@ -24,7 +22,6 @@ public class HoeFarmingBehaviour : MonoBehaviour
 
     private void OnTillingImpact(OnTillingImpactEvent evt)
     {
-        //var x = evt.Position.x;
         GameObject go = SpawnPrefabs(evt.prefabs, evt.Position, evt.YRotation);
         RegisterSpawnedPrefabs(go, evt.CellPos);
     }
@@ -33,6 +30,7 @@ public class HoeFarmingBehaviour : MonoBehaviour
         DespawnPrefabs(evt.CellPos);
     }
     #endregion
+    #region Spawn And Despawn
     private GameObject SpawnPrefabs(GameObject prefab, Vector3 position, float Yrotation)
     {
         return LeanPool.Spawn(prefab, position, Quaternion.Euler(0f, Yrotation, 0f));
@@ -44,21 +42,22 @@ public class HoeFarmingBehaviour : MonoBehaviour
         LeanPool.Despawn(spawnedPrefabsList[position]);
         UnRegisterSpawnedPrefabs(position);
     }
+    #endregion
+    #region Register 
     private void RegisterSpawnedPrefabs(GameObject prefab, Vector3Int position)
     {
-        spawnedPrefabsList[position] = prefab;
+        spawnedPrefabsList.Add(position, prefab);
     }
 
     private void UnRegisterSpawnedPrefabs(Vector3Int position)
     {
-        spawnedPrefabsList[position] = null;
+        spawnedPrefabsList.Remove(position);
     }
 
     private GameObject GetSpawnedPrefabs(Vector3Int position)
     {
         spawnedPrefabsList.TryGetValue(position, out var value);
-        //Debug.Log(spawnedPrefabsList.Values);
-        Debug.Log(value + "" + position);
         return value;
     }
+    #endregion
 }
