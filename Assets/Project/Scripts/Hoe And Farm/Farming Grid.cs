@@ -16,11 +16,22 @@ public class FarmingGrid : MonoBehaviour, IFarmingGrid
         Tilled        // พรวนแล้ว
     }
 
+    public struct TileData
+    {
+        public TileState State;
+        public bool IsWatered;
+
+        public void Watering()
+        {
+            IsWatered = true;
+        }
+    }
+
     [SerializeField] private Grid grid;
     [SerializeField] private LayerMask obstacleLayerMask;
     [SerializeField] private FarmingGridReference farmingGridReference;
 
-    private readonly Dictionary<Vector3Int, TileState> _overrides = new Dictionary<Vector3Int, TileState>();
+    private readonly Dictionary<Vector3Int, TileData> _overrides = new Dictionary<Vector3Int, TileData>();
     private const float CELL_SIZE_MODIFIER = 0.48f;
 
     #region Lifecycle
@@ -61,6 +72,13 @@ public class FarmingGrid : MonoBehaviour, IFarmingGrid
         return GetTileState(cellPos) == TileState.Tilled;
     }
 
+    public bool IsWaterable(Vector3 worldPos, out Vector3 cellWorldPos)
+    {
+        var cellPos = grid.WorldToCell(worldPos);
+        cellWorldPos = grid.GetCellCenterWorld(cellPos);
+        return IsValidForWatering(cellPos);
+    }
+
     public bool TryTill(Vector3 worldPos, out Vector3Int cellPos)
     {
         cellPos = grid.WorldToCell(worldPos);
@@ -83,6 +101,17 @@ public class FarmingGrid : MonoBehaviour, IFarmingGrid
         return true;
     }
 
+    public bool TryWater(Vector3 worldPos, out Vector3Int cellPos)
+    {
+        cellPos = grid.WorldToCell(worldPos);
+        var cellWorldPos = grid.GetCellCenterWorld(cellPos);
+
+        if (GetTileState(cellPos) != TileState.Tilled) return false;
+
+        WateringTile(cellPos);
+        return true;
+    }
+
     #endregion
 
     /// <summary>
@@ -93,13 +122,23 @@ public class FarmingGrid : MonoBehaviour, IFarmingGrid
         if (GetTileState(cellPos) != TileState.Tillable) return false;
         return !Physics.CheckBox(cellWorldPos, grid.cellSize * CELL_SIZE_MODIFIER, Quaternion.identity, obstacleLayerMask);
     }
-
-    public void RegisterTilledSoil(Vector3Int gridPos) => _overrides[gridPos] = TileState.Tilled;
-
-    public void UnRegisterTiledSoil(Vector3Int gridPos) => _overrides[gridPos] = TileState.Tillable;
-
-    public TileState GetTileState(Vector3Int gridPos)
+    private bool IsValidForWatering(Vector3Int cellPos)
     {
-        return _overrides.TryGetValue(gridPos, out var state) ? state : TileState.Tillable;
+        if (GetTileState(cellPos) != TileState.Tilled) return false;
+        return _overrides.TryGetValue(cellPos, out var tileData) ? !tileData.IsWatered : true;
+    }
+
+    public void RegisterTilledSoil(Vector3Int cellPos) => _overrides[cellPos] = new TileData() { IsWatered = false, State = TileState.Tilled };
+
+    public void UnRegisterTiledSoil(Vector3Int cellPos) => _overrides[cellPos] = new TileData() { IsWatered = false, State = TileState.Tillable };
+
+    public TileState GetTileState(Vector3Int cellPos)
+    {
+        return _overrides.TryGetValue(cellPos, out var tileData) ? tileData.State : TileState.Tillable;
+    }
+
+    public void WateringTile(Vector3Int cellPos)
+    {
+        _overrides[cellPos].Watering();
     }
 }

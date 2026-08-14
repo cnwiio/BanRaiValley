@@ -8,7 +8,8 @@ public class DemoSpawnItem : MonoBehaviour
 
     public void Start()
     {
-        hotbarModel.TryAddItem(itemToSpawn[0], 3);
+        hotbarModel.TryAddItem(itemToSpawn[0], 1);
+        hotbarModel.TryAddItem(itemToSpawn[1], 1);
     }
 
     public void SpawnItem2(int id)
