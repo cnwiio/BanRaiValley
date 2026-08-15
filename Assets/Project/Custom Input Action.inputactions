@@ -16,15 +16,6 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Toggle Inventory",
-                    "type": "Button",
-                    "id": "a64694cd-6d2b-4bd0-83c0-d7b8b7734ebf",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Primary Action",
                     "type": "Button",
                     "id": "1c709fa6-03a2-401c-af45-2197952f3d4d",
@@ -70,17 +61,6 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse;Touch;KeyBoard&Mouse",
                     "action": "Look",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "c7589630-a878-4fbd-b040-3432576244e1",
-                    "path": "<Keyboard>/tab",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";KeyBoard&Mouse",
-                    "action": "Toggle Inventory",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -159,9 +139,18 @@
             ]
         },
         {
-            "name": "HotBar",
+            "name": "Hotbar",
             "id": "9b4b33bf-3f48-4f63-a1de-78fe735ffbfb",
             "actions": [
+                {
+                    "name": "Toggle Inventory",
+                    "type": "Button",
+                    "id": "f1a9927d-3af1-4520-bfef-23e74d2cc966",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
                 {
                     "name": "Hotbar Select",
                     "type": "Value",
@@ -245,6 +234,17 @@
                     "processors": "Clamp(min=6,max=6)",
                     "groups": ";KeyBoard&Mouse",
                     "action": "Hotbar Select",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "eaf98699-c179-4ec7-93ab-3994d50a00c1",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KeyBoard&Mouse",
+                    "action": "Toggle Inventory",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

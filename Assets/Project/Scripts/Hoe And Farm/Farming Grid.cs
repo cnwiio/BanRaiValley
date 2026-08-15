@@ -79,9 +79,9 @@ public class FarmingGrid : MonoBehaviour, IFarmingGrid
     {
         cellPos = grid.WorldToCell(worldPos);
 
-        var watered = _tileStore.TryWater(cellPos);
-        Debug.Log(_tileStore.IsWatered(cellPos));
-        return watered;
+        // var watered = _tileStore.TryWater(cellPos);
+        // Debug.Log(_tileStore.IsWatered(cellPos));
+        return _tileStore.TryWater(cellPos);
     }
 
     #endregion

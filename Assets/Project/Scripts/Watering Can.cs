@@ -1,8 +1,10 @@
 using Unity.VisualScripting;
+using UnityEditor.Toolbars;
 using UnityEngine;
 
 public enum WaterCanState
 {
+    Idle,
     Farm,
     Watering
 }
@@ -22,8 +24,16 @@ public class WateringCan : FarmingToolBase
             if (_currentState == value) return;
 
             // on exit state
-            // if (_currentState == WaterCanState.Farm){}
-            //     EndPreviewNow();
+            if (_currentState == WaterCanState.Farm)
+            {
+                if (value != WaterCanState.Watering)
+                    EndPreviewNow();
+            }
+
+            if (value == WaterCanState.Watering)
+            {
+                EventBus<OnStartWateringEvent>.Raise(new OnStartWateringEvent());
+            }
 
             _currentState = value;
         }
@@ -35,16 +45,30 @@ public class WateringCan : FarmingToolBase
     protected override void OnEnable()
     {
         base.OnEnable();
+        EventBus<ChangeActionMap>.Subscribe(OnChangeActionMap);
     }
 
     protected override void OnDisable()
     {
         base.OnDisable();
+        EventBus<ChangeActionMap>.Unsubscribe(OnChangeActionMap);
         
         EndPreviewNow();
         CurrentState = WaterCanState.Farm;
     }
-
+    
+    void OnChangeActionMap(ChangeActionMap evt)
+    {
+        if (evt.MapType != ActionMapType.Player)
+        {
+            CurrentState = WaterCanState.Idle;
+        }
+        else
+        {
+            CurrentState = WaterCanState.Farm;
+        }
+    }
+    
     private void StartWatering()
     {
         CurrentState = WaterCanState.Watering;
@@ -84,6 +108,7 @@ public class WateringCan : FarmingToolBase
         if (CurrentState != WaterCanState.Farm) return;
         if (!TryGetGrid()) return;
 
+        Debug.Log("Raycasting");
         RunPreviewUpdate(WateringCanRange, hologramPrefabs, PreviewState.Watering, grid.IsWaterable, 0f);
     }
 }

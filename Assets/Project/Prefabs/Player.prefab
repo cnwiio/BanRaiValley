@@ -75,6 +75,7 @@ GameObject:
   - component: {fileID: 7295424160333478852}
   - component: {fileID: 5518632834441925289}
   - component: {fileID: 9220241301251801149}
+  - component: {fileID: 4278678886193900730}
   - component: {fileID: 3237870357853340737}
   - component: {fileID: 8187068999090942818}
   m_Layer: 8
@@ -199,6 +200,23 @@ MonoBehaviour:
   PlayerCam: {fileID: 0}
   Data: {fileID: 11400000, guid: 9da0044848d7623479f7d41199f7dd0c, type: 2}
   InputReader: {fileID: 3237870357853340737}
+--- !u!114 &4278678886193900730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8128742679925487322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a53aec8cb024acab7c547e944d18339, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InputManager
+  inputActionAsset: {fileID: -944628639613478452, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
+  PlayerActionMapName: Player
+  UIActionMapName: UI
+  HotbarActionMapName: Hotbar
+  MovementActionMapName: Movement
 --- !u!114 &3237870357853340737
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -211,14 +229,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01ec244b108694a40a75cc4721bdec9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInputReader
-  inputActionAsset: {fileID: -944628639613478452, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
-  PlayerActionMapName: Player
-  UIActionMapName: UI
-  HotbarActionMapName: Hotbar
-  MovementActionMapName: Movement
   MoveAction: {fileID: -2822950199889475732, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
   JumpAction: {fileID: 3764721509380322806, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
-  InventoryToggleAction_PlayerMap: {fileID: -2231613874261945677, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
+  InventoryToggleAction_PlayerMap: {fileID: 4672973331285641741, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
   InventoryToggleAction_UIMap: {fileID: -8967117750965259324, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
   HotbarSelectAction: {fileID: 6586862962766629273, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
   HotbarScrollAction: {fileID: 6266939080993166162, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}

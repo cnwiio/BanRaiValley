@@ -127,4 +127,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Dirt
   intialMaterial: {fileID: 2100000, guid: 382e2b1b7fbf94945963320a17603c7c, type: 2}
-  MeshRenderer: {fileID: 8209775890507910426}
+  meshRenderer: {fileID: 8209775890507910426}

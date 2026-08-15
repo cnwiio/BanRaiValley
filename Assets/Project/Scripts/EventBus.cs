@@ -133,3 +133,7 @@ public struct OnWateringEvent : IEvent
     public Vector3Int CellPos;
     public Material Material;
 }
+
+public struct OnStartWateringEvent : IEvent
+{
+}

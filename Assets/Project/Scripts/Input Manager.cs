@@ -1,0 +1,119 @@
+﻿using System;
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public enum ActionMapType
+{
+    Player,
+    UI
+}
+public class InputManager : MonoBehaviour
+{
+    [Header("Input Action Asset Reference")]
+    [SerializeField] private InputActionAsset inputActionAsset;
+    [SerializeField] private String PlayerActionMapName;
+    [SerializeField] private String UIActionMapName;
+    [SerializeField] private String HotbarActionMapName;
+    [SerializeField] private String MovementActionMapName;
+    
+    private InputActionMap playerActionMap;
+    private InputActionMap UIActionMap;
+    private InputActionMap HotbarActionMap;
+    private InputActionMap MovementActionMap;
+    
+    private ActionMapType currentActionMaptype;
+    public ActionMapType CurrentActionMaptype
+    {
+        get => currentActionMaptype;
+        set
+        {
+            currentActionMaptype = value;
+            switch (value)
+            {
+                case ActionMapType.Player:
+                    SwitchToPlayerActionMap();
+                    break;
+                case ActionMapType.UI:
+                    SwitchToUIActionMap();
+                    break;
+            }
+        }
+    }
+
+    private void OnEnable()
+    {
+        playerActionMap = inputActionAsset.FindActionMap(PlayerActionMapName);
+        UIActionMap = inputActionAsset.FindActionMap(UIActionMapName);
+        HotbarActionMap = inputActionAsset.FindActionMap(HotbarActionMapName);
+        MovementActionMap = inputActionAsset.FindActionMap(MovementActionMapName);
+        
+        EventBus<ChangeActionMap>.Subscribe(ChangeActionMap);
+        EventBus<OnStartTillingEvent>.Subscribe(OnStartTilling);
+        EventBus<OnTillingImpactEvent>.Subscribe(OnTillingImpact);
+        EventBus<OnStartWateringEvent>.Subscribe(OnStartWatering);
+        EventBus<OnWateringEvent>.Subscribe(OnWatering);
+        
+        CurrentActionMaptype = ActionMapType.Player;
+    }
+
+    private void OnDisable()
+    {
+        EventBus<ChangeActionMap>.Unsubscribe(ChangeActionMap);
+        EventBus<OnStartTillingEvent>.Unsubscribe(OnStartTilling);
+        EventBus<OnTillingImpactEvent>.Unsubscribe(OnTillingImpact);
+        EventBus<OnWateringEvent>.Unsubscribe(OnWatering);
+        
+        UIActionMap?.Disable();
+        playerActionMap?.Disable();
+        HotbarActionMap?.Disable();
+        MovementActionMap?.Disable();
+
+        inputActionAsset.Disable();
+    }
+
+    private void ChangeActionMap(ChangeActionMap evt)
+    {
+        CurrentActionMaptype = evt.MapType;
+    }
+    private void OnStartTilling(OnStartTillingEvent evt)
+    {
+        HotbarActionMap?.Disable();
+        MovementActionMap?.Disable();
+    }
+
+    private void OnTillingImpact(OnTillingImpactEvent evt)
+    {
+        HotbarActionMap?.Enable();
+        MovementActionMap?.Enable();
+    }
+
+    private void OnStartWatering(OnStartWateringEvent evt)
+    {
+        HotbarActionMap?.Disable();
+    }
+
+    private void OnWatering(OnWateringEvent evt)
+    {
+        HotbarActionMap?.Enable();
+    }
+
+    
+    
+    public void SwitchToPlayerActionMap()
+    {
+        UIActionMap?.Disable();
+
+        playerActionMap?.Enable();
+        MovementActionMap?.Enable();
+        HotbarActionMap?.Enable();
+    }
+
+    public void SwitchToUIActionMap()
+    {
+        playerActionMap?.Disable();
+        MovementActionMap?.Disable();
+        HotbarActionMap?.Disable();
+
+        UIActionMap?.Enable();
+    }
+}
