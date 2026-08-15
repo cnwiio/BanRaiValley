@@ -5,6 +5,8 @@ public class Item : ScriptableObject
 {
     [Header("Only gameplay")]
     public ItemType type;
+
+    public Vector3 spawnOffset;
     //public Vector2Int range = new Vector2Int(5, 4);
 
     [Header("Only UI")]

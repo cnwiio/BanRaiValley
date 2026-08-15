@@ -108,7 +108,6 @@ public class WateringCan : FarmingToolBase
         if (CurrentState != WaterCanState.Farm) return;
         if (!TryGetGrid()) return;
 
-        Debug.Log("Raycasting");
         RunPreviewUpdate(WateringCanRange, hologramPrefabs, PreviewState.Watering, grid.IsWaterable, 0f);
     }
 }

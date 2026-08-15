@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Camera PlayerCam;
     [SerializeField] private PlayerMovementData Data;
     [SerializeField] private PlayerInputReader InputReader;
+    [SerializeField] private Transform Head;
 
     private Vector3 movementInput;
     private Vector3 horizontalDirection;
@@ -47,6 +48,7 @@ public class PlayerMovement : MonoBehaviour
     {
         // cached
         _camTransform = PlayerCam.transform;
+        Head.rotation = _camTransform.rotation;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
@@ -123,12 +125,13 @@ public class PlayerMovement : MonoBehaviour
 
     void UpdateCamRotateToPlayer()
     {
-        _forward = Vector3.ProjectOnPlane(CamForwardDirection, Vector3.up);
-
-        if (_forward.sqrMagnitude > MinForwardSqrMagnitude)
-        {
-            transform.rotation = Quaternion.LookRotation(_forward);
-            //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(_forward), 15 * Time.deltaTime);
-        }
+        // _forward = Vector3.ProjectOnPlane(CamForwardDirection, Vector3.up);
+        //
+        // if (_forward.sqrMagnitude > MinForwardSqrMagnitude)
+        // {
+        //     transform.rotation = Quaternion.LookRotation(_forward);
+        //     //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(_forward), 15 * Time.deltaTime);
+        // }
+        Head.rotation = _camTransform.rotation;
     }
 }

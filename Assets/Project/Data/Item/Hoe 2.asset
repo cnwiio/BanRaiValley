@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8d4523333e702c4439aa77764e85a4da, type: 3}
-  m_Name: Watering Can
+  m_Name: Hoe 2
   m_EditorClassIdentifier: Assembly-CSharp::Item
   type: 0
-  spawnOffset: {x: 0, y: 0.4, z: 0}
+  spawnOffset: {x: 0.25, y: -0.5, z: 0}
   stackable: 0
   MaxStack: 1
-  image: {fileID: 957467715, guid: d0605ad740c06ba409403bec1d4acd18, type: 3}
-  prefab: {fileID: 2509925977032215398, guid: 6b62ae4e6a28d1044b155d868fd82ebb, type: 3}
+  image: {fileID: 21300000, guid: 536a61b41f6eaf948b42b61596af4400, type: 3}
+  prefab: {fileID: 2182252356913973370, guid: dfde104e30a61af488c8eb1dc6adddb0, type: 3}
