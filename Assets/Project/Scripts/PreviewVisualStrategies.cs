@@ -22,7 +22,7 @@ public class BuildPreviewStrategy : IPreviewVisualStrategy
     }
 }
 
-/// <summary>Delete preview: only visible when aiming at something deletable.</summary>
+/// <summary>Delete preview: same visibility rule as Build - visible while aiming, color signals waterable/not.</summary>
 public class DeletePreviewStrategy : IPreviewVisualStrategy
 {
     public void Apply(GameObject hologram, MeshRenderer renderer, Material validMaterial, Material invalidMaterial, bool isTilled)

@@ -126,9 +126,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94f30bcf2fb65d64c8f447281fb9848e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WateringCan
-  wateringCanAnimator: {fileID: 3395382924879716630}
-  HologramPrefabs: {fileID: 6940088763359480455, guid: 9913c6916dc2ed44296d0667c8f28a30, type: 3}
   farmingGridReference: {fileID: 11400000, guid: 5ea848fd122f7cd48a93832bd2e00c19, type: 2}
+  wateringCanAnimator: {fileID: 3395382924879716630}
+  hologramPrefabs: {fileID: 6940088763359480455, guid: 9913c6916dc2ed44296d0667c8f28a30, type: 3}
+  WateringMaterial: {fileID: 2100000, guid: 811d06cef11243f43bd247913095162c, type: 2}
 --- !u!95 &3395382924879716630
 Animator:
   serializedVersion: 7
@@ -137,10 +138,10 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2509925977032215398}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
+  m_Controller: {fileID: 9100000, guid: b149b80b51f2a114388f0773b23b7088, type: 2}
+  m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0

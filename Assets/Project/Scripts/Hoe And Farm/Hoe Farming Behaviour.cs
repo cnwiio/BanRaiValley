@@ -5,19 +5,21 @@ using UnityEngine;
 
 public class HoeFarmingBehaviour : MonoBehaviour
 {
-    private readonly Dictionary<Vector3Int, GameObject> spawnedPrefabsList = new Dictionary<Vector3Int, GameObject>();
+    private readonly Dictionary<Vector3Int, GameObject> _spawnedTilesByCell = new Dictionary<Vector3Int, GameObject>();
 
     #region Bind Events
     private void OnEnable()
     {
         EventBus<OnTillingImpactEvent>.Subscribe(OnTillingImpact);
         EventBus<OnTileClearEvent>.Subscribe(OnTileClear);
+        EventBus<OnWateringEvent>.Subscribe(OnWatering);
     }
 
     private void OnDisable()
     {
         EventBus<OnTillingImpactEvent>.Unsubscribe(OnTillingImpact);
         EventBus<OnTileClearEvent>.Unsubscribe(OnTileClear);
+        EventBus<OnWateringEvent>.Unsubscribe(OnWatering);
     }
 
     private void OnTillingImpact(OnTillingImpactEvent evt)
@@ -29,35 +31,49 @@ public class HoeFarmingBehaviour : MonoBehaviour
     {
         DespawnPrefabs(evt.CellPos);
     }
+    private void OnWatering(OnWateringEvent evt)
+    {
+        WateringSoil(evt.CellPos, evt.Material);
+    }
     #endregion
     #region Spawn And Despawn
-    private GameObject SpawnPrefabs(GameObject prefab, Vector3 position, float Yrotation)
+    private GameObject SpawnPrefabs(GameObject prefab, Vector3 position, float yrotation)
     {
-        return LeanPool.Spawn(prefab, position, Quaternion.Euler(0f, Yrotation, 0f));
+        return LeanPool.Spawn(prefab, position, Quaternion.Euler(0f, yrotation, 0f));
     }
-    private void DespawnPrefabs(Vector3Int position)
+    private void DespawnPrefabs(Vector3Int cellPos)
     {
-        if (GetSpawnedPrefabs(position) == null) return;
+        if (!_spawnedTilesByCell.TryGetValue(cellPos, out var go)) return;
 
-        LeanPool.Despawn(spawnedPrefabsList[position]);
-        UnRegisterSpawnedPrefabs(position);
+        LeanPool.Despawn(go);
+        UnRegisterSpawnedPrefabs(cellPos);
     }
     #endregion
     #region Register 
-    private void RegisterSpawnedPrefabs(GameObject prefab, Vector3Int position)
+    private void RegisterSpawnedPrefabs(GameObject prefab, Vector3Int cellPos)
     {
-        spawnedPrefabsList.Add(position, prefab);
+        _spawnedTilesByCell[cellPos] = prefab;
     }
 
     private void UnRegisterSpawnedPrefabs(Vector3Int position)
     {
-        spawnedPrefabsList.Remove(position);
+        _spawnedTilesByCell.Remove(position);
     }
 
     private GameObject GetSpawnedPrefabs(Vector3Int position)
     {
-        spawnedPrefabsList.TryGetValue(position, out var value);
+        _spawnedTilesByCell.TryGetValue(position, out var value);
         return value;
     }
     #endregion
+
+    private void WateringSoil(Vector3Int cellPos, Material material)
+    {
+        if (_spawnedTilesByCell.TryGetValue(cellPos, out var value))
+        {
+            var meshRenderer = value.GetComponent<MeshRenderer>();
+            meshRenderer.sharedMaterial = material;
+        }
+    }
+    
 }

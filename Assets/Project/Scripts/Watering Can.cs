@@ -1,131 +1,89 @@
+using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public enum WaterCanState
 {
-    Idle,
     Farm,
     Watering
 }
-public class WateringCan : MonoBehaviour
+
+public class WateringCan : FarmingToolBase
 {
     [SerializeField] private Animator wateringCanAnimator;
-    [SerializeField] private GameObject HologramPrefabs;
-    [Header("Grid link - same asset must be assigned on the FarmingGrid")]
-    [SerializeField] private FarmingGridReference farmingGridReference;
-    private WaterCanState _currentState = WaterCanState.Idle;
+    [SerializeField] private GameObject hologramPrefabs;
+    [SerializeField] private Material WateringMaterial;
+
+    private WaterCanState _currentState = WaterCanState.Farm;
     private WaterCanState CurrentState
     {
         get => _currentState;
         set
         {
-            if (_currentState != value)
-            {
-                // on exit state
-                switch (_currentState)
-                {
-                    case WaterCanState.Idle:
-                        break;
-                    case WaterCanState.Farm:
-                        _lastCellWorldPos = Vector3.zero;
-                        EventBus<EndPreviewEvent>.Raise(new EndPreviewEvent() { });
-                        break;
-                }
-                // on enter state
-                switch (value)
-                {
-                    case WaterCanState.Idle:
-                        break;
-                    case WaterCanState.Farm:
-                        _lastCellWorldPos = Vector3.zero;
-                        break;
-                }
-                _currentState = value;
-            }
+            if (_currentState == value) return;
+
+            // on exit state
+            // if (_currentState == WaterCanState.Farm){}
+            //     EndPreviewNow();
+
+            _currentState = value;
         }
     }
 
+    private const int WateringCanRange = 10;
+    private Vector3 _wateringPos;
 
-    private Camera sceneCamera;
-    private Vector3 mousePos;
-    private Mouse currentMouse;
-    private int WateringCanRange = 10;
-    private IFarmingGrid grid;
-
-    // cached
-    private Ray _ray;
-    private RaycastHit _hit;
-    private Vector3 _lastCellWorldPos;
-    private void Awake()
+    protected override void OnEnable()
     {
-        sceneCamera = Camera.main;
-        currentMouse = Mouse.current;
-        grid = farmingGridReference.Grid;
-    }
-    private void OnEnable()
-    {
-        EventBus<OnPrimaryActionEvent>.Subscribe(OnPrimaryAction);
-        EventBus<OnSecondaryActionEvent>.Subscribe(OnSecondaryAction);
+        base.OnEnable();
     }
 
-    private void OnDisable()
+    protected override void OnDisable()
     {
-        EventBus<OnPrimaryActionEvent>.Unsubscribe(OnPrimaryAction);
-        EventBus<OnSecondaryActionEvent>.Unsubscribe(OnSecondaryAction);
-
-        CurrentState = WaterCanState.Idle;
-    }
-
-    bool _isWaterable = false;
-    private void OnPrimaryAction(OnPrimaryActionEvent evt)
-    {
-        PrimaryAction();
-    }
-
-    private void OnSecondaryAction(OnSecondaryActionEvent evt)
-    {
-        SecondaryAction();
-    }
-
-    private Ray RayCastAtCursor()
-    {
-        mousePos = currentMouse.position.ReadValue();
-        mousePos.z = sceneCamera.nearClipPlane;
-        return sceneCamera.ScreenPointToRay(mousePos);
-    }
-
-    private void PrimaryAction()
-    {
+        base.OnDisable();
         
+        EndPreviewNow();
+        CurrentState = WaterCanState.Farm;
     }
 
-    private void SecondaryAction()
+    private void StartWatering()
     {
-        CurrentState = CurrentState == WaterCanState.Farm ? WaterCanState.Idle : WaterCanState.Farm;
+        CurrentState = WaterCanState.Watering;
+        wateringCanAnimator.SetTrigger("watering");
     }
 
-    private void Update()
+    public void OnWaterinAnimationFinished()
     {
-        //Debug.Log(CurrentState);
-        if (CurrentState == WaterCanState.Farm)
+        if (grid.TryWater(_wateringPos, out var cellPos))
         {
-            _ray = RayCastAtCursor();
-            if (Physics.Raycast(_ray, out _hit, WateringCanRange))
-            {
-                _isWaterable = grid.IsWaterable(_hit.point, out var cellWorldPos);
-                //Debug.Log(_isWaterable);
-                if (_lastCellWorldPos != cellWorldPos)
-                {
-                    _lastCellWorldPos = cellWorldPos;
-                    EventBus<StartPreviewEvent>.Raise(new StartPreviewEvent() { prefabs = HologramPrefabs, previewState = PreviewState.Watering });
-                    EventBus<PreviewingEvent>.Raise(new PreviewingEvent() { Position = cellWorldPos, IsValid = _isWaterable, YRotation = 0 });
-                }
-            }
-            else
-            {
-                _lastCellWorldPos = Vector3.zero;
-                EventBus<EndPreviewEvent>.Raise(new EndPreviewEvent() { });
-            } 
+            EventBus<OnWateringEvent>.Raise(new OnWateringEvent() { CellPos = cellPos, Material = WateringMaterial});
+            EventBus<PreviewingEvent>.Raise(new PreviewingEvent() { Position = _lastCellWorldPos, IsValid = false, YRotation = 0 });
         }
+
+        CurrentState = WaterCanState.Farm;
+    }
+
+    protected override void PrimaryAction()
+    {
+        // watering logic goes here later
+        if (!TryGetGrid()) return;
+
+        if (grid.IsWaterable(_hit.point, out var cellWorldPos))
+        {
+            _wateringPos = cellWorldPos;
+            StartWatering();
+        }
+    }
+
+    protected override void SecondaryAction()
+    {
+        //CurrentState = CurrentState == WaterCanState.Farm ? WaterCanState.Idle : WaterCanState.Farm;
+    }
+
+    void Update()
+    {
+        if (CurrentState != WaterCanState.Farm) return;
+        if (!TryGetGrid()) return;
+
+        RunPreviewUpdate(WateringCanRange, hologramPrefabs, PreviewState.Watering, grid.IsWaterable, 0f);
     }
 }

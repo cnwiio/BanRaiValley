@@ -127,3 +127,9 @@ public struct OnRotateFarmEvent : IEvent
 }
 
 public struct OnDeleteActionEvent : IEvent { }
+
+public struct OnWateringEvent : IEvent
+{
+    public Vector3Int CellPos;
+    public Material Material;
+}
