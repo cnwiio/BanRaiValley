@@ -51,7 +51,7 @@ public class FarmingGrid : MonoBehaviour, IFarmingGrid
     {
         var cellPos = grid.WorldToCell(worldPos);
         cellWorldPos = grid.GetCellCenterWorld(cellPos);
-        return _tileStore.IsValidForWatering(cellPos);
+        return IsWaterable(cellPos);
     }
 
     public bool TryTill(Vector3 worldPos, out Vector3Int cellPos)
@@ -79,27 +79,32 @@ public class FarmingGrid : MonoBehaviour, IFarmingGrid
     {
         cellPos = grid.WorldToCell(worldPos);
 
-        // var watered = _tileStore.TryWater(cellPos);
-        // Debug.Log(_tileStore.IsWatered(cellPos));
-        return _tileStore.TryWater(cellPos);
+        if (!IsWaterable(cellPos)) return false;
+        
+        RegisterWateredSoil(cellPos);
+        return true;
     }
 
     #endregion
 
-    /// <summary>
-    /// คืนค่า true ถ้าช่องนี้อยู่ในโซนและยังไม่ได้พรวน / ไม่มีสิ่งกีดขวาง
-    /// </summary>
+    public TileState GetTileState(Vector3Int cellPos) => _tileStore.GetState(cellPos);
+    
     private bool IsValidForTilling(Vector3Int cellPos, Vector3 cellWorldPos)
     {
         if (GetTileState(cellPos) != TileState.Tillable) return false;
         return !Physics.CheckBox(cellWorldPos, grid.cellSize * CELL_SIZE_MODIFIER, Quaternion.identity, obstacleLayerMask);
     }
 
+    private bool IsWaterable(Vector3Int cellPos)
+    {
+        if (GetTileState(cellPos) != TileState.Tilled) return false;
+        return !_tileStore.IsWatered(cellPos);
+    }
+
+    public void RegisterWateredSoil(Vector3Int cellPos) => _tileStore.SetWatered(cellPos);
     public void RegisterTilledSoil(Vector3Int cellPos) => _tileStore.SetTilled(cellPos);
 
     public void UnRegisterTiledSoil(Vector3Int cellPos) => _tileStore.SetTillable(cellPos);
+    
 
-    public TileState GetTileState(Vector3Int cellPos) => _tileStore.GetState(cellPos);
-
-    public void WateringTile(Vector3Int cellPos) => _tileStore.TryWater(cellPos);
 }

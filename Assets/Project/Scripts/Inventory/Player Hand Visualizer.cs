@@ -42,12 +42,12 @@ public class PlayerHandVisualizer : MonoBehaviour
         }
         if (!slotdata.IsEmpty)
         {
-            spawnTransform.localPosition = intialSpawnPostion;
-            spawnTransform.localPosition += currentSlotData.item.spawnOffset;
-            currentItem = LeanPool.Spawn(slotdata.item.prefab, spawnTransform, false);
-            // currentItem = Instantiate(slotdata.item.prefab, spawnTransform);
-            // currentItem.transform.position = Vector3.zero;
-            // currentItem.transform.position += slotdata.item.spawnOffset;
+            if (slotdata.item.type == ItemType.Tool)
+            {
+                spawnTransform.localPosition = intialSpawnPostion;
+                spawnTransform.localPosition += currentSlotData.item.spawnOffset;
+                currentItem = LeanPool.Spawn(slotdata.item.prefab, spawnTransform);
+            }
         }
     }    
 }

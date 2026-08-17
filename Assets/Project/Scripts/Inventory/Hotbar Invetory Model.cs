@@ -93,7 +93,7 @@ public class HotbarInventoryModel : BaseInventory
     #region Selected Slot
     public SlotData GetCurrentSelectSlotData()
     {
-        return GetSlotData(SelectedIndex);
+        return inventorySlots[SelectedIndex];
     }
 
     private void SetSelectSlot(OnHotbarSelectEvent evt)
@@ -138,6 +138,16 @@ public class HotbarInventoryModel : BaseInventory
         if (inventorySlots[SelectedIndex].item == _lastItem) return;
         _lastItem = inventorySlots[SelectedIndex].item;
         EventBus<OnHotbarChangeEvent>.Raise(new OnHotbarChangeEvent() { slotData = GetCurrentSelectSlotData() });
+    }
+
+    public void UseConsumableInSelectedSlot()
+    {
+        if (inventorySlots[SelectedIndex].item.stackable)
+        {
+            inventorySlots[SelectedIndex].count -= 1;
+            EventBus<InventoryUIRefreshEvent>.Raise(new InventoryUIRefreshEvent() { });
+            EventBus<OnHotbarChangeEvent>.Raise(new OnHotbarChangeEvent() { slotData = inventorySlots[SelectedIndex] });
+        }
     }
     #endregion
 

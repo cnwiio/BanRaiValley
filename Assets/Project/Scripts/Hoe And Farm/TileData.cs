@@ -17,15 +17,18 @@ public readonly struct TileData
 {
     public TileState State { get; }
     public bool IsWatered { get; }
+    public bool IsPlanted { get; }
 
-    public TileData(TileState state, bool isWatered)
+    public TileData(TileState state, bool isWatered, bool isPlantable)
     {
         State = state;
         IsWatered = isWatered;
+        IsPlanted = isPlantable;
     }
 
-    public TileData WithWatered(bool value) => new TileData(State, value);
-    public TileData WithState(TileState state) => new TileData(state, IsWatered);
+    public TileData WithPlatable(bool value) => new TileData(State, IsWatered, IsPlanted);
+    public TileData WithWatered(bool value) => new TileData(State, value, IsPlanted);
+    public TileData WithState(TileState state) => new TileData(state, IsWatered, IsPlanted);
 }
 
 /// <summary>
@@ -36,10 +39,9 @@ public interface ITileStore
 {
     TileState GetState(Vector3Int cellPos);
     bool IsWatered(Vector3Int cellPos);
-    bool IsValidForWatering(Vector3Int cellPos);
     void SetTilled(Vector3Int cellPos);
     void SetTillable(Vector3Int cellPos);
-    bool TryWater(Vector3Int cellPos);
+    void SetWatered(Vector3Int cellPos);
 }
 
 public class TileStore : ITileStore
@@ -52,28 +54,19 @@ public class TileStore : ITileStore
     public bool IsWatered(Vector3Int cellPos) =>
         _tiles.TryGetValue(cellPos, out var tile) && tile.IsWatered;
 
-    public bool IsValidForWatering(Vector3Int cellPos)
-    {
-        if (GetState(cellPos) != TileState.Tilled) return false;
-        return !IsWatered(cellPos);
-    }
 
     public void SetTilled(Vector3Int cellPos) =>
-        _tiles[cellPos] = new TileData(TileState.Tilled, false);
+        _tiles[cellPos] = new TileData(TileState.Tilled, false, false);
 
     public void SetTillable(Vector3Int cellPos) =>
-        _tiles[cellPos] = new TileData(TileState.Tillable, false);
+        _tiles[cellPos] = new TileData(TileState.Tillable, false, false);
 
-    public bool TryWater(Vector3Int cellPos)
+    public void SetWatered(Vector3Int cellPos)
     {
-        if (!IsValidForWatering(cellPos)) return false;
-
-        // Read -> mutate copy -> write back, since TileData is immutable.
         var current = _tiles.TryGetValue(cellPos, out var tile)
             ? tile
-            : new TileData(TileState.Tilled, false);
-
+            : new TileData(TileState.Tilled, false, false);
+        
         _tiles[cellPos] = current.WithWatered(true);
-        return true;
     }
 }
