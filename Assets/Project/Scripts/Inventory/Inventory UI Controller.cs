@@ -91,9 +91,26 @@ public class InventoryUIController : MonoBehaviour
 
         if (_inventoryA == _inventoryB)
         {
-            if (_indexA == _indexB) return; 
+            if (_indexA == _indexB) return;
 
-            _inventoryA.SwapSlot(_indexA, _indexB);
+            if (itemA.item == itemB.item && itemA.item.stackable)
+            {
+                int remainingAmount = _inventoryB.AddStackItemToSlot(_indexB, itemA.item, itemA.count);
+                if (remainingAmount > 0)
+                {
+                    itemB.count = remainingAmount;
+                    _inventoryA.SetSlotData(itemB, _indexA);
+                }
+                else
+                {
+                    _inventoryA.ClearSlot(_indexA);
+                }
+            }
+            else
+            {
+                _inventoryA.SwapSlot(_indexA, _indexB);
+            }
+
             _slotA.RenderVisual();
             _slotB.RenderVisual();
         }
