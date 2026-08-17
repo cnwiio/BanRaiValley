@@ -44,7 +44,7 @@ public class FarmingGrid : MonoBehaviour, IFarmingGrid
     {
         var cellPos = grid.WorldToCell(worldPos);
         cellWorldPos = grid.GetCellCenterWorld(cellPos);
-        return GetTileState(cellPos) == TileState.Tilled;
+        return IsTilled(cellPos);
     }
 
     public bool IsWaterable(Vector3 worldPos, out Vector3 cellWorldPos)
@@ -53,7 +53,12 @@ public class FarmingGrid : MonoBehaviour, IFarmingGrid
         cellWorldPos = grid.GetCellCenterWorld(cellPos);
         return IsWaterable(cellPos);
     }
-
+    public bool IsPlantable(Vector3 worldPos, out Vector3 cellWorldPos)
+    {
+        var cellPos = grid.WorldToCell(worldPos);
+        cellWorldPos = grid.GetCellCenterWorld(cellPos);
+        return IsPlantable(cellPos);
+    }
     public bool TryTill(Vector3 worldPos, out Vector3Int cellPos)
     {
         cellPos = grid.WorldToCell(worldPos);
@@ -69,13 +74,13 @@ public class FarmingGrid : MonoBehaviour, IFarmingGrid
     {
         cellPos = grid.WorldToCell(worldPos);
 
-        if (GetTileState(cellPos) != TileState.Tilled) return false;
+        if (!IsTilled(cellPos)) return false;
 
         UnRegisterTiledSoil(cellPos);
         return true;
     }
 
-    public bool TryWater(Vector3 worldPos, out Vector3Int cellPos)
+    public bool TryWatering(Vector3 worldPos, out Vector3Int cellPos)
     {
         cellPos = grid.WorldToCell(worldPos);
 
@@ -85,26 +90,43 @@ public class FarmingGrid : MonoBehaviour, IFarmingGrid
         return true;
     }
 
-    #endregion
+    public bool TryPlanting(Vector3 worldPos, out Vector3Int cellPos)
+    {
+        cellPos = grid.WorldToCell(worldPos);
 
-    public TileState GetTileState(Vector3Int cellPos) => _tileStore.GetState(cellPos);
+        if (!IsWaterable(cellPos)) return false;
+        
+        RegisterPlantedSoil(cellPos);
+        return true;
+    }
+
+    #endregion
+    
+    private bool IsTilled(Vector3Int cellPos) => _tileStore.IsTilled(cellPos);
     
     private bool IsValidForTilling(Vector3Int cellPos, Vector3 cellWorldPos)
     {
-        if (GetTileState(cellPos) != TileState.Tillable) return false;
+        if (IsTilled(cellPos)) return false;
         return !Physics.CheckBox(cellWorldPos, grid.cellSize * CELL_SIZE_MODIFIER, Quaternion.identity, obstacleLayerMask);
     }
 
     private bool IsWaterable(Vector3Int cellPos)
     {
-        if (GetTileState(cellPos) != TileState.Tilled) return false;
+        if (!IsTilled(cellPos)) return false;
         return !_tileStore.IsWatered(cellPos);
     }
 
-    public void RegisterWateredSoil(Vector3Int cellPos) => _tileStore.SetWatered(cellPos);
-    public void RegisterTilledSoil(Vector3Int cellPos) => _tileStore.SetTilled(cellPos);
+    private bool IsPlantable(Vector3Int cellPos)
+    {
+        if (!IsTilled(cellPos)) return false;
+        return !_tileStore.IsPlanted(cellPos);
+    }
 
-    public void UnRegisterTiledSoil(Vector3Int cellPos) => _tileStore.SetTillable(cellPos);
+    private void RegisterTilledSoil(Vector3Int cellPos) => _tileStore.SetTilled(cellPos);
+
+    private void UnRegisterTiledSoil(Vector3Int cellPos) => _tileStore.SetTillable(cellPos);
+    private void RegisterWateredSoil(Vector3Int cellPos) => _tileStore.SetWatered(cellPos);
+    private void RegisterPlantedSoil(Vector3Int cellPos) => _tileStore.SetPlanted(cellPos);
     
 
 }

@@ -128,12 +128,18 @@ public struct OnRotateFarmEvent : IEvent
 
 public struct OnDeleteActionEvent : IEvent { }
 
+public struct OnStartWateringEvent : IEvent { }
 public struct OnWateringEvent : IEvent
 {
     public Vector3Int CellPos;
     public Material Material;
 }
 
-public struct OnStartWateringEvent : IEvent
+public struct OnStartPlantingEvent : IEvent { }
+
+public struct OnPlantingEvent : IEvent
 {
+    public GameObject Prefab;
+    public Vector3 Position;
+    public Vector3Int CellPos;
 }

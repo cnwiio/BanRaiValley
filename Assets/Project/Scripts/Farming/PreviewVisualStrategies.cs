@@ -56,3 +56,14 @@ public class WateringPreviewStrategy : IPreviewVisualStrategy
         }
     }
 }
+
+public class PlantingPreviewStrategy : IPreviewVisualStrategy
+{
+    public void Apply(GameObject hologram, MeshRenderer renderer, Material validMaterial, Material invalidMaterial, bool isPlantable)
+    {
+        renderer.sharedMaterial = isPlantable ? validMaterial : invalidMaterial;
+
+        if (!hologram.activeSelf)
+            hologram.SetActive(true);
+    }
+}

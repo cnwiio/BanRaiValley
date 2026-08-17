@@ -77,7 +77,7 @@ public class WateringCan : FarmingToolBase
 
     public void OnWaterinAnimationFinished()
     {
-        if (grid.TryWater(_wateringPos, out var cellPos))
+        if (grid.TryWatering(_wateringPos, out var cellPos))
         {
             EventBus<OnWateringEvent>.Raise(new OnWateringEvent() { CellPos = cellPos, Material = WateringMaterial});
             EventBus<PreviewingEvent>.Raise(new PreviewingEvent() { Position = _lastCellWorldPos, IsValid = false, YRotation = 0 });

@@ -6,7 +6,8 @@ public enum PreviewState
 {
     Build,
     Delete,
-    Watering
+    Watering,
+    Planting
 }
 
 public class PlacementPreviewer : MonoBehaviour
@@ -18,7 +19,8 @@ public class PlacementPreviewer : MonoBehaviour
         {
             { PreviewState.Build, new BuildPreviewStrategy() },
             { PreviewState.Delete, new DeletePreviewStrategy() },
-            { PreviewState.Watering, new WateringPreviewStrategy() }
+            { PreviewState.Watering, new WateringPreviewStrategy() },
+            { PreviewState.Planting, new PlantingPreviewStrategy() }
         };
 
     GameObject _hologramPrefabs;

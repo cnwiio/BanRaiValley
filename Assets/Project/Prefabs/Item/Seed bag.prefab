@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1817393841542236843}
   - component: {fileID: 307311213828903824}
   - component: {fileID: 3395382924879716630}
+  - component: {fileID: 1724741180066006902}
   m_Layer: 0
   m_Name: Seed bag
   m_TagString: Untagged
@@ -101,7 +102,7 @@ Animator:
   m_GameObject: {fileID: 2509925977032215398}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: b149b80b51f2a114388f0773b23b7088, type: 2}
+  m_Controller: {fileID: 9100000, guid: 110dcd9f53c86d44890d4a24dc26bec1, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -113,3 +114,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1724741180066006902
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2509925977032215398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da323491e9afd2a48956a895079459cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SeedBag
+  farmingGridReference: {fileID: 11400000, guid: 5ea848fd122f7cd48a93832bd2e00c19, type: 2}
+  seedBagAnimator: {fileID: 3395382924879716630}
+  hologramPrefab: {fileID: 6940088763359480455, guid: 9913c6916dc2ed44296d0667c8f28a30, type: 3}
+  plantPrefab: {fileID: 2147524051394071840, guid: 0c2b4faa19f146e418d920ee35be1c37, type: 3}
