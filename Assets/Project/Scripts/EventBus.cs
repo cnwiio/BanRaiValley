@@ -143,3 +143,8 @@ public struct OnPlantingEvent : IEvent
     public Vector3 Position;
     public Vector3Int CellPos;
 }
+
+public struct OnClearPlant : IEvent
+{
+    public Vector3Int CellPos;
+}

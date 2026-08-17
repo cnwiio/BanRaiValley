@@ -9,9 +9,11 @@ public interface IFarmingGrid
     bool IsValidForTilling(Vector3 worldPos, out Vector3 cellWorldPos);
     bool IsTilled(Vector3 worldPos, out Vector3 cellWorldPos);
     bool IsWaterable(Vector3 worldPos, out Vector3 cellWorldPos);
+    bool IsPlanted(Vector3 worldPos, out Vector3 cellWorldPos);
     bool IsPlantable(Vector3 worldPos, out Vector3 cellWorldPos);
     bool TryTill(Vector3 worldPos, out Vector3Int cellPos);
     bool TryUntill(Vector3 worldPos, out Vector3Int cellPos);
     bool TryWatering(Vector3 worldPos, out Vector3Int cellPos);
     bool TryPlanting(Vector3 worldPos, out Vector3Int cellPos);
+    bool TryClearPlant(Vector3 worldPos, out Vector3Int cellPos);
 }

@@ -41,9 +41,10 @@ public interface ITileStore
     bool IsWatered(Vector3Int cellPos);
     bool IsPlanted(Vector3Int cellPos);
     void SetTilled(Vector3Int cellPos);
-    void SetTillable(Vector3Int cellPos);
+    void SetUnTill(Vector3Int cellPos);
     void SetWatered(Vector3Int cellPos);
     void SetPlanted(Vector3Int cellPos);
+    void SetUnPlant(Vector3Int cellPos);
 }
 
 public class TileStore : ITileStore
@@ -63,7 +64,7 @@ public class TileStore : ITileStore
     public void SetTilled(Vector3Int cellPos) =>
         _tiles[cellPos] = new TileData(true, false, false);
 
-    public void SetTillable(Vector3Int cellPos) =>
+    public void SetUnTill(Vector3Int cellPos) =>
         _tiles[cellPos] = new TileData(false, false, false);
 
     public void SetWatered(Vector3Int cellPos)
@@ -82,5 +83,13 @@ public class TileStore : ITileStore
             : new TileData(true, false, false);
         
         _tiles[cellPos] = current.WithPlatable(true);
+    }
+    public void SetUnPlant(Vector3Int cellPos)
+    {
+        var current = _tiles.TryGetValue(cellPos, out var tile)
+            ? tile
+            : new TileData(true, false, false);
+        
+        _tiles[cellPos] = current.WithPlatable(false);
     }
 }

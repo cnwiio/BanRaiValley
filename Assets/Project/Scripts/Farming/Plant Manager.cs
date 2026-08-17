@@ -10,17 +10,24 @@ public class PlantManager : MonoBehaviour
     private void OnEnable()
     {
         EventBus<OnPlantingEvent>.Subscribe(OnPlanting);
+        EventBus<OnClearPlant>.Subscribe(OnClearPlant);
     }
 
     private void OnDisable()
     {
         EventBus<OnPlantingEvent>.Unsubscribe(OnPlanting);
+        EventBus<OnClearPlant>.Unsubscribe(OnClearPlant);
     }
 
     private void OnPlanting(OnPlantingEvent evt)
     {
         GameObject go = SpawnPrefabs(evt.Prefab, evt.Position);
         RegisterSpawnedPrefabs(go, evt.CellPos);
+    }
+
+    private void OnClearPlant(OnClearPlant evt)
+    {
+        DespawnPrefabs(evt.CellPos);
     }
 
     #region Spawn And Despawn

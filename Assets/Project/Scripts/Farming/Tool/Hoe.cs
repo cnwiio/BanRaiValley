@@ -111,9 +111,14 @@ public class Hoe : FarmingToolBase
         }
         else if (CurrentState == HoeState.Deleting)
         {
-            if (grid.IsTilled(_hit.point, out var cellWorldPos))
+            if (grid.IsPlanted(_hit.point, out var cellWorldPos))
             {
-                _dirtPos = cellWorldPos;
+                // _dirtPos = cellWorldPos1;
+                DeletePlant(cellWorldPos);
+            }
+            else if (grid.IsTilled(_hit.point, out cellWorldPos))
+            {
+                // _dirtPos = cellWorldPos2;
                 DeleteTile(cellWorldPos);
             }
         }
@@ -136,10 +141,17 @@ public class Hoe : FarmingToolBase
         // Only tell the world "a tile was cleared" if the grid's state actually
         // changed - keeps HoeFarmingBehaviour's spawned-object registry in sync
         // with FarmingGrid's logical TileState.
-        if (!grid.TryUntill(_dirtPos, out var cellPos)) return;
+        if (!grid.TryUntill(pos, out var cellPos)) return;
 
         EventBus<OnTileClearEvent>.Raise(new OnTileClearEvent() { CellPos = cellPos });
         EventBus<PreviewingEvent>.Raise(new PreviewingEvent() { Position = _lastCellWorldPos, IsValid = false, YRotation = currentYRotate });
+    }
+
+    private void DeletePlant(Vector3 pos)
+    {
+        if (!grid.TryClearPlant(pos, out var cellPos)) return;
+        
+        EventBus<OnClearPlant>.Raise(new OnClearPlant() {CellPos = cellPos});
     }
 
     public void OnTillingAnimationFinish()
