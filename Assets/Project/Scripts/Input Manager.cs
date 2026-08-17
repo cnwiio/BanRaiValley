@@ -52,6 +52,8 @@ public class InputManager : MonoBehaviour
         EventBus<OnTillingImpactEvent>.Subscribe(OnTillingImpact);
         EventBus<OnStartWateringEvent>.Subscribe(OnStartWatering);
         EventBus<OnWateringEvent>.Subscribe(OnWatering);
+        EventBus<OnStartPlantingEvent>.Subscribe(OnStartPlanting);
+        EventBus<OnPlantingEvent>.Subscribe(OnPlanting);
         
         CurrentActionMaptype = ActionMapType.Player;
     }
@@ -62,6 +64,8 @@ public class InputManager : MonoBehaviour
         EventBus<OnStartTillingEvent>.Unsubscribe(OnStartTilling);
         EventBus<OnTillingImpactEvent>.Unsubscribe(OnTillingImpact);
         EventBus<OnWateringEvent>.Unsubscribe(OnWatering);
+        EventBus<OnStartPlantingEvent>.Unsubscribe(OnStartPlanting);
+        EventBus<OnPlantingEvent>.Unsubscribe(OnPlanting);
         
         UIActionMap?.Disable();
         playerActionMap?.Disable();
@@ -93,6 +97,14 @@ public class InputManager : MonoBehaviour
     }
 
     private void OnWatering(OnWateringEvent evt)
+    {
+        HotbarActionMap?.Enable();
+    }
+    private void OnStartPlanting(OnStartPlantingEvent evt)
+    {
+        HotbarActionMap?.Disable();
+    }
+    private void OnPlanting(OnPlantingEvent evt)
     {
         HotbarActionMap?.Enable();
     }

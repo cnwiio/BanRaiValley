@@ -894,6 +894,17 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!114 &618677820 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3427529152441689816, guid: b3acce19ab968ee43aa0d264a5e2a7ee, type: 3}
+  m_PrefabInstance: {fileID: 1797427631}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c7e70e362000ec4aafcf2e2d74f5604, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HotbarInvetoryModel
 --- !u!1 &647987720
 GameObject:
   m_ObjectHideFlags: 0
@@ -1140,6 +1151,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &996749824 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6186238327870193689, guid: b3acce19ab968ee43aa0d264a5e2a7ee, type: 3}
+  m_PrefabInstance: {fileID: 1797427631}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1044331569
 GameObject:
   m_ObjectHideFlags: 0
@@ -1257,12 +1273,25 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7762035644728615176, guid: b3acce19ab968ee43aa0d264a5e2a7ee, type: 3}
   m_PrefabInstance: {fileID: 1797427631}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 996749824}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a2cce3b3aa33e5140a53f200c15f595b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DemoSpawnItem
+--- !u!114 &1200339323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 996749824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91d179b747a71cc43ad9e642896a4044, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInventoryManager
+  hotbarInventory: {fileID: 618677820}
 --- !u!1 &1202154868
 GameObject:
   m_ObjectHideFlags: 0
@@ -1891,7 +1920,10 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4587986333968756850, guid: b3acce19ab968ee43aa0d264a5e2a7ee, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2001655459}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6186238327870193689, guid: b3acce19ab968ee43aa0d264a5e2a7ee, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1200339323}
   m_SourcePrefab: {fileID: 100100000, guid: b3acce19ab968ee43aa0d264a5e2a7ee, type: 3}
 --- !u!224 &1809885640 stripped
 RectTransform:
@@ -2037,7 +2069,7 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0

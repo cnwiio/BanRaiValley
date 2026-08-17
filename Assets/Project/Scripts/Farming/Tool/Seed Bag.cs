@@ -31,6 +31,7 @@ public class SeedBag : FarmingToolBase
 
             if (value == SeedBagState.Planting)
             {
+                EventBus<OnStartPlantingEvent>.Raise(new OnStartPlantingEvent());
             }
             _currentState = value;
         }
@@ -86,7 +87,7 @@ public class SeedBag : FarmingToolBase
     {
         if (!TryGetGrid()) return;
 
-        if (grid.IsWaterable(_hit.point, out var cellWorldPos))
+        if (grid.IsPlantable(_hit.point, out var cellWorldPos))
         {
             _plantingPos = cellWorldPos;
             StartPlanting();

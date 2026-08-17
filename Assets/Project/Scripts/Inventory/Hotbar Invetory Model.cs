@@ -1,4 +1,5 @@
 using Lean.Pool;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class HotbarInventoryModel : BaseInventory
@@ -140,12 +141,18 @@ public class HotbarInventoryModel : BaseInventory
         EventBus<OnHotbarChangeEvent>.Raise(new OnHotbarChangeEvent() { slotData = GetCurrentSelectSlotData() });
     }
 
+    private const byte MIN_ITEM_COUNT = 0;
     public void UseConsumableInSelectedSlot()
     {
         if (inventorySlots[SelectedIndex].item.stackable)
         {
-            inventorySlots[SelectedIndex].count -= 1;
-            EventBus<InventoryUIRefreshEvent>.Raise(new InventoryUIRefreshEvent() { });
+            inventorySlots[SelectedIndex].count--;
+            if (inventorySlots[SelectedIndex].count <= MIN_ITEM_COUNT)
+            {
+                inventorySlots[SelectedIndex].Clear();
+            }
+            _SlotUI[SelectedIndex].RenderVisual();
+            // EventBus<InventoryUIRefreshEvent>.Raise(new InventoryUIRefreshEvent() { });
             EventBus<OnHotbarChangeEvent>.Raise(new OnHotbarChangeEvent() { slotData = inventorySlots[SelectedIndex] });
         }
     }

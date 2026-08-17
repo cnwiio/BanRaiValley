@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Hoe
   m_EditorClassIdentifier: Assembly-CSharp::Item
   type: 1
-  spawnOffset: {x: 0, y: 0, z: 0}
+  spawnOffset: {x: 0.25, y: -0.5, z: 0}
   stackable: 0
   MaxStack: 1
   image: {fileID: 21300000, guid: 536a61b41f6eaf948b42b61596af4400, type: 3}
-  prefab: {fileID: 2509925977032215398, guid: 4301633a26934f54687769cf5614424c, type: 3}
+  prefab: {fileID: 2182252356913973370, guid: dfde104e30a61af488c8eb1dc6adddb0, type: 3}
