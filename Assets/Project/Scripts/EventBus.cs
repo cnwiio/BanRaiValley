@@ -148,3 +148,85 @@ public struct OnClearPlant : IEvent
 {
     public Vector3Int CellPos;
 }
+
+#region Plant AI Events
+
+/// <summary>
+/// Raised when a plant entity awakens and becomes an active AI combatant.
+/// </summary>
+public struct OnPlantAwakenedEvent : IEvent
+{
+    /// <summary>The plant's root GameObject.</summary>
+    public GameObject PlantInstance;
+
+    /// <summary>Grid cell the plant occupies.</summary>
+    public Vector3Int CellPos;
+
+    /// <summary>World-space position of the plant.</summary>
+    public Vector3 WorldPosition;
+}
+
+/// <summary>
+/// Raised every time a plant AI transitions between behavioural states.
+/// </summary>
+public struct OnPlantStateChangedEvent : IEvent
+{
+    /// <summary>The plant's root GameObject.</summary>
+    public GameObject PlantInstance;
+
+    /// <summary>The state the plant was in before the transition.</summary>
+    public PlantAIState PreviousState;
+
+    /// <summary>The state the plant has entered.</summary>
+    public PlantAIState NewState;
+}
+
+/// <summary>
+/// Raised when a plant entity receives a damage hit.
+/// </summary>
+public struct OnPlantDamagedEvent : IEvent
+{
+    /// <summary>The plant's root GameObject.</summary>
+    public GameObject PlantInstance;
+
+    /// <summary>Full context of the damage applied.</summary>
+    public DamageData DamageData;
+
+    /// <summary>HP value immediately after the damage is applied.</summary>
+    public float CurrentHp;
+
+    /// <summary>Maximum HP of the plant (used to calculate health percentage).</summary>
+    public float MaxHp;
+}
+
+/// <summary>
+/// Raised when a plant entity's HP reaches zero and the death sequence begins.
+/// </summary>
+public struct OnPlantDiedEvent : IEvent
+{
+    /// <summary>The plant's root GameObject.</summary>
+    public GameObject PlantInstance;
+
+    /// <summary>World-space position at the moment of death.</summary>
+    public Vector3 Position;
+
+    /// <summary>Grid cell the plant occupied.</summary>
+    public Vector3Int CellPos;
+}
+
+/// <summary>
+/// Raised each time a plant completes an attack action against its target.
+/// </summary>
+public struct OnPlantAttackExecutedEvent : IEvent
+{
+    /// <summary>The plant's root GameObject.</summary>
+    public GameObject PlantInstance;
+
+    /// <summary>Transform of the entity that was attacked.</summary>
+    public Transform TargetTransform;
+
+    /// <summary>Raw damage amount dealt by this attack.</summary>
+    public float DamageAmount;
+}
+
+#endregion
