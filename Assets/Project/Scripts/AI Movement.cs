@@ -23,13 +23,36 @@ public class AIMovement : MonoBehaviour, IWalkable
     private const float UPDATE_INTERVAL = 0.25f;
     public void MoveTo(Vector3 targetPos)
     {
+        if (!agent.isActiveAndEnabled || !agent.isOnNavMesh)
+        {
+            Debug.LogWarning("Can not set Destination");
+            return;
+        }
+        
         agent.stoppingDistance = stopDistance;
+        agent.isStopped = false;
         agent.SetDestination(targetPos);
     }
     
     public void ReturnToStart()
     {
+        if (!agent.isActiveAndEnabled || !agent.isOnNavMesh)
+        {
+            return;
+        }
+        
         agent.stoppingDistance = 0;
         agent.SetDestination(startPos);
+    }
+
+    public void StopMoving()
+    {
+        if (!agent.isActiveAndEnabled || !agent.isOnNavMesh)
+        {
+            return;
+        }
+        
+        agent.isStopped = true;
+        agent.ResetPath();
     }
 }

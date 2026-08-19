@@ -15,8 +15,14 @@ public class AIBrain : MonoBehaviour, IPoolable
 {
     [SerializeField] private AIMovement movement;
     [SerializeField] private AIDetection detection;
+    [SerializeField] private AIAttack attack;
+    
 
+    private const float MOVE_THRESHOLD = 1.5f;
+    private const float STOP_DISTANCE = 3f;
     private const float ATTACK_RANGE = 5;
+    private const float ATTACK_COOLDOWN = 1;
+    private const float HITBOX_LIFESPAN = 0.2f;
     
     private Coroutine chaseCoroutine;
 
@@ -27,35 +33,48 @@ public class AIBrain : MonoBehaviour, IPoolable
         get => _currentState;
         set
         {
+            if (_currentState == value) return;
+            
+            ExitState(_currentState);
             EnterState(value);
-            EnterState(_currentState);
 
             _currentState = value;
+            Debug.Log(value);
         }
     }
     private void Awake()
     {
-        movement.Initialize(transform.position, 3);
+        movement.Initialize(transform.position, STOP_DISTANCE);
         detection.Initialize(movement);
+        attack.Initialize(ATTACK_COOLDOWN, HITBOX_LIFESPAN );
     }
 
     private void OnEnable()
     {
         detection.OnTargetDetectedEvent += OnTargetDetected;
         detection.OnTargetLostEvent += OnTargetLost;
+
+        attack.OnAttackEndEvent += OnAttackEnd;
     }
 
     private void OnDisable()
     {
         detection.OnTargetDetectedEvent -= OnTargetDetected;
         detection.OnTargetLostEvent -= OnTargetLost;
+
+        attack.OnAttackEndEvent -= OnAttackEnd;
     }
 
     private void EnterState(PlantAIState state)
     {
         switch (state)
         {
+            case PlantAIState.Idle:
+                movement.ReturnToStart();
+                break;
             case PlantAIState.Attack:
+                movement.StopMoving();
+                attack.StartAttack();
                 break;
         }
     }
@@ -72,11 +91,29 @@ public class AIBrain : MonoBehaviour, IPoolable
                 break;
         }
     }
+    
+    private void OnTargetDetected(Transform transform)
+    {
+        if (currentState != PlantAIState.Idle) return;
+        currentState = PlantAIState.Chase;
+        chaseCoroutine = StartCoroutine(ChaseTargetCoroutine(transform));
+    }
 
+    private void OnTargetLost()
+    {
+        if (currentState != PlantAIState.Chase) return;
+        currentState = PlantAIState.Idle;
+    }
+
+    private void OnAttackEnd()
+    {
+        if (currentState != PlantAIState.Attack) return;
+        currentState = detection.IsPlayerInSight ? PlantAIState.Chase : PlantAIState.Idle;
+    }
+    
     private float _distanceFromLastPos;
     private float _distanceFromPlayer;
     private Vector3 _lastKnowTargetPos;
-    private const float MOVE_THRESHOLD = 2;
     private const float CHASE_UPDATE_INTERVAL_SEC = 0.25f;
     private IEnumerator ChaseTargetCoroutine(Transform target)
     {
@@ -86,8 +123,8 @@ public class AIBrain : MonoBehaviour, IPoolable
             _distanceFromPlayer = Vector3.Distance(transform.position, target.position);
             if (_distanceFromPlayer <= ATTACK_RANGE)
             {
-                // currentState == PlantAIState.Attack;
-                
+                if (attack.CanAttack)
+                    currentState = PlantAIState.Attack;
             }
             else
             {
@@ -100,18 +137,6 @@ public class AIBrain : MonoBehaviour, IPoolable
             }
             yield return waitInterval;
         }
-    }
-
-    private void OnTargetDetected(Transform transform)
-    {
-        currentState = PlantAIState.Chase;
-        chaseCoroutine = StartCoroutine(ChaseTargetCoroutine(transform));
-    }
-
-    private void OnTargetLost()
-    {
-        currentState = PlantAIState.Idle;
-        movement.ReturnToStart();
     }
 
     public void OnSpawn()

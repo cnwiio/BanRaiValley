@@ -5,6 +5,7 @@ public class AIDetection : MonoBehaviour, IDetection
 {
     private IWalkable move;
     private Transform playerTransform;
+    public bool IsPlayerInSight => playerTransform != null;
 
     public event Action<Transform> OnTargetDetectedEvent;
     public event Action OnTargetLostEvent;
