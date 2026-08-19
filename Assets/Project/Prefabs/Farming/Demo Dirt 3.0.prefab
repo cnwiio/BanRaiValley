@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8209775890507910426}
   - component: {fileID: 2290102815593137865}
   - component: {fileID: -4475728628943230658}
+  - component: {fileID: -1878695737818156948}
   m_Layer: 2
   m_Name: Demo Dirt 3.0
   m_TagString: Untagged
@@ -128,3 +129,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Dirt
   intialMaterial: {fileID: 2100000, guid: 382e2b1b7fbf94945963320a17603c7c, type: 2}
   meshRenderer: {fileID: 8209775890507910426}
+  plant: {fileID: -1878695737818156948}
+--- !u!114 &-1878695737818156948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8209775890509911002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8f2bc5d83a0cd44ab7d350ef08e353e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AwakenedCropHarvestTrigger
+  _awakenedMonsterPrefab: {fileID: 1330837476780144618, guid: f16e30f9c8a8d6b42869702e21825b72, type: 3}

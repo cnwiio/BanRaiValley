@@ -57,9 +57,11 @@ public class PlantMovement : MonoBehaviour
     {
         if (!_navMeshAgent.isActiveAndEnabled || !_navMeshAgent.isOnNavMesh)
         {
+            Debug.LogWarning("Can not set Destination");
             return;
         }
 
+        Debug.Log(targetPosition);
         _navMeshAgent.isStopped = false;
         _navMeshAgent.SetDestination(targetPosition);
     }

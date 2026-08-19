@@ -83,6 +83,7 @@ public class PlantPerception : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("Trigger Enter");
         if (CurrentTarget != null) return;
         if (!IsInTargetLayer(other.gameObject)) return;
 

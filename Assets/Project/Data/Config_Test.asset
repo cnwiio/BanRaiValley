@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0e279a0729976848ae2f9c0067e2ca3, type: 3}
+  m_Name: Config_Test
+  m_EditorClassIdentifier: Assembly-CSharp::PlantAIConfigSO
+  <MaxHp>k__BackingField: 500
+  <HitStaggerDurationSec>k__BackingField: 0.3
+  <MoveSpeedUps>k__BackingField: 200
+  <RotationSpeedDeg>k__BackingField: 360
+  <AggroRadiusM>k__BackingField: 20
+  <AttackRangeM>k__BackingField: 0.2
+  <StoppingDistanceM>k__BackingField: 0.1
+  <BaseAttackDamage>k__BackingField: 10
+  <AttackCooldownSec>k__BackingField: 1.5
+  <AttackWindupSec>k__BackingField: 0.4
+  <AwakeningDurationSec>k__BackingField: 1.2
+  <AwakeningTriggerName>k__BackingField: Awaken
+  <AttackTriggerName>k__BackingField: Attack
+  <HitTriggerName>k__BackingField: Hit
+  <DieTriggerName>k__BackingField: Die

@@ -71,6 +71,7 @@ public class PlantBrain : MonoBehaviour, IAIAgent
 
     private void Awake()
     {
+        Debug.Log("Awake");
         _health.Initialize(_config.MaxHp);
         _perception.Initialize(_config.AggroRadiusM);
         _movement.Initialize(_config.MoveSpeedUps, _config.StoppingDistanceM, _config.RotationSpeedDeg);
@@ -339,7 +340,8 @@ public class PlantBrain : MonoBehaviour, IAIAgent
                 TransitionTo(PlantAIState.Attack);
                 yield break;
             }
-
+            
+            // Debug.Log(target.position);
             _movement.SetDestination(target.position);
             yield return waitInterval;
         }
@@ -384,6 +386,7 @@ public class PlantBrain : MonoBehaviour, IAIAgent
 
     private void OnTargetDetected(Transform target)
     {
+        Debug.Log("Detect");
         if (CurrentState == PlantAIState.Idle || CurrentState == PlantAIState.Dormant)
         {
             TransitionTo(PlantAIState.Chase);
