@@ -27,7 +27,7 @@ public class AIAttack : MonoBehaviour
     
     public void StartAttack()
     {
-        if (canAttack || isAttacking) return;
+        if (!canAttack || isAttacking) return;
             
         canAttack = false;
         isAttacking = true;
