@@ -1,3 +1,4 @@
+using System;
 using UnityEditorInternal;
 using UnityEngine;
 
@@ -122,7 +123,7 @@ public class FarmingGrid : MonoBehaviour, IFarmingGrid
     #endregion
     
     private bool IsTilled(Vector3Int cellPos) => _tileStore.IsTilled(cellPos);
-    
+
     private bool IsValidForTilling(Vector3Int cellPos, Vector3 cellWorldPos)
     {
         if (IsTilled(cellPos)) return false;
@@ -147,7 +148,4 @@ public class FarmingGrid : MonoBehaviour, IFarmingGrid
     private void RegisterWateredSoil(Vector3Int cellPos) => _tileStore.SetWatered(cellPos);
     private void RegisterPlantedSoil(Vector3Int cellPos) => _tileStore.SetPlanted(cellPos);
     private void UnRegisterPlantedSoil(Vector3Int cellPos) => _tileStore.SetUnPlant(cellPos);
-    
-    
-
 }

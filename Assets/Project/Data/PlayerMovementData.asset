@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53919540e02a5844dab58dae935aa326, type: 3}
   m_Name: PlayerMovementData
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovementData
-  Speed: 5
+  Speed: 10
   JumpHeight: 5
   GroundSnapForce: -0.5
   GravityMultiplyer: 0.1
