@@ -4,7 +4,7 @@ using UnityEngine.AI;
 using UnityEngine.Serialization;
 
 [RequireComponent(typeof(NavMeshAgent))]
-public class AIMovement : MonoBehaviour, IWalkable
+public class AIMovement : MonoBehaviour
 {
     [SerializeField] private NavMeshAgent agent;
 

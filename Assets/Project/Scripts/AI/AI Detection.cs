@@ -3,16 +3,15 @@ using UnityEngine;
 
 public class AIDetection : MonoBehaviour
 {
-    private IWalkable move;
     private Transform playerTransform;
     public bool IsPlayerInSight => playerTransform != null;
 
     public event Action<Transform> OnTargetDetectedEvent;
     public event Action OnTargetLostEvent;
 
-    public void Initialize(IWalkable movement)
+    public void Initialize()
     {
-        move = movement;
+        // move = movement;
     }
     
     private void OnTriggerEnter(Collider other)

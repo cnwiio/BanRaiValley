@@ -1,12 +1,33 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class AIHealth : MonoBehaviour, IDamageable
 {
+    private int MaxHP;
     private int _hp;
+
+    public int Hp
+    {
+        get => _hp;
+        set
+        {
+            _hp = Math.Clamp(value, 0, MaxHP);
+        }
+    }
+
+    public event Action OnTakeDamageEvent;
+
+    public void Initialize(int HP)
+    {
+        _hp = HP;
+        MaxHP = HP;
+    }
     
     public void TakeDamage(int amount)
     {
+        Hp -= amount;
         Debug.Log(gameObject.name  + " Take Damage : " + amount);
-        _hp -= amount;
+        Debug.Log(gameObject.name  + " current HP : " + Hp);
+        OnTakeDamageEvent?.Invoke();
     }
 }

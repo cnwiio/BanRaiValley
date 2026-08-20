@@ -4435,6 +4435,7 @@ MonoBehaviour:
   detection: {fileID: 527692802}
   attack: {fileID: 1899747970}
   animator: {fileID: 1899747972}
+  health: {fileID: 1899747974}
 --- !u!114 &1899747970
 MonoBehaviour:
   m_ObjectHideFlags: 0
