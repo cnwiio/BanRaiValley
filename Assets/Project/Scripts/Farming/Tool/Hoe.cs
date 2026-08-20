@@ -99,28 +99,33 @@ public class Hoe : FarmingToolBase
 
     protected override void PrimaryAction()
     {
-        if (!TryGetGrid()) return;
+        switch (CurrentState)
+        {
+            case HoeState.Idle:
+                // Delegate to the combat system — PlayerCombatController handles the swing.
+                EventBus<OnPlayerRequestAttackEvent>.Raise(new OnPlayerRequestAttackEvent { });
+                break;
 
-        if (CurrentState == HoeState.Farming)
-        {
-            if (grid.IsValidForTilling(_hit.point, out var cellWorldPos))
-            {
-                _dirtPos = cellWorldPos;
-                StartTilling();
-            }
-        }
-        else if (CurrentState == HoeState.Deleting)
-        {
-            if (grid.IsPlanted(_hit.point, out var cellWorldPos))
-            {
-                // _dirtPos = cellWorldPos1;
-                DeletePlant(cellWorldPos);
-            }
-            else if (grid.IsTilled(_hit.point, out cellWorldPos))
-            {
-                // _dirtPos = cellWorldPos2;
-                DeleteTile(cellWorldPos);
-            }
+            case HoeState.Farming:
+                if (!TryGetGrid()) return;
+                if (grid.IsValidForTilling(_hit.point, out var tillingPos))
+                {
+                    _dirtPos = tillingPos;
+                    StartTilling();
+                }
+                break;
+
+            case HoeState.Deleting:
+                if (!TryGetGrid()) return;
+                if (grid.IsPlanted(_hit.point, out var plantedPos))
+                {
+                    DeletePlant(plantedPos);
+                }
+                else if (grid.IsTilled(_hit.point, out var tilledPos))
+                {
+                    DeleteTile(tilledPos);
+                }
+                break;
         }
     }
 

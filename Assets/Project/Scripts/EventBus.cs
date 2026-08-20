@@ -230,3 +230,44 @@ public struct OnPlantAttackExecutedEvent : IEvent
 }
 
 #endregion
+
+#region Player Combat Events
+
+/// <summary>
+/// Raised when the player inputs an attack request (button pressed).
+/// The combat controller listens to this to start the attack sequence.
+/// </summary>
+public struct OnPlayerRequestAttackEvent : IEvent { }
+
+/// <summary>
+/// Raised after the player's attack animation / hitbox window has fired.
+/// Carry the equipped item and resolved attack data for downstream systems.
+/// </summary>
+public struct OnPlayerAttackExecutedEvent : IEvent
+{
+    /// <summary>The item that was held when the attack was performed.</summary>
+    public Item EquippedItem;
+
+    /// <summary>Resolved attack parameters used for this swing.</summary>
+    public ItemAttackData AttackData;
+
+    /// <summary>World-space origin of the attack overlap-box.</summary>
+    public Vector3 AttackOrigin;
+}
+
+/// <summary>
+/// Raised for each valid target that was hit during a player attack sweep.
+/// </summary>
+public struct OnPlayerHitTargetEvent : IEvent
+{
+    /// <summary>The GameObject that received the hit.</summary>
+    public GameObject TargetInstance;
+
+    /// <summary>Full damage context passed to the target's IDamageable.</summary>
+    public DamageData DamageData;
+
+    /// <summary>Whether the hit reduced the target's HP to zero.</summary>
+    public bool TargetDied;
+}
+
+#endregion

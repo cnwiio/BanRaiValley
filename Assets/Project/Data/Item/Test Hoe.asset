@@ -18,3 +18,12 @@ MonoBehaviour:
   MaxStack: 1
   image: {fileID: 21300000, guid: 536a61b41f6eaf948b42b61596af4400, type: 3}
   prefab: {fileID: 2509925977032215398, guid: 4301633a26934f54687769cf5614424c, type: 3}
+  _attackData:
+    canAttack: 1
+    damageAmount: 2
+    damageType: 0
+    attackCooldownSec: 0.4
+    staminaCost: 1
+    knockbackForce: 2
+    attackBoxSize: {x: 3, y: 3, z: 3}
+    attackBoxOffset: {x: 0, y: 0, z: 1.2}

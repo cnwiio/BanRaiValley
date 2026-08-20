@@ -2059,6 +2059,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1655261624}
   m_CullTransparentMesh: 1
+--- !u!1 &1709661812 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8128742679925487322, guid: 0b29d41089b94e043b272fa4d64e8b6c, type: 3}
+  m_PrefabInstance: {fileID: 3146440083194429063}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1709661814 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8187068999090942818, guid: 0b29d41089b94e043b272fa4d64e8b6c, type: 3}
+  m_PrefabInstance: {fileID: 3146440083194429063}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709661812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e1c6b2b7560b264e9f79d0bd52ad708, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHandVisualizer
+--- !u!114 &1709661821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709661812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 756c220bf289f9d4aa0564049e2dd50a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerCombatController
+  _handVisualizer: {fileID: 1709661814}
+  _attackCameraTransform: {fileID: 2091949063}
+  _hitLayers:
+    serializedVersion: 2
+    m_Bits: 1
+  _unarmedAttackData:
+    canAttack: 1
+    damageAmount: 2
+    damageType: 0
+    attackCooldownSec: 0.4
+    staminaCost: 1
+    knockbackForce: 2
+    attackBoxSize: {x: 1.2, y: 1.2, z: 2}
+    attackBoxOffset: {x: 0, y: 0, z: 1.2}
+  _impactDelaySec: 0.1
+  _maxTargetCount: 10
 --- !u!4 &1745594786 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4527114064535542650, guid: 0b29d41089b94e043b272fa4d64e8b6c, type: 3}
@@ -2779,6 +2823,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 8187068999090942818, guid: 0b29d41089b94e043b272fa4d64e8b6c, type: 3}
+      propertyPath: _spawnTransform
+      value: 
+      objectReference: {fileID: 1745594786}
     - target: {fileID: 9220241301251801149, guid: 0b29d41089b94e043b272fa4d64e8b6c, type: 3}
       propertyPath: PlayerCam
       value: 
@@ -2786,7 +2834,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8128742679925487322, guid: 0b29d41089b94e043b272fa4d64e8b6c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1709661821}
   m_SourcePrefab: {fileID: 100100000, guid: 0b29d41089b94e043b272fa4d64e8b6c, type: 3}
 --- !u!1001 &5834985642999751268
 PrefabInstance:

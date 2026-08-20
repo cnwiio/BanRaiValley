@@ -16,6 +16,12 @@ public class Item : ScriptableObject
     [Header("Both")]
     public Sprite image;
     public GameObject prefab;
+
+    [Header("Combat")]
+    [SerializeField] private ItemAttackData _attackData = ItemAttackData.DefaultUnarmed;
+
+    /// <summary>Attack parameters defined for this item.</summary>
+    public ItemAttackData AttackData => _attackData;
 }
 
 public enum ItemType
