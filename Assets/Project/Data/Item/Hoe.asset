@@ -18,3 +18,7 @@ MonoBehaviour:
   MaxStack: 1
   image: {fileID: 21300000, guid: 536a61b41f6eaf948b42b61596af4400, type: 3}
   prefab: {fileID: 2182252356913973370, guid: dfde104e30a61af488c8eb1dc6adddb0, type: 3}
+  attackData:
+    damage: 1
+    hitboxOffset: {x: 0, y: 0, z: 3}
+    hitBoxSize: {x: 5, y: 5, z: 5}

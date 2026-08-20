@@ -121,6 +121,10 @@ public class Hoe : FarmingToolBase
                 // _dirtPos = cellWorldPos2;
                 DeleteTile(cellWorldPos);
             }
+        } 
+        else if (CurrentState == HoeState.Idle)
+        {
+            EventBus<OnPlayerRequestAttackEvent>.Raise(new OnPlayerRequestAttackEvent());
         }
     }
 

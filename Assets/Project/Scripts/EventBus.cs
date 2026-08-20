@@ -148,3 +148,7 @@ public struct OnClearPlant : IEvent
 {
     public Vector3Int CellPos;
 }
+
+public struct OnPlayerRequestAttackEvent : IEvent
+{
+}

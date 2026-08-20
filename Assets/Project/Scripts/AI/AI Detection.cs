@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class AIDetection : MonoBehaviour, IDetection
+public class AIDetection : MonoBehaviour
 {
     private IWalkable move;
     private Transform playerTransform;

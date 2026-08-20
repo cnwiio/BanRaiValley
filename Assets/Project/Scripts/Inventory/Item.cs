@@ -1,11 +1,11 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "Item", menuName = "Scriptable Objects/Item")]
 public class Item : ScriptableObject
 {
     [Header("Only gameplay")]
     public ItemType type;
-
     public Vector3 spawnOffset;
     //public Vector2Int range = new Vector2Int(5, 4);
 
@@ -16,6 +16,9 @@ public class Item : ScriptableObject
     [Header("Both")]
     public Sprite image;
     public GameObject prefab;
+
+    [Header("Combat")] 
+    public ItemAttackData attackData;
 }
 
 public enum ItemType

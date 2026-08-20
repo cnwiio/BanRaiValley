@@ -49,12 +49,13 @@ public class PlayerHandVisualizer : MonoBehaviour
             }
         }
         
-        DeSpawnCurrentItem();
         SpawnSlotItem(currentSlotData);
     }
 
     private void SpawnSlotItem(SlotData slotdata)
     {
+        DeSpawnCurrentItem();
+        
         if (!slotdata.IsEmpty)
         {
             if (slotdata.count == 0) return;
