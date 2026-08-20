@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlantAIConfigSO
   <MaxHp>k__BackingField: 500
   <HitStaggerDurationSec>k__BackingField: 0.3
-  <MoveSpeedUps>k__BackingField: 200
+  <MoveSpeedUps>k__BackingField: 3.2
   <RotationSpeedDeg>k__BackingField: 360
-  <AggroRadiusM>k__BackingField: 20
-  <AttackRangeM>k__BackingField: 0.2
-  <StoppingDistanceM>k__BackingField: 0.1
+  <AggroRadiusM>k__BackingField: 15
+  <AttackRangeM>k__BackingField: 5
+  <StoppingDistanceM>k__BackingField: 3
   <BaseAttackDamage>k__BackingField: 10
   <AttackCooldownSec>k__BackingField: 1.5
   <AttackWindupSec>k__BackingField: 0.4

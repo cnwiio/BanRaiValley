@@ -71,7 +71,7 @@ public class PlantBrain : MonoBehaviour, IAIAgent
 
     private void Awake()
     {
-        Debug.Log("Awake");
+        // Debug.Log("Awake");
         _health.Initialize(_config.MaxHp);
         _perception.Initialize(_config.AggroRadiusM);
         _movement.Initialize(_config.MoveSpeedUps, _config.StoppingDistanceM, _config.RotationSpeedDeg);
@@ -79,6 +79,11 @@ public class PlantBrain : MonoBehaviour, IAIAgent
 
         // Perception is disabled during dormancy; it is enabled once Awakening completes.
         _perception.SetPerceptionActive(false);
+    }
+
+    private void Start()
+    {
+        Awaken();
     }
 
     private void OnEnable()
@@ -141,6 +146,7 @@ public class PlantBrain : MonoBehaviour, IAIAgent
     /// waits for the configured duration, then enables perception and transitions to <c>Idle</c>.
     /// Call this once from whatever external trigger reveals the plant to the player.
     /// </summary>
+    [ContextMenu("Awake")]
     public void Awaken()
     {
         TransitionTo(PlantAIState.Awakening);
@@ -162,7 +168,7 @@ public class PlantBrain : MonoBehaviour, IAIAgent
         {
             return;
         }
-
+        
         PlantAIState previousState = CurrentState;
 
         // --- Exit logic for current state ---
@@ -177,6 +183,7 @@ public class PlantBrain : MonoBehaviour, IAIAgent
         });
 
         CurrentState = nextState;
+        Debug.Log(CurrentState);
 
         // --- Enter logic for new state ---
         EnterState(nextState);

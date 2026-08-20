@@ -6,13 +6,14 @@ Welcome to the **BanRaiValley** AI Agent System. The following workflow commands
 
 ## 📋 Available Commands & Roles
 
-### 1. `/plan [system-name]` — Lead Developer Agent
+### 1. `/plan [system-name]` — Lead Developer Agent (Interactive Grill-Me Mode)
 - **Workflow File**: [.agent/workflow/plan.md](file:///d:/Work/Unity%20Project/BanRaiValley/.agent/workflow/plan.md)
 - **Role**: Lead Developer & System Architect
 - **Action**:
   1. Reads [.agent/docs/GameOverview.md](file:///d:/Work/Unity%20Project/BanRaiValley/.agent/docs/GameOverview.md) and [.agent/rule/](file:///d:/Work/Unity%20Project/BanRaiValley/.agent/rule/).
-  2. Creates the **Big Architecture Plan** at `.agent/ai-docs/plan/[system-name]-plan.md`.
-  3. Decomposes the plan into step-by-step **Task Files** for Coder Agents at `.agent/ai-docs/tasks/[system-name]/task-[01-xx]-[name].md`.
+  2. **Interviews the user** using `ask_question` one question at a time across key decision branches (Core Mechanics, Data Models, EventBus, UI/Input) with recommended options.
+  3. Creates the **Big Architecture Plan** at `.agent/ai-docs/plan/[system-name]-plan.md` integrating all confirmed choices.
+  4. Decomposes the plan into step-by-step **Task Files** for Coder Agents at `.agent/ai-docs/tasks/[system-name]/task-[01-xx]-[name].md`.
 
 ---
 
@@ -47,3 +48,13 @@ Welcome to the **BanRaiValley** AI Agent System. The following workflow commands
   1. Reads `NEEDS REVISION` entries in [.agent/ai-docs/TaskReview.md](file:///d:/Work/Unity%20Project/BanRaiValley/.agent/ai-docs/TaskReview.md).
   2. Applies the reviewer's exact code fixes while keeping rules intact.
   3. Appends `[FIX]` entry into [.agent/ai-docs/TaskOverview.md](file:///d:/Work/Unity%20Project/BanRaiValley/.agent/ai-docs/TaskOverview.md).
+
+---
+
+### 5. `/clean-report` — Clean & Archive Agent
+- **Workflow File**: [.agent/workflow/clean-report.md](file:///d:/Work/Unity%20Project/BanRaiValley/.agent/workflow/clean-report.md)
+- **Role**: Milestone Archival & History Reset
+- **Action**:
+  1. Reads active [.agent/ai-docs/TaskOverview.md](file:///d:/Work/Unity%20Project/BanRaiValley/.agent/ai-docs/TaskOverview.md) and [.agent/ai-docs/TaskReview.md](file:///d:/Work/Unity%20Project/BanRaiValley/.agent/ai-docs/TaskReview.md).
+  2. Compiles and saves a comprehensive milestone archive report at `.agent/ai-docs/reports/report-YYYY-MM-DD-HHmm.md`.
+  3. Resets `TaskOverview.md` and `TaskReview.md` to their clean, empty initial blank templates.

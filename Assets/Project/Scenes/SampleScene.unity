@@ -384,7 +384,6 @@ GameObject:
   - component: {fileID: 204208708}
   - component: {fileID: 204208707}
   - component: {fileID: 204208706}
-  - component: {fileID: 204208705}
   - component: {fileID: 204208704}
   - component: {fileID: 204208703}
   - component: {fileID: 204208702}
@@ -440,22 +439,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlantMovement
   _navMeshAgent: {fileID: 204208709}
---- !u!114 &204208705
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 204208701}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 861c142d8f8325e4cbd934df3096ab6f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlantPerception
-  _aggroTrigger: {fileID: 1790775041}
-  _targetLayer:
-    serializedVersion: 2
-    m_Bits: 256
 --- !u!114 &204208706
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -483,7 +466,7 @@ MonoBehaviour:
   _config: {fileID: 11400000, guid: b2e00d27ae02bd24a92f4ff5ad6c8014, type: 2}
   _lootTable: {fileID: 11400000, guid: 7a67c1bab14bb2e448e921663a64a47d, type: 2}
   _health: {fileID: 204208706}
-  _perception: {fileID: 204208705}
+  _perception: {fileID: 1790775043}
   _movement: {fileID: 204208704}
   _combat: {fileID: 204208703}
   _animationController: {fileID: 204208702}
@@ -503,7 +486,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: d2143225fe7f00d4f8a9b361bbe8ced6, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
@@ -521,7 +504,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 204208701}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.5
+  m_Radius: 0.6
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
@@ -551,7 +534,7 @@ SphereCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
@@ -621,7 +604,7 @@ Transform:
   m_GameObject: {fileID: 204208701}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.764, z: 12.41}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -2148,6 +2131,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1790775042}
   - component: {fileID: 1790775041}
+  - component: {fileID: 1790775043}
   m_Layer: 0
   m_Name: AggroZone
   m_TagString: Untagged
@@ -2191,6 +2175,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 204208713}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1790775043
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1790775040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 861c142d8f8325e4cbd934df3096ab6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlantPerception
+  _aggroTrigger: {fileID: 1790775041}
+  _targetLayer:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!1001 &1797427631
 PrefabInstance:
   m_ObjectHideFlags: 0
