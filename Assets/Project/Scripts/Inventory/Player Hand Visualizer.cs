@@ -5,9 +5,12 @@ using UnityEngine;
 
 public class PlayerHandVisualizer : MonoBehaviour
 {
-    private SlotData currentSlotData;
-    private GameObject currentItem;
     [SerializeField] private Transform spawnTransform;
+    [SerializeField] private Item bareHand;
+    
+    private SlotData currentSlotData;
+    private GameObject currentSpawnedPrefab;
+    private Item currentSpawnedItem;
 
     private Vector3 intialSpawnPostion;
     private void Awake()
@@ -29,23 +32,36 @@ public class PlayerHandVisualizer : MonoBehaviour
     {
         //if (evt.slotData == currentSlotData) return;
         currentSlotData = evt.slotData;
+        
+        // check if next spawn item is the same one player have
+        if (currentSpawnedItem != null)
+        {
+            if (currentSlotData.IsEmpty)
+            {
+                if (currentSpawnedItem == bareHand)
+                {
+                    return;
+                }
+            }
+            if (currentSpawnedItem == currentSlotData.item)
+            {
+                return;
+            }
+        }
+        
+        DeSpawnCurrentItem();
         SpawnSlotItem(currentSlotData);
     }
 
     private void SpawnSlotItem(SlotData slotdata)
     {
-        if (currentItem != null)
-        {
-            LeanPool.Despawn(currentItem);
-            currentItem = null;
-            // spawnTransform.localPosition = intialSpawnTransform.localPosition;
-        }
         if (!slotdata.IsEmpty)
         {
             if (slotdata.count == 0) return;
             spawnTransform.localPosition = intialSpawnPostion;
             spawnTransform.localPosition += currentSlotData.item.spawnOffset;
-            currentItem = LeanPool.Spawn(slotdata.item.prefab, spawnTransform);
+            currentSpawnedItem = slotdata.item;
+            currentSpawnedPrefab = LeanPool.Spawn(slotdata.item.prefab, spawnTransform);
             // if (slotdata.item.type == ItemType.Tool)
             // {
             //     spawnTransform.localPosition = intialSpawnPostion;
@@ -58,5 +74,22 @@ public class PlayerHandVisualizer : MonoBehaviour
             //     currentItem = LeanPool.Spawn(slotdata.item.prefab, spawnTransform);
             // }
         }
-    }    
+        else
+        {
+            spawnTransform.localPosition = intialSpawnPostion;
+            spawnTransform.localPosition += bareHand.spawnOffset;
+            currentSpawnedItem = bareHand;
+            currentSpawnedPrefab = LeanPool.Spawn(bareHand.prefab, spawnTransform);
+        }
+    }
+
+    private void DeSpawnCurrentItem()
+    {
+        if (currentSpawnedPrefab != null)
+        {
+            LeanPool.Despawn(currentSpawnedPrefab);
+            currentSpawnedPrefab = null;
+            currentSpawnedItem = null;
+        }
+    }
 }

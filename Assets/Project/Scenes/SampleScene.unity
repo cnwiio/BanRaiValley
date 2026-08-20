@@ -4690,6 +4690,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 8187068999090942818, guid: 0b29d41089b94e043b272fa4d64e8b6c, type: 3}
+      propertyPath: bareHand
+      value: 
+      objectReference: {fileID: 11400000, guid: 43fc273620986bf40aa6de99879a24a2, type: 2}
     - target: {fileID: 9220241301251801149, guid: 0b29d41089b94e043b272fa4d64e8b6c, type: 3}
       propertyPath: PlayerCam
       value: 
