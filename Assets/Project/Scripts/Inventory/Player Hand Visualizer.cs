@@ -43,10 +43,6 @@ public class PlayerHandVisualizer : MonoBehaviour
                     return;
                 }
             }
-            if (currentSpawnedItem == currentSlotData.item)
-            {
-                return;
-            }
         }
         
         SpawnSlotItem(currentSlotData);

@@ -5,7 +5,8 @@ public enum HoeState
     Idle,
     Farming,
     Tilling,
-    Deleting
+    Deleting,
+    Attacking
 }
 
 public class Hoe : FarmingToolBase
@@ -47,14 +48,23 @@ public class Hoe : FarmingToolBase
                         break;
                 }
             }
-
+            
+            // Debug.Log(value);
             _currentState = value;
         }
     }
 
+    private ComboAttackController combo;
+    
     private const int HoeRange = 10;
     private float currentYRotate;
     private Vector3 _dirtPos;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        combo = new ComboAttackController(hoeAnimator, 2);
+    }
 
     protected override void OnEnable()
     {
@@ -93,11 +103,11 @@ public class Hoe : FarmingToolBase
 
     void OnDeleteAction(OnDeleteActionEvent evt)
     {
-        if (CurrentState != HoeState.Tilling)
+        if (CurrentState != HoeState.Tilling && 
+            CurrentState != HoeState.Attacking)
             CurrentState = CurrentState == HoeState.Deleting ? HoeState.Idle : HoeState.Deleting;
     }
 
-    private int num = 0;
     protected override void PrimaryAction()
     {
         if (!TryGetGrid()) return;
@@ -125,19 +135,19 @@ public class Hoe : FarmingToolBase
         } 
         else if (CurrentState == HoeState.Idle)
         {
-            if (num == 0)
-            {
-                hoeAnimator.SetTrigger("Attack");
-            }else if (num == 1)
-            {
-                hoeAnimator.SetTrigger("Attack2");
-            }
+            CurrentState = HoeState.Attacking;
+            combo.TryAttack();
+        }
+        else if (CurrentState == HoeState.Attacking)
+        {
+            combo.TryAttack();
         }
     }
 
     protected override void SecondaryAction()
     {
-        if (CurrentState != HoeState.Tilling)
+        if (CurrentState != HoeState.Tilling && 
+            CurrentState != HoeState.Attacking)
             CurrentState = CurrentState == HoeState.Farming ? HoeState.Idle : HoeState.Farming;
     }
 
@@ -177,15 +187,9 @@ public class Hoe : FarmingToolBase
 
     public void OnAttackAnimationHit()
     {
-        num = (num + 1) % 2;
-        if (num == 0)
-        {
-            hoeAnimator.ResetTrigger("Attack2");
-        }else if (num == 1)
-        {
-            hoeAnimator.ResetTrigger("Attack");
-        }
+        combo.OnAnimationHit();
         EventBus<OnPlayerRequestAttackEvent>.Raise(new OnPlayerRequestAttackEvent());
+        if (!combo.IsAttacking()) CurrentState = HoeState.Idle;
     }
 
     void Update()

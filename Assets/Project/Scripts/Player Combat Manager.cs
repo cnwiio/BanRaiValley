@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -11,6 +12,7 @@ public class PlayerCombatManager : MonoBehaviour
     private Item _item;
     private ItemAttackData _attackData;
     private Collider[] hitCollider = new Collider[10];
+    private readonly HashSet<IDamageable> hitTargets = new();
     
     private Vector3 attackPos;
     private Quaternion hitboxOrientation;
@@ -54,7 +56,8 @@ public class PlayerCombatManager : MonoBehaviour
     {
         SpawnHitBox(_attackData);
     }
-    
+
+    private IDamageable target;
     private void SpawnHitBox(ItemAttackData attackData)
     {
         attackPos = playerCamTransform.position +
@@ -71,18 +74,14 @@ public class PlayerCombatManager : MonoBehaviour
             enemyLayer,
             QueryTriggerInteraction.Ignore
         );
-
+    
+        hitTargets.Clear();
         for (int i = 0; i < hitCount; i++)
         {
-            PerformHit(hitCollider[i], attackData.damage);
+            target = hitCollider[i].GetComponentInParent<IDamageable>();
+            if (target != null && hitTargets.Add(target))
+                target.TakeDamage(attackData.damage);
         }
-    }
-
-    private void PerformHit(Collider col, int damage)
-    {
-        var target = col.GetComponentInParent<IDamageable>();
-        if (target == null) return;
-        target.TakeDamage(damage);
     }
 
     private void OnDrawGizmos()
