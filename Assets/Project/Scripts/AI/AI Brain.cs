@@ -115,6 +115,7 @@ public class AIBrain : MonoBehaviour, IPoolable
                 break;
             case PlantAIState.Stun:
                 movement.StopMoving();
+                movement.RotateToTarget();
                 attack.StopAttack();
                 stunCoroutine = StartCoroutine(StunCoroutine());
                 animator.PlayHit();
@@ -219,7 +220,14 @@ public class AIBrain : MonoBehaviour, IPoolable
 
     public void OnTakeDamage()
     {
-        if (currentState == PlantAIState.Stun) return;
+        if (currentState == PlantAIState.Stun)
+        {
+            StopCoroutine(stunCoroutine);
+            stunCoroutine = null;
+            stunCoroutine = StartCoroutine(StunCoroutine());
+            movement.RotateToTarget();
+            animator.PlayHit();
+        }
         currentState = PlantAIState.Stun;
     }
     

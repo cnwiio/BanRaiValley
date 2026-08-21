@@ -97,6 +97,7 @@ public class Hoe : FarmingToolBase
             CurrentState = CurrentState == HoeState.Deleting ? HoeState.Idle : HoeState.Deleting;
     }
 
+    private int num = 0;
     protected override void PrimaryAction()
     {
         if (!TryGetGrid()) return;
@@ -124,7 +125,13 @@ public class Hoe : FarmingToolBase
         } 
         else if (CurrentState == HoeState.Idle)
         {
-            EventBus<OnPlayerRequestAttackEvent>.Raise(new OnPlayerRequestAttackEvent());
+            if (num == 0)
+            {
+                hoeAnimator.SetTrigger("Attack");
+            }else if (num == 1)
+            {
+                hoeAnimator.SetTrigger("Attack2");
+            }
         }
     }
 
@@ -166,6 +173,19 @@ public class Hoe : FarmingToolBase
         }
 
         CurrentState = HoeState.Farming;
+    }
+
+    public void OnAttackAnimationHit()
+    {
+        num = (num + 1) % 2;
+        if (num == 0)
+        {
+            hoeAnimator.ResetTrigger("Attack2");
+        }else if (num == 1)
+        {
+            hoeAnimator.ResetTrigger("Attack");
+        }
+        EventBus<OnPlayerRequestAttackEvent>.Raise(new OnPlayerRequestAttackEvent());
     }
 
     void Update()

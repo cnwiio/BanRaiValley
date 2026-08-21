@@ -17,6 +17,13 @@ public class PlayerCombatManager : MonoBehaviour
     private const float HALF_EXTENTS_MODIFY = 0.5f;
     private int hitCount;
     private Vector3 hitboxSize;
+
+    private void Awake()
+    {
+        _item = bareHand;
+        _attackData = _item.attackData;
+    }
+
     private void OnEnable()
     {
         EventBus<OnPlayerRequestAttackEvent>.Subscribe(OnPlayerAttack);
@@ -45,16 +52,16 @@ public class PlayerCombatManager : MonoBehaviour
     
     private void OnPlayerAttack(OnPlayerRequestAttackEvent evt)
     {
-        Attack(_attackData);
+        SpawnHitBox(_attackData);
     }
     
-    private void Attack(ItemAttackData attackData)
+    private void SpawnHitBox(ItemAttackData attackData)
     {
         attackPos = playerCamTransform.position +
                     playerCamTransform.TransformDirection(attackData.hitboxOffset);
-        attackPos.y = playerCamTransform.position.y;
+        // attackPos.y = playerCamTransform.position.y;
         hitboxOrientation = playerCamTransform.rotation;
-        hitboxOrientation.y = 0;
+        // hitboxOrientation.y = 0;
         hitboxSize = attackData.hitBoxSize * HALF_EXTENTS_MODIFY;
         hitCount = Physics.OverlapBoxNonAlloc(
             attackPos,
@@ -81,6 +88,6 @@ public class PlayerCombatManager : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.indianRed;
-        Gizmos.DrawCube(attackPos, hitboxSize);
+        Gizmos.DrawWireCube(attackPos, hitboxSize); 
     }
 }
