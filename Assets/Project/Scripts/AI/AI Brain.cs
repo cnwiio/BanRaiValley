@@ -59,7 +59,7 @@ public class AIBrain : MonoBehaviour, IPoolable
             EnterState(value);
 
             _currentState = value;
-            Debug.Log(value);
+            // Debug.Log(value);
         }
     }
     private PlantChaseState _currentChaseState = PlantChaseState.ChasePlayer;
@@ -87,7 +87,7 @@ public class AIBrain : MonoBehaviour, IPoolable
     {
         detection.Initialize(data.DetectionRange);
         movement.Initialize(transform.position, data.StopDistance, data.Speed, data.TurnSpeed, data.Acceleration);
-        attack.Initialize(data.AttackCooldown, HITBOX_LIFESPAN);
+        attack.Initialize(data.AttackCooldown, HITBOX_LIFESPAN, data.Damage);
         health.Initialize(data.HP);
         
         _lastKnowTargetPos = Vector3.zero;

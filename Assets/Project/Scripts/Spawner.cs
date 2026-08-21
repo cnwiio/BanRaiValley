@@ -28,7 +28,7 @@ public class Spawner : MonoBehaviour
     {
         for (int i = 0; i < Amount; i++)
         {
-            LeanPool.Spawn(prefab, spawnTransform);
+            LeanPool.Spawn(prefab, spawnTransform.position, transform.rotation);
         }
     }
 }

@@ -15,10 +15,10 @@ MonoBehaviour:
   Speed: 2.5
   Acceleration: 8
   TurnSpeed: 250
-  StopDistance: 3
+  StopDistance: 2.5
   DetectionRange: 15
   HP: 10
   Damage: 1
-  AttackRange: 5
+  AttackRange: 4
   AttackCooldown: 2
   StunTime: 2.5

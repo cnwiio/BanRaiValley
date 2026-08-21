@@ -19,10 +19,11 @@ public class AIAttack : MonoBehaviour
     private float attackCooldown;
     private float hitboxLifeSpan;
 
-    public void Initialize(float cooldown, float hitboxLife)
+    public void Initialize(float cooldown, float hitboxLife, int damage)
     {
         attackCooldown = cooldown;
         hitboxLifeSpan = hitboxLife;
+        hitBox.Initialize(damage);
     }
     
     public void StartAttack()
