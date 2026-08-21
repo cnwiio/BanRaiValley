@@ -14,10 +14,13 @@ public class AIMovement : MonoBehaviour
 
     public float Speed => agent.velocity.magnitude;
     public bool IsReachDestination => !agent.hasPath;
-    public void Initialize(Vector3 startPosition, float stoppingDistance)
+    public void Initialize(Vector3 startPosition, float stoppingDistance, float speed, float turnSpeed, float acceleration)
     {
         startPos = startPosition;
         stopDistance = stoppingDistance;
+        agent.speed = speed;
+        agent.angularSpeed = turnSpeed;
+        agent.acceleration = acceleration;
     }
     
     public void BindTargetTransform(Transform transform)

@@ -114,6 +114,7 @@ public class Hoe : FarmingToolBase
 
         if (CurrentState == HoeState.Farming)
         {
+            if (!_isHit) return;
             if (grid.IsValidForTilling(_hit.point, out var cellWorldPos))
             {
                 _dirtPos = cellWorldPos;
@@ -122,6 +123,7 @@ public class Hoe : FarmingToolBase
         }
         else if (CurrentState == HoeState.Deleting)
         {
+            if (!_isHit) return;
             if (grid.IsPlanted(_hit.point, out var cellWorldPos))
             {
                 // _dirtPos = cellWorldPos1;

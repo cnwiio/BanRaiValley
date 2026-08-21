@@ -6,6 +6,7 @@ public class AIHealth : MonoBehaviour, IDamageable
     private int MaxHP;
     private int _hp;
 
+    
     public int Hp
     {
         get => _hp;
@@ -15,6 +16,7 @@ public class AIHealth : MonoBehaviour, IDamageable
         }
     }
 
+    public event Action OnDieEvent;
     public event Action OnTakeDamageEvent;
 
     public void Initialize(int HP)
@@ -26,8 +28,12 @@ public class AIHealth : MonoBehaviour, IDamageable
     public void TakeDamage(int amount)
     {
         Hp -= amount;
-        Debug.Log(gameObject.name  + " Take Damage : " + amount);
-        Debug.Log(gameObject.name  + " current HP : " + Hp);
+        // Debug.Log(gameObject.name  + " Take Damage : " + amount);
+        // Debug.Log(gameObject.name  + " current HP : " + Hp);
         OnTakeDamageEvent?.Invoke();
+        if (Hp <= 0)
+        {
+            OnDieEvent?.Invoke();
+        }
     }
 }

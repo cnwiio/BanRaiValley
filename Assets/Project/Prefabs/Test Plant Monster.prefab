@@ -66,6 +66,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 203e63c0a61dd1148bc25c820242760f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Zone
+  _collider: {fileID: 6982816133254063103}
 --- !u!1 &8500882108080917300
 GameObject:
   m_ObjectHideFlags: 0
@@ -187,6 +188,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 129c327fbf3a1984bbbf882c949282f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AIBrain
+  data: {fileID: 11400000, guid: 89604c27b6f75344d8a2ed9c7639e6d1, type: 2}
   movement: {fileID: 7062104129550860087}
   detection: {fileID: 8275500833609944525}
   attack: {fileID: 173291752851820372}
@@ -233,7 +235,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AIAnimationController
   _animator: {fileID: 8467686098223704104}
   _movingParamName: Speed
-  _awakenParamName: Awaken
+  _awakenParamName: Awake
   _attackParamName: Attack
   _hitParamName: Hit
   _dieParamName: Die
@@ -1191,6 +1193,14 @@ PrefabInstance:
     - target: {fileID: 3490026887102542094, guid: e0a2ae8d8ae1c1f4b83e337da0b6f6b4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 23.519886
+      objectReference: {fileID: 0}
+    - target: {fileID: 3490026887102542096, guid: e0a2ae8d8ae1c1f4b83e337da0b6f6b4, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.2871122
+      objectReference: {fileID: 0}
+    - target: {fileID: 3490026887102542096, guid: e0a2ae8d8ae1c1f4b83e337da0b6f6b4, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.48973677
       objectReference: {fileID: 0}
     - target: {fileID: 3490026887102542100, guid: e0a2ae8d8ae1c1f4b83e337da0b6f6b4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

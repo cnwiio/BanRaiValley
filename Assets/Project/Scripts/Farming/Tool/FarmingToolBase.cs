@@ -26,6 +26,7 @@ public abstract class FarmingToolBase : MonoBehaviour
 
     protected Ray _ray;
     protected RaycastHit _hit;
+    protected bool _isHit;
     protected Vector3 _lastCellWorldPos;
     /// <summary>Result of the most recent RunPreviewUpdate check - handy for handlers
     /// (like a rotate action) that need "is the currently-aimed cell valid?" without
@@ -88,6 +89,7 @@ public abstract class FarmingToolBase : MonoBehaviour
         _ray = RayCastAtCursor();
         if (Physics.Raycast(_ray, out _hit, range))
         {
+            _isHit = true;
             _isValid = check(_hit.point, out var cellWorldPos);
             lastCheckWasValid = _isValid;
             if (_lastCellWorldPos != cellWorldPos)
@@ -99,6 +101,7 @@ public abstract class FarmingToolBase : MonoBehaviour
         }
         else
         {
+            _isHit = false;
             EndPreviewNow();
         }
     }

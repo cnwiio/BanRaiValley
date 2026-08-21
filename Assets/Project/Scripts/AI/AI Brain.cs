@@ -6,10 +6,12 @@ using UnityEngine.Serialization;
 
 public enum PlantAIState
 {
+    Awake,
     Idle,
     Chase,
     Attack,
-    Stun
+    Stun,
+    Die
 }
 
 public enum PlantChaseState
@@ -20,25 +22,29 @@ public enum PlantChaseState
 
 public class AIBrain : MonoBehaviour, IPoolable
 {
+    [Header("Data")] 
+    [SerializeField] private AIData data;
+
+    
+    [Header("Scripts")]
     [SerializeField] private AIMovement movement;
     [SerializeField] private AIDetection detection;
     [SerializeField] private AIAttack attack;
     [SerializeField] private AIAnimationController animator;
     [SerializeField] private AIHealth health;
+    
 
 
     private const float MOVE_THRESHOLD = 1.5f;
-    private const float STOP_DISTANCE = 3f;
-    private const float ATTACK_RANGE = 5;
-    private const float ATTACK_COOLDOWN = 2;
     private const float HITBOX_LIFESPAN = 0.2f;
-    private const int HP = 10;
 
     private readonly WaitForSeconds chaseWaitInterval = new WaitForSeconds(0.25f);
-    private readonly WaitForSeconds stunTime = new WaitForSeconds(1.5f);
+    private WaitForSeconds stunTime;
+    private readonly WaitForSeconds deSpawnTime = new WaitForSeconds(3);
     private Coroutine chaseCoroutine;
     private Coroutine movementCoroutine;
     private Coroutine stunCoroutine;
+    private Coroutine dieCoroutine;
 
     private PlantAIState _currentState = PlantAIState.Idle;
 
@@ -53,7 +59,7 @@ public class AIBrain : MonoBehaviour, IPoolable
             EnterState(value);
 
             _currentState = value;
-            // Debug.Log(value);
+            Debug.Log(value);
         }
     }
     private PlantChaseState _currentChaseState = PlantChaseState.ChasePlayer;
@@ -74,9 +80,17 @@ public class AIBrain : MonoBehaviour, IPoolable
     }
     private void Awake()
     {
-        movement.Initialize(transform.position, STOP_DISTANCE);
-        attack.Initialize(ATTACK_COOLDOWN, HITBOX_LIFESPAN);
-        health.Initialize(HP);
+        stunTime = new WaitForSeconds(data.StunTime);
+    }
+
+    private void Initialize()
+    {
+        detection.Initialize(data.DetectionRange);
+        movement.Initialize(transform.position, data.StopDistance, data.Speed, data.TurnSpeed, data.Acceleration);
+        attack.Initialize(data.AttackCooldown, HITBOX_LIFESPAN);
+        health.Initialize(data.HP);
+        
+        _lastKnowTargetPos = Vector3.zero;
     }
 
     private void OnEnable()
@@ -87,6 +101,7 @@ public class AIBrain : MonoBehaviour, IPoolable
         attack.OnAttackEndEvent += OnAttackEnd;
 
         health.OnTakeDamageEvent += OnTakeDamage;
+        health.OnDieEvent += OnDie;
     }
 
     private void OnDisable()
@@ -97,12 +112,17 @@ public class AIBrain : MonoBehaviour, IPoolable
         attack.OnAttackEndEvent -= OnAttackEnd;
 
         health.OnTakeDamageEvent -= OnTakeDamage;
+        health.OnDieEvent -= OnDie;
     }
 
     private void EnterState(PlantAIState state)
     {
         switch (state)
         {
+            case PlantAIState.Awake:
+                detection.EnableDetect(false);
+                animator.PlayAwaken();
+                break;
             case PlantAIState.Idle:
                 break;
             case PlantAIState.Chase:
@@ -119,6 +139,12 @@ public class AIBrain : MonoBehaviour, IPoolable
                 attack.StopAttack();
                 stunCoroutine = StartCoroutine(StunCoroutine());
                 animator.PlayHit();
+                break;
+            case PlantAIState.Die:
+                movement.StopMoving();
+                attack.StopAttack();
+                animator.PlayDie();
+                dieCoroutine = StartCoroutine(DieCoroutine());
                 break;
         }
     }
@@ -148,6 +174,13 @@ public class AIBrain : MonoBehaviour, IPoolable
                 {
                     StopCoroutine(stunCoroutine);
                     stunCoroutine = null;
+                }
+                break;
+            case PlantAIState.Die:
+                if (dieCoroutine != null)
+                {
+                    StopCoroutine(DieCoroutine());
+                    dieCoroutine = null;
                 }
                 break;
         }
@@ -184,6 +217,7 @@ public class AIBrain : MonoBehaviour, IPoolable
     private void OnTargetDetected(Transform transform)
     {
         if (currentState == PlantAIState.Idle ||
+            currentState == PlantAIState.Awake ||
             (currentState == PlantAIState.Chase && currentChaseState == PlantChaseState.ChaseHome))
         {
             currentState = PlantAIState.Chase;
@@ -218,8 +252,9 @@ public class AIBrain : MonoBehaviour, IPoolable
         attack.ExcuteAttack();
     }
 
-    public void OnTakeDamage()
+    private void OnTakeDamage()
     {
+        if (currentState == PlantAIState.Die) return;
         if (currentState == PlantAIState.Stun)
         {
             StopCoroutine(stunCoroutine);
@@ -229,6 +264,17 @@ public class AIBrain : MonoBehaviour, IPoolable
             animator.PlayHit();
         }
         currentState = PlantAIState.Stun;
+    }
+
+    private void OnDie()
+    {
+        currentState = PlantAIState.Die;
+    }
+
+    public void OnAwakeAnimationEnd()
+    {
+        currentState = PlantAIState.Idle;
+        detection.EnableDetect(true);
     }
     
     private float _distanceFromLastPos;
@@ -246,7 +292,7 @@ public class AIBrain : MonoBehaviour, IPoolable
         while (currentState == PlantAIState.Chase)
         {
             _distanceFromPlayer = Vector3.Distance(transform.position, target.position);
-            if (_distanceFromPlayer <= ATTACK_RANGE)
+            if (_distanceFromPlayer <= data.AttackRange)
             {
                 if (attack.CanAttack)
                     currentState = PlantAIState.Attack;
@@ -266,7 +312,6 @@ public class AIBrain : MonoBehaviour, IPoolable
     
     private IEnumerator AnimationSpeedCoroutine()
     {
-        // var waitInterval = new WaitForSeconds(CHASE_UPDATE_INTERVAL_SEC);
         while (true)
         {
             if (currentChaseState == PlantChaseState.ChaseHome)
@@ -295,13 +340,22 @@ public class AIBrain : MonoBehaviour, IPoolable
         }
     }
 
+    private IEnumerator DieCoroutine()
+    {
+        yield return deSpawnTime;
+        LeanPool.Despawn(this);
+        dieCoroutine = null;
+    }
+
     public void OnSpawn()
     {
-        throw new NotImplementedException();
+        Initialize();
+        currentState = PlantAIState.Awake;
     }
 
     public void OnDespawn()
     {
-        throw new NotImplementedException();
+        animator.Reset();
+        // currentState = PlantAIState.Idle;
     }
 }

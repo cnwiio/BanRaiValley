@@ -77,4 +77,10 @@ public class AIAnimationController : MonoBehaviour
     {
         _animator.SetFloat(_movingHash, speed);
     }
+
+    public void Reset()
+    {
+        _animator.Rebind();
+        _animator.Update(0);
+    }
 }
