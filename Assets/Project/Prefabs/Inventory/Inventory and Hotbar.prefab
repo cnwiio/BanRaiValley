@@ -219,6 +219,22 @@ PrefabInstance:
       propertyPath: inventoyModel
       value: 
       objectReference: {fileID: 840015874419128950}
+    - target: {fileID: 5644196794530264836, guid: 89db41b87ff4853488876e9f06963ce6, type: 3}
+      propertyPath: itemToSpawn.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5644196794530264836, guid: 89db41b87ff4853488876e9f06963ce6, type: 3}
+      propertyPath: 'itemToSpawn.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: f9d961e05ee54184984c70683bde2efb, type: 2}
+    - target: {fileID: 5644196794530264836, guid: 89db41b87ff4853488876e9f06963ce6, type: 3}
+      propertyPath: 'itemToSpawn.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 57356b1bb3af15845acb88d1a9081f11, type: 2}
+    - target: {fileID: 5644196794530264836, guid: 89db41b87ff4853488876e9f06963ce6, type: 3}
+      propertyPath: 'itemToSpawn.Array.data[2]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 876a37afe6dbdca47aeccc33ac31ca2f, type: 2}
     - target: {fileID: 7667176755021999392, guid: 89db41b87ff4853488876e9f06963ce6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -266,14 +282,17 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8085531038618211861, guid: 89db41b87ff4853488876e9f06963ce6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3816880536073904277}
   m_SourcePrefab: {fileID: 100100000, guid: 89db41b87ff4853488876e9f06963ce6, type: 3}
 --- !u!114 &955554670543116486 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2931476907865657034, guid: 89db41b87ff4853488876e9f06963ce6, type: 3}
   m_PrefabInstance: {fileID: 2732696923795871244}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 6186238327870193689}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7629998cd3920a2479b31e6c8aa8ba5b, type: 3}
@@ -284,6 +303,24 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7667176755021999392, guid: 89db41b87ff4853488876e9f06963ce6, type: 3}
   m_PrefabInstance: {fileID: 2732696923795871244}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &6186238327870193689 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8085531038618211861, guid: 89db41b87ff4853488876e9f06963ce6, type: 3}
+  m_PrefabInstance: {fileID: 2732696923795871244}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3816880536073904277
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6186238327870193689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91d179b747a71cc43ad9e642896a4044, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInventoryManager
+  hotbarInventory: {fileID: 3427529152441689816}
 --- !u!1001 &6975654898608778376
 PrefabInstance:
   m_ObjectHideFlags: 0

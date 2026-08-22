@@ -120,6 +120,7 @@ public class AIBrain : MonoBehaviour, IPoolable
         switch (state)
         {
             case PlantAIState.Awake:
+                health.IsInvicible = true;
                 detection.EnableDetect(false);
                 animator.PlayAwaken();
                 break;
@@ -153,6 +154,9 @@ public class AIBrain : MonoBehaviour, IPoolable
     {
         switch (state)
         {
+            case PlantAIState.Awake:
+                health.IsInvicible = false;
+                break;
             case PlantAIState.Chase:
                 if (chaseCoroutine != null)
                 {
@@ -294,7 +298,7 @@ public class AIBrain : MonoBehaviour, IPoolable
             _distanceFromPlayer = Vector3.Distance(transform.position, target.position);
             if (_distanceFromPlayer <= data.AttackRange)
             {
-                if (attack.CanAttack)
+                if (attack.CanAttack || currentState == PlantAIState.Chase)
                     currentState = PlantAIState.Attack;
             }
             else

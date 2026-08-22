@@ -62,7 +62,7 @@ MonoBehaviour:
   grid: {fileID: 8801442420171781805}
   obstacleLayerMask:
     serializedVersion: 2
-    m_Bits: 631
+    m_Bits: 627
   farmingGridReference: {fileID: 11400000, guid: 5ea848fd122f7cd48a93832bd2e00c19, type: 2}
 --- !u!114 &8853531029058559928
 MonoBehaviour:

@@ -3,9 +3,10 @@ using UnityEngine;
 
 public class AIHealth : MonoBehaviour, IDamageable
 {
+    public bool IsInvicible;
+    
     private int MaxHP;
     private int _hp;
-
     
     public int Hp
     {
@@ -27,6 +28,7 @@ public class AIHealth : MonoBehaviour, IDamageable
     
     public void TakeDamage(int amount)
     {
+        if (IsInvicible) return;
         Hp -= amount;
         // Debug.Log(gameObject.name  + " Take Damage : " + amount);
         // Debug.Log(gameObject.name  + " current HP : " + Hp);
