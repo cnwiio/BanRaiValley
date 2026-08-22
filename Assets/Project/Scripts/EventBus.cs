@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using BanRaiValley.Time;
 
 public interface IEvent {}
 
@@ -268,6 +269,77 @@ public struct OnPlayerHitTargetEvent : IEvent
 
     /// <summary>Whether the hit reduced the target's HP to zero.</summary>
     public bool TargetDied;
+}
+
+#endregion
+
+#region Time & Calendar Events
+
+/// <summary>
+/// Raised on every minute tick. Drives all time-sensitive systems (lighting, HUD, etc.).
+/// </summary>
+public struct OnTimeTickEvent : IEvent
+{
+    public GameDateTime CurrentDateTime;
+    public float        NormalizedDayTime;
+}
+
+/// <summary>
+/// Raised once when the in-game hour value changes.
+/// </summary>
+public struct OnHourChangedEvent : IEvent
+{
+    public int          PreviousHour;
+    public int          NewHour;
+    public GameDateTime CurrentDateTime;
+}
+
+/// <summary>
+/// Raised at the end of a day, just before the sleep transition begins.
+/// </summary>
+public struct OnDayEndedEvent : IEvent
+{
+    public GameDateTime EndedDateTime;
+    /// <summary>True if the day ended because the player passed out rather than sleeping voluntarily.</summary>
+    public bool         IsPassout;
+}
+
+/// <summary>
+/// Raised when a new in-game day starts (after sleep or passout recovery).
+/// </summary>
+public struct OnNewDayStartedEvent : IEvent
+{
+    public GameDateTime NewDateTime;
+    /// <summary>True if this new day follows a passout event.</summary>
+    public bool         WasPassout;
+}
+
+/// <summary>
+/// Raised when the current season rolls over to the next one.
+/// </summary>
+public struct OnSeasonChangedEvent : IEvent
+{
+    public Season PreviousSeason;
+    public Season NewSeason;
+    public int    Year;
+}
+
+/// <summary>
+/// Raised when the player is force-teleported to bed due to passing out.
+/// </summary>
+public struct OnPlayerPassedOutEvent : IEvent
+{
+    public GameDateTime PassoutTime;
+    /// <summary>Fraction (0.0 – 1.0) of stamina to deduct as a penalty on the next morning.</summary>
+    public float        StaminaPenaltyPercent;
+}
+
+/// <summary>
+/// Raised whenever the time simulation is paused or unpaused.
+/// </summary>
+public struct OnTimePausedStateChangedEvent : IEvent
+{
+    public bool IsPaused;
 }
 
 #endregion
