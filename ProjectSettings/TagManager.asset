@@ -14,9 +14,9 @@ TagManager:
   - Obstacle
   - Ground
   - Player
-  - Farm
-  - Enemy
   - 
+  - Enemy
+  - Interactable
   - 
   - 
   - 

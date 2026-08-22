@@ -82,9 +82,9 @@ public struct ChangeActionMap : IEvent
 {
     public ActionMapType MapType;
 }
-
 public struct OnPrimaryActionEvent : IEvent { }
 public struct OnSecondaryActionEvent : IEvent { }
+public struct OnInteractActionEvent : IEvent { }
 
 #region Hoe Event
 public struct OnTillingImpactEvent : IEvent
