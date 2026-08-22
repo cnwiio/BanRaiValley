@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Threading.Tasks;
 using UnityEngine;
 
 /// <summary>
@@ -21,6 +23,8 @@ public class ComboAttackController
     private int currentIndex;
     private bool isAttacking;
     private bool pendingAttack;
+    private float lastAttackedTime;
+    private readonly float comboResetTime = 2;
 
     public ComboAttackController(Animator animator, int comboLength)
     {
@@ -37,6 +41,10 @@ public class ComboAttackController
     /// <summary>Call this from the input/event handler (e.g. OnPrimaryAction).</summary>
     public void TryAttack()
     {
+        if (Time.time - lastAttackedTime > comboResetTime && !isAttacking)
+        {
+            currentIndex = 0;
+        }
         if (!pendingAttack && isAttacking)
         {
             pendingAttack = true;
@@ -49,6 +57,7 @@ public class ComboAttackController
     private void Attack()
     {
         isAttacking = true;
+        lastAttackedTime = Time.time;
         animator.SetTrigger(attackHashes[currentIndex]);
     }
 
@@ -67,13 +76,14 @@ public class ComboAttackController
             pendingAttack = false;
             Attack();
         }
+        
     }
     
     public bool IsAttacking()
     {
         return isAttacking;
     }
-
+    
     /// <summary>Call on spawn/despawn/state-exit to fully reset the combo.</summary>
     public void Reset()
     {
