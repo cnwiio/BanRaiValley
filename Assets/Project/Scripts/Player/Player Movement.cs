@@ -30,13 +30,13 @@ public class PlayerMovement : MonoBehaviour
     private void OnEnable()
     {
         EventBus<OnJumpEvent>.Subscribe(HandleJumpInput);
-        EventBus<OnSleepEvent>.Subscribe(OnSleep);
+        EventBus<OnRequestTeleportEvent>.Subscribe(OnRequestTeleport);
     }
 
     private void OnDisable()
     {
         EventBus<OnJumpEvent>.Unsubscribe(HandleJumpInput);
-        EventBus<OnSleepEvent>.Unsubscribe(OnSleep);
+        EventBus<OnRequestTeleportEvent>.Unsubscribe(OnRequestTeleport);
     }
 
     public void HandleJumpInput(OnJumpEvent ctx)
@@ -47,7 +47,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    public void OnSleep(OnSleepEvent evt)
+    public void OnRequestTeleport(OnRequestTeleportEvent evt)
     {
         TeleportTo(evt.AwakeTransform);
     }

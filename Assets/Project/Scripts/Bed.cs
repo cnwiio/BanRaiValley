@@ -14,14 +14,12 @@ public class Bed : MonoBehaviour, IInteractable
     [Header("Outline")]
     [SerializeField] private MeshRenderer meshRenderer;
     [SerializeField] private Material outlineMaterial;
-
-    [SerializeField] private Transform awakePosition;
+    [Header("Sleep Ref")]
+    [SerializeField] private Transform awakeTransform;
+    [SerializeField] private SleepSequenceController sleepController;
     
-    
-
     private GameObject uiGameObject;
     private List<Material> mats = new List<Material>();
-    private bool db;
     private void Awake()
     {
         uiGameObject = tipTextUI.gameObject;
@@ -30,10 +28,8 @@ public class Bed : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        Debug.Log(gameObject.name);
-        // StartCoroutine(BlackOutCoroutine());
-        EventBus<OnSleepEvent>.Raise(new OnSleepEvent(){AwakeTransform = awakePosition});
-        // EventBus<ChangeActionMap>.Raise(new ChangeActionMap(){MapType = ActionMapType.Static});
+        // Debug.Log(gameObject.name);
+        sleepController.HandleSleep(awakeTransform);
     }
 
     public void IsLookAt(bool value)
@@ -48,7 +44,7 @@ public class Bed : MonoBehaviour, IInteractable
         }
     }
 
-    public void OnHover()
+    private void OnHover()
     {
         tipTextUI.text = tipText;
         uiGameObject.SetActive(true);
@@ -57,7 +53,7 @@ public class Bed : MonoBehaviour, IInteractable
         meshRenderer.SetSharedMaterials(mats);
     }
 
-    public void OnStopHover()
+    private void OnStopHover()
     {
         uiGameObject.SetActive(false);
 

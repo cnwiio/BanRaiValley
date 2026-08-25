@@ -144,7 +144,9 @@ public struct OnClearPlant : IEvent
 
 public struct OnPlayerRequestAttackEvent : IEvent { }
 
-public struct OnSleepEvent : IEvent
+public struct OnSleepEvent : IEvent { }
+
+public struct OnRequestTeleportEvent : IEvent
 {
     public Transform AwakeTransform;
 }
