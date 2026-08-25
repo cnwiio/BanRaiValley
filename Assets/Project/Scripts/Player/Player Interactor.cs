@@ -59,10 +59,12 @@ public class PlayerInteractor : MonoBehaviour
             if (!ReferenceEquals(interactable, _target))
             {
                 _target = interactable;
+                _target.IsLookAt(true);
             }
         } 
         else if (!ReferenceEquals(_target, null))
         {
+            _target.IsLookAt(false);
             _target = null;
         }
     }
