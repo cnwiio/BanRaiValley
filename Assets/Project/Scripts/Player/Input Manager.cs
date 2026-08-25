@@ -5,7 +5,8 @@ using UnityEngine.InputSystem;
 public enum ActionMapType
 {
     Player,
-    UI
+    UI,
+    Static
 }
 public class InputManager : MonoBehaviour
 {
@@ -35,6 +36,9 @@ public class InputManager : MonoBehaviour
                     break;
                 case ActionMapType.UI:
                     SwitchToUIActionMap();
+                    break;
+                case ActionMapType.Static:
+                    SwitchToStaticUIActionMap();
                     break;
             }
         }
@@ -127,5 +131,13 @@ public class InputManager : MonoBehaviour
         HotbarActionMap?.Disable();
 
         UIActionMap?.Enable();
+    }
+
+    public void SwitchToStaticUIActionMap()
+    {
+        UIActionMap?.Disable();
+        playerActionMap?.Disable();
+        HotbarActionMap?.Disable();
+        MovementActionMap?.Disable();
     }
 }

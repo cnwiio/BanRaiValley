@@ -1,19 +1,27 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 public class Bed : MonoBehaviour, IInteractable
 {
-    [Header("UI")]
+    [Header("TextUI")]
     [SerializeField] private TextMeshProUGUI tipTextUI;
     [SerializeField] private String tipText;
+    [Header("Black Out UI")]
+    [SerializeField] private CanvasGroup blackOutUI;
     [Header("Outline")]
     [SerializeField] private MeshRenderer meshRenderer;
     [SerializeField] private Material outlineMaterial;
 
+    [SerializeField] private Transform awakePosition;
+    
+    
+
     private GameObject uiGameObject;
     private List<Material> mats = new List<Material>();
+    private bool db;
     private void Awake()
     {
         uiGameObject = tipTextUI.gameObject;
@@ -23,6 +31,9 @@ public class Bed : MonoBehaviour, IInteractable
     public void Interact()
     {
         Debug.Log(gameObject.name);
+        // StartCoroutine(BlackOutCoroutine());
+        EventBus<OnSleepEvent>.Raise(new OnSleepEvent(){AwakeTransform = awakePosition});
+        // EventBus<ChangeActionMap>.Raise(new ChangeActionMap(){MapType = ActionMapType.Static});
     }
 
     public void IsLookAt(bool value)
@@ -35,7 +46,6 @@ public class Bed : MonoBehaviour, IInteractable
         {
             OnStopHover();
         }
-        Debug.Log("Is player look at? = " + value);
     }
 
     public void OnHover()

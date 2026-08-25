@@ -1,4 +1,5 @@
 using NUnit.Framework.Internal.Commands;
+using Unity.Cinemachine;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -7,6 +8,8 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private CharacterController characterController;
     [SerializeField] private Camera PlayerCam;
+    // [SerializeField] private CinemachineCamera vcam;
+    [SerializeField] private CinemachinePanTilt panTilt;
     [SerializeField] private PlayerMovementData Data;
     [SerializeField] private PlayerInputReader InputReader;
     [SerializeField] private Transform Head;
@@ -27,11 +30,13 @@ public class PlayerMovement : MonoBehaviour
     private void OnEnable()
     {
         EventBus<OnJumpEvent>.Subscribe(HandleJumpInput);
+        EventBus<OnSleepEvent>.Subscribe(OnSleep);
     }
 
     private void OnDisable()
     {
         EventBus<OnJumpEvent>.Unsubscribe(HandleJumpInput);
+        EventBus<OnSleepEvent>.Unsubscribe(OnSleep);
     }
 
     public void HandleJumpInput(OnJumpEvent ctx)
@@ -42,6 +47,10 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    public void OnSleep(OnSleepEvent evt)
+    {
+        TeleportTo(evt.AwakeTransform);
+    }
     #endregion
 
     private void Awake()
@@ -116,22 +125,25 @@ public class PlayerMovement : MonoBehaviour
         CamRightDirection.Normalize();
     }
 
-
-    //[SerializeField] private float turnSpeed = 15f;
-
-    // cached
-    Vector3 _forward;
-    private const float MinForwardSqrMagnitude = 0.001f;
-
     void UpdateCamRotateToPlayer()
     {
-        // _forward = Vector3.ProjectOnPlane(CamForwardDirection, Vector3.up);
-        //
-        // if (_forward.sqrMagnitude > MinForwardSqrMagnitude)
-        // {
-        //     transform.rotation = Quaternion.LookRotation(_forward);
-        //     //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(_forward), 15 * Time.deltaTime);
-        // }
         Head.rotation = _camTransform.rotation;
+    }
+
+    // Cached
+    private Vector3 _euler;
+    void TeleportTo(Transform targetTransform)
+    {
+        characterController.enabled = false;
+        transform.SetPositionAndRotation(targetTransform.position, targetTransform.rotation);
+        VerticalMovement = 0f;
+        characterController.enabled = true;
+
+        Head.rotation = targetTransform.rotation;
+
+        // รีเซ็ตค่ามุมที่ Cinemachine จำไว้
+        _euler = targetTransform.eulerAngles;
+        panTilt.PanAxis.Value = _euler.y;
+        panTilt.TiltAxis.Value = _euler.x;
     }
 }

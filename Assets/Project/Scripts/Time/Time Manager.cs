@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class TimeManager : MonoBehaviour
@@ -28,6 +29,22 @@ public class TimeManager : MonoBehaviour
     public GameDateTime CurrentDateTime   => _currentDateTime;
     public bool         IsPaused          => _isPaused;
     public float        TimeScaleMultiplier => _timeScaleMultiplier;
+
+    private void OnEnable()
+    {
+        EventBus<OnSleepEvent>.Subscribe(OnSleep);
+    }
+
+    private void OnDisable()
+    {
+        EventBus<OnSleepEvent>.Unsubscribe(OnSleep);
+    }
+
+    private void OnSleep(OnSleepEvent evt)
+    {
+        AdvanceToNextDay(false);
+    }
+    
     
     private void Awake()
     {
@@ -53,6 +70,7 @@ public class TimeManager : MonoBehaviour
             AdvanceMinute(configuration.minuteTickInterval);
         }
     }
+    
     
     /// <summary>
     /// Advances the in-game clock by the specified number of minutes,
@@ -108,7 +126,7 @@ public class TimeManager : MonoBehaviour
         // EventBus<OnDayEndedEvent>.Raise(new OnDayEndedEvent
         // {
         //     EndedDateTime = _currentDateTime,
-        //     IsPassout     = false
+        //     IsPassOut     = false
         // });
 
         AdvanceToNextDay(wasPassout: false);
@@ -174,9 +192,10 @@ public class TimeManager : MonoBehaviour
         // EventBus<OnNewDayStartedEvent>.Raise(new OnNewDayStartedEvent
         // {
         //     NewDateTime = _currentDateTime,
-        //     WasPassout  = wasPassout
+        //     WasPassOut  = wasPassout
         // });
-
+        
+        timeUI.RefreshCalender(_currentDateTime);
         // Emit the first tick of the new day so listeners (lighting, HUD) update immediately
         // EventBus<OnTimeTickEvent>.Raise(new OnTimeTickEvent
         // {

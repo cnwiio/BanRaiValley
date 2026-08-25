@@ -44,7 +44,7 @@ public struct OnUIBeginDragEvent : IEvent
 }
 public struct OnUIDragEvent : IEvent 
 {
-    public UnityEngine.Vector2 Position;
+    public Vector2 Position;
 }
 public struct OnUIEndDragEvent : IEvent 
 {
@@ -78,6 +78,7 @@ public struct OnHotbarChangeEvent : IEvent
 }
 #endregion
 
+#region Input Event
 public struct ChangeActionMap : IEvent
 {
     public ActionMapType MapType;
@@ -85,6 +86,10 @@ public struct ChangeActionMap : IEvent
 public struct OnPrimaryActionEvent : IEvent { }
 public struct OnSecondaryActionEvent : IEvent { }
 public struct OnInteractActionEvent : IEvent { }
+public struct OnRotateActionEvent : IEvent { }
+public struct OnDeleteActionEvent : IEvent { }
+
+#endregion
 
 #region Hoe Event
 public struct OnTillingImpactEvent : IEvent
@@ -115,19 +120,7 @@ public struct PreviewingEvent : IEvent
     public float YRotation;
 }
 
-public struct EndPreviewEvent : IEvent
-{
-
-}
-
-public struct OnRotateActionEvent : IEvent { }
-public struct OnRotateFarmEvent : IEvent 
-{
-    public float YRotation;
-}
-
-public struct OnDeleteActionEvent : IEvent { }
-
+public struct EndPreviewEvent : IEvent { }
 public struct OnStartWateringEvent : IEvent { }
 public struct OnWateringEvent : IEvent
 {
@@ -149,6 +142,19 @@ public struct OnClearPlant : IEvent
     public Vector3Int CellPos;
 }
 
-public struct OnPlayerRequestAttackEvent : IEvent
+public struct OnPlayerRequestAttackEvent : IEvent { }
+
+public struct OnSleepEvent : IEvent
 {
+    public Transform AwakeTransform;
 }
+
+#region Time Event
+
+public struct OnNewDayStartedEvent : IEvent
+{
+    public GameDateTime NewDateTime;
+    public bool WasPassOut;
+}
+
+#endregion
