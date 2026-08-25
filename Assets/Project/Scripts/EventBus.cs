@@ -159,4 +159,6 @@ public struct OnNewDayStartedEvent : IEvent
     public bool WasPassOut;
 }
 
+public struct OnPlayerPassedOutEvent : IEvent { }
+
 #endregion

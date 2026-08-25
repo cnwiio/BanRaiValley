@@ -15,7 +15,6 @@ public class Bed : MonoBehaviour, IInteractable
     [SerializeField] private MeshRenderer meshRenderer;
     [SerializeField] private Material outlineMaterial;
     [Header("Sleep Ref")]
-    [SerializeField] private Transform awakeTransform;
     [SerializeField] private SleepSequenceController sleepController;
     
     private GameObject uiGameObject;
@@ -28,8 +27,7 @@ public class Bed : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        // Debug.Log(gameObject.name);
-        sleepController.HandleSleep(awakeTransform);
+        sleepController.HandleSleep();
     }
 
     public void IsLookAt(bool value)

@@ -1,13 +1,25 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
 public class SleepSequenceController : MonoBehaviour
 {
     [SerializeField] private CanvasGroup blackOutUI;
+    [SerializeField] private Transform awakeTransform;
     [SerializeField] private float fadeDuration;
     
     private bool isSleeping;
     private GameObject blackOutUIGameObject;
+
+    private void OnEnable()
+    {
+        EventBus<OnPlayerPassedOutEvent>.Subscribe(HandlePassOut);
+    }
+
+    private void OnDisable()
+    {
+        EventBus<OnPlayerPassedOutEvent>.Unsubscribe(HandlePassOut);
+    }
 
     private void Start()
     {
@@ -15,16 +27,26 @@ public class SleepSequenceController : MonoBehaviour
         LeanTween.reset();
     }
 
-    public void HandleSleep(Transform targetTransform)
+    private void HandlePassOut(OnPlayerPassedOutEvent evt)
     {
         if (isSleeping) return;
         isSleeping = true;
         blackOutUIGameObject.SetActive(true);
         EventBus<ChangeActionMap>.Raise(new ChangeActionMap(){MapType = ActionMapType.Static});
-        StartFadeOut(targetTransform);
+        StartFadeOut(awakeTransform, false, 0.1f);
+        
     }
 
-    private void StartFadeOut(Transform targetTransform)
+    public void HandleSleep()
+    {
+        if (isSleeping) return;
+        isSleeping = true;
+        blackOutUIGameObject.SetActive(true);
+        EventBus<ChangeActionMap>.Raise(new ChangeActionMap(){MapType = ActionMapType.Static});
+        StartFadeOut(awakeTransform, true, fadeDuration / 2);
+    }
+
+    private void StartFadeOut(Transform targetTransform, bool raiseSleepEvent, float fadeDuration)
     {
         LeanTween.cancel(blackOutUIGameObject);
         LeanTween.value(blackOutUIGameObject, 0, 1, fadeDuration  / 2)
@@ -35,10 +57,13 @@ public class SleepSequenceController : MonoBehaviour
             .setOnComplete(() =>
             {
                 blackOutUI.alpha = 1;
+
+                if (raiseSleepEvent)
+                {
+                    EventBus<OnSleepEvent>.Raise(new OnSleepEvent());
+                }
                 
-                EventBus<OnSleepEvent>.Raise(new OnSleepEvent());
                 EventBus<OnRequestTeleportEvent>.Raise(new OnRequestTeleportEvent(){AwakeTransform = targetTransform});
-                // StartCoroutine(WaitCoroutine());
                 StartFadeIn();
             });
     }
@@ -60,12 +85,6 @@ public class SleepSequenceController : MonoBehaviour
                 blackOutUIGameObject.SetActive(false);
                 isSleeping = false;
             });
-    }
-
-    private IEnumerator WaitCoroutine()
-    {
-        yield return new WaitForSeconds(0.5f);
-        StartFadeIn();
     }
 }
 

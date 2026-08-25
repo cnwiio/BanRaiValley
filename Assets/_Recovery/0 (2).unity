@@ -2130,7 +2130,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bed
   tipTextUI: {fileID: 1036706510}
-  tipText: '"Press E to interact"'
+  tipText: Press E to interact
   blackOutUI: {fileID: 2028751847}
   meshRenderer: {fileID: 1287466716}
   outlineMaterial: {fileID: 2100000, guid: f27e5fb461c11ec469150bb502e54254, type: 2}
@@ -3636,7 +3636,7 @@ GameObject:
   - component: {fileID: 2028751844}
   - component: {fileID: 2028751847}
   m_Layer: 5
-  m_Name: Sleep Fade
+  m_Name: Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3687,7 +3687,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2028751843}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.1, y: 1.1, z: 1.1}
   m_ConstrainProportionsScale: 1

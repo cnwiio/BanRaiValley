@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c22dd7fe6930d8c479737464e9e2400f, type: 3}
   m_Name: TimeConfiguration
   m_EditorClassIdentifier: Assembly-CSharp::TimeConfiguration
-  realSecondsPerGameMinute: 0.1
-  minuteTickInterval: 1
+  realSecondsPerGameMinute: 0.5
+  minuteTickInterval: 10
   startHour: 6
-  passoutHour: 2
+  passoutHour: 12
   daysPerSeason: 30
