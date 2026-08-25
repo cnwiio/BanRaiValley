@@ -8,7 +8,6 @@ public class TimeUI : MonoBehaviour
     [Tooltip("Shows the current in-game time (e.g. \"06:00 AM\" or \"06:00\").")]
     [SerializeField] private TextMeshProUGUI _timeText;
     [SerializeField] private TextMeshProUGUI _DayText;
-    [SerializeField] private TextMeshProUGUI _DayofWeekText;
     
     [Header("Configuration")]
     [Tooltip("TimeConfiguration ScriptableObject used to resolve season sprites.")]
@@ -46,10 +45,8 @@ public class TimeUI : MonoBehaviour
     public void RefreshCalender(GameDateTime dateTime)
     {
         if (_DayText != null)
-            _DayText.text = $"{dateTime.DayOfSeason}";
-        
-        if (_DayofWeekText)
-            _DayofWeekText.text = dateTime.DayOfWeek.ToString().Substring(0, 3) + ".";
+            _DayText.text = $"{dateTime.DayOfSeason} " 
+                            + dateTime.DayOfWeek.ToString().Substring(0, 3) + ".";
     }
     
 }
