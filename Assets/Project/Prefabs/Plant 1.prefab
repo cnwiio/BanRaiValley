@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4274225688688833825}
+  - component: {fileID: 3448843598997336890}
   m_Layer: 11
   m_Name: Plant 1
   m_TagString: Untagged
@@ -32,6 +33,19 @@ Transform:
   - {fileID: 2546563477657118504}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3448843598997336890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2147524051394071840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e93e4b7f58ad7d647b8ddc99ceac3892, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Plant
+  meshFillter: {fileID: 4559907559804620536}
 --- !u!1 &7829806146325339667
 GameObject:
   m_ObjectHideFlags: 0
@@ -44,7 +58,7 @@ GameObject:
   - component: {fileID: 4559907559804620536}
   - component: {fileID: 4370724749959649947}
   - component: {fileID: 8545045585480726618}
-  - component: {fileID: 695517198610233386}
+  - component: {fileID: 1173663357190199886}
   m_Layer: 11
   m_Name: Cube
   m_TagString: Untagged
@@ -74,7 +88,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7829806146325339667}
-  m_Mesh: {fileID: -6320001982633638869, guid: 88133688ce354be4c85e1c167e475c5a, type: 3}
+  m_Mesh: {fileID: 4300000, guid: 1a2e91ebc86d2c84ca817eb30abe86d4, type: 3}
 --- !u!23 &4370724749959649947
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -137,15 +151,15 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1527
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.59122187, y: 0.8677931, z: 0.38152578}
-  m_Center: {x: -0.048345648, y: 0.43160826, z: 0.034383625}
---- !u!114 &695517198610233386
+  m_Size: {x: 3.7808595, y: 4.950954, z: 3.134452}
+  m_Center: {x: 0.10087067, y: 2.475477, z: -0.120905876}
+--- !u!114 &1173663357190199886
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -154,9 +168,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 7829806146325339667}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e93e4b7f58ad7d647b8ddc99ceac3892, type: 3}
+  m_Script: {fileID: 11500000, guid: a602827d6f7793b4788d98ea8c68d632, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Plant
-  meshFillter: {fileID: 4559907559804620536}
+  m_EditorClassIdentifier: Assembly-CSharp::PlantInteractor
+  plant: {fileID: 3448843598997336890}
   meshRenderer: {fileID: 4370724749959649947}
   outlineMaterial: {fileID: 2100000, guid: f27e5fb461c11ec469150bb502e54254, type: 2}

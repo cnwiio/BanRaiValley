@@ -1,24 +1,30 @@
-using System;
+
 using System.Collections.Generic;
 using Lean.Pool;
 using UnityEngine;
 
 public class PlantManager : MonoBehaviour
 {
+    // [SerializeField] private FarmingGridReference gridReference;
+    
+    
     private readonly Dictionary<Vector3Int, Plant> _spawnedPlantsByCell = new Dictionary<Vector3Int, Plant>();
 
     private void OnEnable()
     {
         EventBus<OnPlantingEvent>.Subscribe(OnPlanting);
         EventBus<OnClearPlant>.Subscribe(OnClearPlant);
+        EventBus<OnNewDayStartedEvent>.Subscribe(OnNewDay);
     }
 
     private void OnDisable()
     {
         EventBus<OnPlantingEvent>.Unsubscribe(OnPlanting);
         EventBus<OnClearPlant>.Unsubscribe(OnClearPlant);
+        EventBus<OnNewDayStartedEvent>.Unsubscribe(OnNewDay);
     }
 
+    
     private void OnPlanting(OnPlantingEvent evt)
     {
         GameObject go = SpawnPrefabs(evt.Prefab, evt.Position);
@@ -28,6 +34,11 @@ public class PlantManager : MonoBehaviour
     private void OnClearPlant(OnClearPlant evt)
     {
         DespawnPrefabs(evt.CellPos);
+    }
+    
+    private void OnNewDay(OnNewDayStartedEvent evt)
+    {
+        GrowAllPlant();   
     }
 
     #region Spawn And Despawn
@@ -47,7 +58,7 @@ public class PlantManager : MonoBehaviour
     #region Register 
     private void RegisterSpawnedPrefabs(GameObject prefab, Vector3Int cellPos, PlantData plantData)
     {
-        _spawnedPlantsByCell[cellPos] = prefab.GetComponentInChildren<Plant>();;
+        _spawnedPlantsByCell[cellPos] = prefab.GetComponent<Plant>();;
         _spawnedPlantsByCell[cellPos].Initialize(plantData);
     }
 
@@ -57,5 +68,12 @@ public class PlantManager : MonoBehaviour
     }
     #endregion
 
+    private void GrowAllPlant()
+    {
+        foreach (var plant in _spawnedPlantsByCell.Values)
+        {
+            plant.Grow();
+        }
+    }
 
 }

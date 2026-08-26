@@ -9,27 +9,19 @@ public enum PlantState
     ReadyToHarvest
 }
 
-public class Plant : MonoBehaviour, IInteractable, IPoolable
+public class Plant : MonoBehaviour, IPoolable
 {
     [SerializeField] private MeshFilter meshFillter;
-    [Header("Hover visual")] 
-    [SerializeField] private MeshRenderer meshRenderer;
-    [SerializeField] private Material outlineMaterial;
+    
     
     private PlantState _currentState = PlantState.CannotHarvest;
+    public PlantState currentState => _currentState;
     private PlantData data;
-
-    private List<Material> _mat = new List<Material>();
-
-    private void Awake()
-    {
-        meshRenderer.GetSharedMaterials(_mat);
-    }
 
     public void Initialize(PlantData plantData)
     {
         data = plantData; 
-        Debug.Log("Initialize" + data);
+        meshFillter.sharedMesh = data.Stages[_currentGrowStages].StageVisualMesh;
     }
 
     private byte _currentGrowStages;
@@ -53,36 +45,12 @@ public class Plant : MonoBehaviour, IInteractable, IPoolable
         
     }
 
-    public void Interact()
+    public void Harvest()
     {
         if (_currentState != PlantState.ReadyToHarvest) return;
-        Debug.Log("Harvest");
-        // throw new System.NotImplementedException();
-    }
-
-    public void IsLookAt(bool value)
-    {
-        if (_currentState != PlantState.ReadyToHarvest) return;
-        if (value)
-        {
-            OnHover();
-        }
-        else
-        {
-            OnStopHover();
-        }
-    }
-
-    private void OnHover()
-    {
-        _mat.Add(outlineMaterial);
-        meshRenderer.SetSharedMaterials(_mat);
-    }
-
-    private void OnStopHover()
-    {
-        _mat.Remove(outlineMaterial);
-        meshRenderer.SetSharedMaterials(_mat);
+        // LeanPool.Despawn(this);
+        // Vector3Int pos = new Vector3Int((int)transform.position.x, (int)transform.position.y, (int)transform.position.z);
+        // EventBus<OnHarvestPlantEvent>.Raise(new OnHarvestPlantEvent(){Plant = this, CellPos = pos});
     }
 
     public void OnSpawn()
@@ -90,12 +58,10 @@ public class Plant : MonoBehaviour, IInteractable, IPoolable
         _currentStagesDays = 0;
         _currentGrowStages = 0;
         _currentState = PlantState.CannotHarvest;
-        if (!data) return;
-        meshFillter.sharedMesh = data.Stages[_currentGrowStages].StageVisualMesh;
     }
 
     public void OnDespawn()
     {
-        // throw new System.NotImplementedException();
+        data = null;
     }
 }

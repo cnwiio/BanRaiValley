@@ -8,6 +8,9 @@ public class PlayerInputReader : MonoBehaviour
     // return value
     public Vector2 MovementInput { get; private set;  }
 
+    [SerializeField] private InputActionReference DebugAction;
+    
+    
     [Header("Input Action Reference")]
     [SerializeField] private InputActionReference MoveAction;
     [SerializeField] private InputActionReference JumpAction;
@@ -24,6 +27,8 @@ public class PlayerInputReader : MonoBehaviour
 
     private void OnEnable()
     {
+        DebugAction.action.performed += OnDebug;
+        
         MoveAction.action.performed += OnMove;
         MoveAction.action.canceled += OnStopMove;
 
@@ -49,6 +54,8 @@ public class PlayerInputReader : MonoBehaviour
 
     private void OnDisable()
     {
+        DebugAction.action.performed -= OnDebug;
+        
         MoveAction.action.performed -= OnMove;
         MoveAction.action.canceled -= OnStopMove;
 
@@ -70,6 +77,11 @@ public class PlayerInputReader : MonoBehaviour
         DeleteAction.action.performed -= OnDeleteAction;
         
         InteractAction.action.performed -= OnInteractAction;
+    }
+
+    private void OnDebug(InputAction.CallbackContext ctx)
+    {
+        EventBus<OnDebugActionEvent>.Raise(new OnDebugActionEvent() { });
     }
     
     private void OnInventoryToggle(InputAction.CallbackContext ctx)

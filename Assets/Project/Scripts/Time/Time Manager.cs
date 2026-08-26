@@ -198,11 +198,11 @@ public class TimeManager : MonoBehaviour
         timeUI.RefreshCalender(_currentDateTime);
         dayNightLightingController.HandleTimeTick(_currentDateTime.NormalizedDayTime);
         timeUI.HandleTimeTick(_currentDateTime);
-        // EventBus<OnNewDayStartedEvent>.Raise(new OnNewDayStartedEvent
-        // {
-        //     NewDateTime = _currentDateTime,
-        //     WasPassOut  = wasPassout
-        // });
+        EventBus<OnNewDayStartedEvent>.Raise(new OnNewDayStartedEvent
+        {
+            NewDateTime = _currentDateTime,
+            WasPassOut  = wasPassout
+        });
         
         // Emit the first tick of the new day so listeners (lighting, HUD) update immediately
         // EventBus<OnTimeTickEvent>.Raise(new OnTimeTickEvent

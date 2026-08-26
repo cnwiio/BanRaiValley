@@ -88,6 +88,7 @@ public struct OnSecondaryActionEvent : IEvent { }
 public struct OnInteractActionEvent : IEvent { }
 public struct OnRotateActionEvent : IEvent { }
 public struct OnDeleteActionEvent : IEvent { }
+public struct OnDebugActionEvent : IEvent { }
 
 #endregion
 
@@ -128,6 +129,8 @@ public struct OnWateringEvent : IEvent
     public Material Material;
 }
 
+#region Plant Event
+
 public struct OnStartPlantingEvent : IEvent { }
 
 public struct OnPlantingEvent : IEvent
@@ -143,6 +146,7 @@ public struct OnClearPlant : IEvent
     public Vector3Int CellPos;
 }
 
+#endregion
 public struct OnPlayerRequestAttackEvent : IEvent { }
 
 public struct OnSleepEvent : IEvent { }
