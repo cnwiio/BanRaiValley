@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum TileState
@@ -45,6 +45,12 @@ public interface ITileStore
     void SetWatered(Vector3Int cellPos);
     void SetPlanted(Vector3Int cellPos);
     void SetUnPlant(Vector3Int cellPos);
+
+    /// <summary>
+    /// Resets all hydrated tiles to dry for the start of a new day.
+    /// </summary>
+    /// <returns>The number of tiles whose hydration state was cleared.</returns>
+    int ResetDailyHydration();
 }
 
 public class TileStore : ITileStore
@@ -91,5 +97,29 @@ public class TileStore : ITileStore
             : new TileData(true, false, false);
         
         _tiles[cellPos] = current.WithPlatable(false);
+    }
+
+    /// <summary>
+    /// Iterates all registered tiles and resets any watered tile to dry.
+    /// Called once per morning before growth evaluation writes new watered flags.
+    /// </summary>
+    /// <returns>The number of tiles whose <see cref="TileData.IsWatered"/> was cleared.</returns>
+    public int ResetDailyHydration()
+    {
+        int resetCount = 0;
+
+        // Collect keys first to avoid mutating the dictionary during iteration.
+        var keys = new System.Collections.Generic.List<Vector3Int>(_tiles.Keys);
+
+        foreach (Vector3Int cellPos in keys)
+        {
+            if (!_tiles[cellPos].IsWatered)
+                continue;
+
+            _tiles[cellPos] = _tiles[cellPos].WithWatered(false);
+            resetCount++;
+        }
+
+        return resetCount;
     }
 }

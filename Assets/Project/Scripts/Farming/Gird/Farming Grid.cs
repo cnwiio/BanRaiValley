@@ -68,6 +68,7 @@ public class FarmingGrid : MonoBehaviour, IFarmingGrid
         cellWorldPos = grid.GetCellCenterWorld(cellPos);
         return IsPlantable(cellPos);
     }
+
     public bool TryTill(Vector3 worldPos, out Vector3Int cellPos)
     {
         cellPos = grid.WorldToCell(worldPos);
@@ -87,28 +88,28 @@ public class FarmingGrid : MonoBehaviour, IFarmingGrid
 
         UnRegisterTiledSoil(cellPos);
         return true;
-    }    
+    }
 
     public bool TryWatering(Vector3 worldPos, out Vector3Int cellPos)
     {
         cellPos = grid.WorldToCell(worldPos);
 
         if (!IsWaterable(cellPos)) return false;
-        
+
         RegisterWateredSoil(cellPos);
         return true;
-    }    
-    
+    }
+
     public bool TryPlanting(Vector3 worldPos, out Vector3Int cellPos)
     {
         cellPos = grid.WorldToCell(worldPos);
 
         if (!IsPlantable(cellPos)) return false;
-        
+
         RegisterPlantedSoil(cellPos);
         return true;
     }
-    
+
     public bool TryClearPlant(Vector3 worldPos, out Vector3Int cellPos)
     {
         cellPos = grid.WorldToCell(worldPos);
@@ -118,11 +119,27 @@ public class FarmingGrid : MonoBehaviour, IFarmingGrid
         UnRegisterPlantedSoil(cellPos);
         return true;
     }
-    
+
+    /// <summary>
+    /// Returns true if the tile at <paramref name="cellPos"/> was watered during the current day.
+    /// Delegates directly to <see cref="ITileStore.IsWatered(Vector3Int)"/>.
+    /// </summary>
+    /// <param name="cellPos">The tilemap cell coordinate to query.</param>
+    public bool IsWatered(Vector3Int cellPos) => _tileStore.IsWatered(cellPos);
+
+    /// <summary>
+    /// Resets all watered tiles to dry for the new day.
+    /// Delegates to <see cref="ITileStore.ResetDailyHydration"/>.
+    /// </summary>
+    /// <returns>The number of tiles whose hydration was cleared.</returns>
+    public int ResetDailyHydration() => _tileStore.ResetDailyHydration();
+
     #endregion
-    
+
+    #region Private Methods
+
     private bool IsTilled(Vector3Int cellPos) => _tileStore.IsTilled(cellPos);
-    
+
     private bool IsValidForTilling(Vector3Int cellPos, Vector3 cellWorldPos)
     {
         if (IsTilled(cellPos)) return false;
@@ -142,12 +159,10 @@ public class FarmingGrid : MonoBehaviour, IFarmingGrid
     }
 
     private void RegisterTilledSoil(Vector3Int cellPos) => _tileStore.SetTilled(cellPos);
-
     private void UnRegisterTiledSoil(Vector3Int cellPos) => _tileStore.SetUnTill(cellPos);
     private void RegisterWateredSoil(Vector3Int cellPos) => _tileStore.SetWatered(cellPos);
     private void RegisterPlantedSoil(Vector3Int cellPos) => _tileStore.SetPlanted(cellPos);
     private void UnRegisterPlantedSoil(Vector3Int cellPos) => _tileStore.SetUnPlant(cellPos);
-    
-    
 
+    #endregion
 }

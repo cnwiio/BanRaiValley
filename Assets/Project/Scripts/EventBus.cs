@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using BanRaiValley.Farming;
 using BanRaiValley.Time;
 
 public interface IEvent {}
@@ -140,8 +141,13 @@ public struct OnStartPlantingEvent : IEvent { }
 
 public struct OnPlantingEvent : IEvent
 {
+    /// <summary>Crop configuration asset driving this planting action.</summary>
+    public CropDataSO CropData;
+    /// <summary>Visual prefab to spawn at the planting position (legacy / preview support).</summary>
     public GameObject Prefab;
+    /// <summary>World-space position of the planted tile.</summary>
     public Vector3 Position;
+    /// <summary>Tilemap cell coordinate of the planted tile.</summary>
     public Vector3Int CellPos;
 }
 
@@ -269,6 +275,85 @@ public struct OnPlayerHitTargetEvent : IEvent
 
     /// <summary>Whether the hit reduced the target's HP to zero.</summary>
     public bool TargetDied;
+}
+
+#endregion
+
+#region Plant Growth Events
+
+/// <summary>
+/// Raised when a new crop instance is spawned and registered on a farm tile.
+/// </summary>
+public struct OnCropPlantedEvent : IEvent
+{
+    /// <summary>The root GameObject representing the newly planted crop.</summary>
+    public GameObject CropInstance;
+
+    /// <summary>Tilemap cell coordinate where the crop was planted.</summary>
+    public Vector3Int CellPos;
+
+    /// <summary>Crop configuration asset for this planting.</summary>
+    public CropDataSO CropData;
+}
+
+/// <summary>
+/// Raised when a crop advances its visual stage or reaches maturity on a morning growth tick.
+/// </summary>
+public struct OnCropStageChangedEvent : IEvent
+{
+    /// <summary>The root GameObject of the crop that progressed.</summary>
+    public GameObject CropInstance;
+
+    /// <summary>Tilemap cell coordinate of the crop.</summary>
+    public Vector3Int CellPos;
+
+    /// <summary>Growth stage index before this advancement.</summary>
+    public int PreviousStageIndex;
+
+    /// <summary>Growth stage index after this advancement.</summary>
+    public int NewStageIndex;
+
+    /// <summary>True when the crop has entered the Mature state after this advancement.</summary>
+    public bool IsMature;
+}
+
+/// <summary>
+/// Raised when a crop withers due to an out-of-season rollover or prolonged neglect.
+/// </summary>
+public struct OnCropWitheredEvent : IEvent
+{
+    /// <summary>The root GameObject of the withered crop.</summary>
+    public GameObject CropInstance;
+
+    /// <summary>Tilemap cell coordinate of the withered crop.</summary>
+    public Vector3Int CellPos;
+
+    /// <summary>Crop configuration asset identifying which crop withered.</summary>
+    public CropDataSO CropData;
+}
+
+/// <summary>
+/// Raised when the player triggers a harvest interaction on a mature crop.
+/// </summary>
+public struct OnCropHarvestRequestedEvent : IEvent
+{
+    /// <summary>The root GameObject of the crop being harvested.</summary>
+    public GameObject CropInstance;
+
+    /// <summary>Tilemap cell coordinate of the crop being harvested.</summary>
+    public Vector3Int CellPos;
+
+    /// <summary>The player or tool GameObject that initiated the harvest.</summary>
+    public GameObject Interactor;
+}
+
+/// <summary>
+/// Raised after daily crop growth evaluation when soil hydration resets to dry for the new day.
+/// </summary>
+public struct OnSoilHydrationResetEvent : IEvent
+{
+    /// <summary>Number of soil tiles whose hydration state was reset to dry.</summary>
+    public int ResetTilesCount;
 }
 
 #endregion

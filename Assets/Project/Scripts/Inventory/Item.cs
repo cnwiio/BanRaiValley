@@ -1,4 +1,5 @@
 using UnityEngine;
+using BanRaiValley.Farming;
 
 [CreateAssetMenu(fileName = "Item", menuName = "Scriptable Objects/Item")]
 public class Item : ScriptableObject
@@ -22,6 +23,17 @@ public class Item : ScriptableObject
 
     /// <summary>Attack parameters defined for this item.</summary>
     public ItemAttackData AttackData => _attackData;
+
+    [Header("Farming / Seed Data")]
+    [Tooltip("Crop growth configuration asset for this seed item. " +
+             "Only required when ItemType is Seed. Leave null for non-seed items.")]
+    [SerializeField] private CropDataSO _cropData;
+
+    /// <summary>
+    /// Crop growth configuration if this item is a seed.
+    /// Returns null for non-seed items.
+    /// </summary>
+    public CropDataSO CropData => _cropData;
 }
 
 public enum ItemType

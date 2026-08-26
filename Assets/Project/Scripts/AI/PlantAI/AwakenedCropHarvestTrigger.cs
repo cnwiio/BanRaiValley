@@ -5,7 +5,7 @@ using UnityEngine;
 /// Placed on a mature crop prefab or its interaction detector. When <see cref="TriggerAwakening"/>
 /// is called (e.g. by the player's harvest action), this component:
 /// <list type="number">
-///   <item>Despawns the static crop visual via <see cref="OnClearPlant"/> on the EventBus.</item>
+///   <item>Optionally despawns the static crop visual via <see cref="OnClearPlant"/> on the EventBus (skipped for regrowable crops).</item>
 ///   <item>Spawns the awakened monster prefab from the LeanPool at the same world position.</item>
 ///   <item>Calls <see cref="PlantBrain.Awaken"/> to start the AI uprooting sequence.</item>
 ///   <item>Raises <see cref="OnPlantAwakenedEvent"/> so other systems can react.</item>
@@ -16,17 +16,20 @@ public class AwakenedCropHarvestTrigger : MonoBehaviour
     #region Serialized Fields
 
     [Header("Spawning")]
-    [Tooltip("Prefab of the awakened plant monster. Must have a PlantBrain component and be registered with LeanPool.")]
+    [Tooltip("Prefab of the awakened plant monster. Must have a PlantBrain component and be registered with LeanPool. " +
+             "Can be overridden at runtime via SetMonsterPrefab() from CropDataSO.")]
     [SerializeField] private GameObject _awakenedMonsterPrefab;
 
     #endregion
 
+
     #region Fields
 
     private Vector3Int _cellPos;
-    private bool       _isAwakened;
+    private bool _isAwakened;
 
     #endregion
+
 
     #region Public Methods
 
@@ -42,25 +45,49 @@ public class AwakenedCropHarvestTrigger : MonoBehaviour
     }
 
     /// <summary>
+    /// Overrides the awakened monster prefab at runtime using the crop's <see cref="CropDataSO"/> data.
+    /// Only applies the override when <paramref name="monsterPrefab"/> is non-null,
+    /// so the Inspector-assigned fallback is preserved for crops without a data asset.
+    /// </summary>
+    /// <param name="monsterPrefab">The monster prefab to spawn. Must be registered with LeanPool.</param>
+    public void SetMonsterPrefab(GameObject monsterPrefab)
+    {
+        if (monsterPrefab != null)
+            _awakenedMonsterPrefab = monsterPrefab;
+    }
+
+    /// <summary>
     /// Initiates the crop-to-monster transformation.
     /// Idempotent — subsequent calls after the first are silently ignored.
     /// </summary>
-    public void TriggerAwakening()
+    /// <param name="isRegrowable">
+    /// When true the crop tile is kept alive for regrowth, so <see cref="OnClearPlant"/> is NOT raised.
+    /// When false the tile is cleared from the farm grid immediately.
+    /// </param>
+    public void TriggerAwakening(bool isRegrowable = false)
     {
         if (_isAwakened)
-        {
             return;
-        }
 
         _isAwakened = true;
 
-        // 1. Remove the static crop visual from PlantManager so the tile returns to tilled state.
-        EventBus<OnClearPlant>.Raise(new OnClearPlant
+        if (!isRegrowable)
         {
-            CellPos = _cellPos,
-        });
+            // Non-regrowable: remove the static crop visual so the tile returns to tilled state.
+            EventBus<OnClearPlant>.Raise(new OnClearPlant
+            {
+                CellPos = _cellPos,
+            });
+        }
+        // Regrowable: the owning CropInstance handles ResetToRegrowth() — tile stays active.
 
-        // 2. Spawn the monster instance from the pool at this crop's world transform.
+        // Spawn the monster instance from the pool at this crop's world transform.
+        if (_awakenedMonsterPrefab == null)
+        {
+            Debug.LogError("[AwakenedCropHarvestTrigger] No awakened monster prefab assigned — cannot spawn monster.");
+            return;
+        }
+
         GameObject monster = LeanPool.Spawn(
             _awakenedMonsterPrefab,
             transform.position,
@@ -73,7 +100,7 @@ public class AwakenedCropHarvestTrigger : MonoBehaviour
             return;
         }
 
-        // 3. Start the awakening animation / invulnerability sequence.
+        // Start the awakening animation / invulnerability sequence.
         PlantBrain brain = monster.GetComponent<PlantBrain>();
         if (brain != null)
         {
@@ -84,7 +111,7 @@ public class AwakenedCropHarvestTrigger : MonoBehaviour
             Debug.LogError($"[AwakenedCropHarvestTrigger] Spawned monster '{monster.name}' is missing a PlantBrain component.");
         }
 
-        // 4. Notify global listeners (e.g. quest system, audio, VFX).
+        // Notify global listeners (e.g. quest system, audio, VFX).
         EventBus<OnPlantAwakenedEvent>.Raise(new OnPlantAwakenedEvent
         {
             PlantInstance = monster,
