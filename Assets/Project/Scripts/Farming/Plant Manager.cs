@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PlantManager : MonoBehaviour
 {
-    private readonly Dictionary<Vector3Int, GameObject> _spawnedPlantsByCell = new Dictionary<Vector3Int, GameObject>();
+    private readonly Dictionary<Vector3Int, Plant> _spawnedPlantsByCell = new Dictionary<Vector3Int, Plant>();
 
     private void OnEnable()
     {
@@ -22,7 +22,7 @@ public class PlantManager : MonoBehaviour
     private void OnPlanting(OnPlantingEvent evt)
     {
         GameObject go = SpawnPrefabs(evt.Prefab, evt.Position);
-        RegisterSpawnedPrefabs(go, evt.CellPos);
+        RegisterSpawnedPrefabs(go, evt.CellPos, evt.PlantData);
     }
 
     private void OnClearPlant(OnClearPlant evt)
@@ -38,16 +38,17 @@ public class PlantManager : MonoBehaviour
     
     private void DespawnPrefabs(Vector3Int cellPos)
     {
-        if (!_spawnedPlantsByCell.TryGetValue(cellPos, out var go)) return;
+        if (!_spawnedPlantsByCell.TryGetValue(cellPos, out var plant)) return;
 
-        LeanPool.Despawn(go);
+        LeanPool.Despawn(plant);
         UnRegisterSpawnedPrefabs(cellPos);
     }
     #endregion
     #region Register 
-    private void RegisterSpawnedPrefabs(GameObject prefab, Vector3Int cellPos)
+    private void RegisterSpawnedPrefabs(GameObject prefab, Vector3Int cellPos, PlantData plantData)
     {
-        _spawnedPlantsByCell[cellPos] = prefab;
+        _spawnedPlantsByCell[cellPos] = prefab.GetComponent<Plant>();;
+        _spawnedPlantsByCell[cellPos].Initialize(plantData);
     }
 
     private void UnRegisterSpawnedPrefabs(Vector3Int position)

@@ -129,4 +129,4 @@ MonoBehaviour:
   farmingGridReference: {fileID: 11400000, guid: 5ea848fd122f7cd48a93832bd2e00c19, type: 2}
   seedBagAnimator: {fileID: 3395382924879716630}
   hologramPrefab: {fileID: 6940088763359480455, guid: 9913c6916dc2ed44296d0667c8f28a30, type: 3}
-  plantPrefab: {fileID: 2147524051394071840, guid: 0c2b4faa19f146e418d920ee35be1c37, type: 3}
+  plantData: {fileID: 11400000, guid: 366f6879a385eae48b627fb779d9cdd3, type: 2}

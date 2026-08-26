@@ -49,9 +49,16 @@ public class TimeManager : MonoBehaviour
     private void Awake()
     {
         _currentDateTime = GameDateTime.InitialDate;
+        
 
         if (!_autoStartOnAwake)
             _isPaused = true;
+    }
+
+    private void Start()
+    {
+        dayNightLightingController.HandleTimeTick(_currentDateTime.NormalizedDayTime);
+        timeUI.HandleTimeTick(_currentDateTime);
     }
 
     private void FixedUpdate()

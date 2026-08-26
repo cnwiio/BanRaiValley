@@ -1,3 +1,4 @@
+using Lean.Pool;
 using UnityEngine;
 
 public enum SeedBagState
@@ -7,11 +8,11 @@ public enum SeedBagState
     Planting
 }
 
-public class SeedBag : FarmingToolBase
+public class SeedBag : FarmingToolBase, IPoolable
 {
     [SerializeField] private Animator seedBagAnimator;
     [SerializeField] private GameObject hologramPrefab;
-    [SerializeField] private GameObject plantPrefab;
+    [SerializeField] private PlantData plantData;
     
     private SeedBagState _currentState = SeedBagState.Farm;
 
@@ -39,6 +40,9 @@ public class SeedBag : FarmingToolBase
     
     private const int SEED_BAG_RANGE = 10;
     private Vector3 _plantingPos;
+    private GameObject plantPrefab;
+
+    #region Event Handles
     protected override void OnEnable()
     {
         base.OnEnable();
@@ -65,7 +69,7 @@ public class SeedBag : FarmingToolBase
             CurrentState = SeedBagState.Farm;
         }
     }
-
+    #endregion
     private void StartPlanting()
     {
         CurrentState = SeedBagState.Planting;
@@ -76,7 +80,12 @@ public class SeedBag : FarmingToolBase
     {
         if (grid.TryPlanting(_plantingPos, out var cellPos))
         {
-            EventBus<OnPlantingEvent>.Raise(new OnPlantingEvent() { Prefab = plantPrefab, Position = _plantingPos, CellPos = cellPos});
+            EventBus<OnPlantingEvent>.Raise(new OnPlantingEvent() 
+                { Prefab = plantPrefab,
+                    Position = _plantingPos,
+                    CellPos = cellPos,
+                    PlantData = plantData
+                });
             EventBus<PreviewingEvent>.Raise(new PreviewingEvent() { Position = _plantingPos, IsValid = false, YRotation = 0 });
         }
 
@@ -105,5 +114,15 @@ public class SeedBag : FarmingToolBase
         if (!TryGetGrid()) return;
 
         RunPreviewUpdate(SEED_BAG_RANGE, hologramPrefab, PreviewState.Planting, grid.IsPlantable, 0f);
+    }
+
+    public void OnSpawn()
+    {
+        plantPrefab = plantData.prefabs;
+    }
+
+    public void OnDespawn()
+    {
+        // throw new System.NotImplementedException();
     }
 }

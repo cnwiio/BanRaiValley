@@ -135,6 +135,7 @@ public struct OnPlantingEvent : IEvent
     public GameObject Prefab;
     public Vector3 Position;
     public Vector3Int CellPos;
+    public PlantData PlantData;
 }
 
 public struct OnClearPlant : IEvent

@@ -9,8 +9,6 @@ public class Bed : MonoBehaviour, IInteractable
     [Header("TextUI")]
     [SerializeField] private TextMeshProUGUI tipTextUI;
     [SerializeField] private String tipText;
-    [Header("Black Out UI")]
-    [SerializeField] private CanvasGroup blackOutUI;
     [Header("Outline")]
     [SerializeField] private MeshRenderer meshRenderer;
     [SerializeField] private Material outlineMaterial;
