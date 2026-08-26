@@ -1,27 +1,35 @@
 
+using System;
 using System.Collections.Generic;
 using Lean.Pool;
 using UnityEngine;
 
 public class PlantManager : MonoBehaviour
 {
-    // [SerializeField] private FarmingGridReference gridReference;
+    [SerializeField] private FarmingGridReference gridReference;
     
     
     private readonly Dictionary<Vector3Int, Plant> _spawnedPlantsByCell = new Dictionary<Vector3Int, Plant>();
 
+    private IFarmingGrid _grid;
+    private void Start()
+    {
+        _grid = gridReference.Grid;
+    }
+
+    #region Bind Events
     private void OnEnable()
     {
         EventBus<OnPlantingEvent>.Subscribe(OnPlanting);
         EventBus<OnClearPlant>.Subscribe(OnClearPlant);
-        EventBus<OnNewDayStartedEvent>.Subscribe(OnNewDay);
+        EventBus<OnDayEndedEvent>.Subscribe(OnDayEnded);
     }
 
     private void OnDisable()
     {
         EventBus<OnPlantingEvent>.Unsubscribe(OnPlanting);
         EventBus<OnClearPlant>.Unsubscribe(OnClearPlant);
-        EventBus<OnNewDayStartedEvent>.Unsubscribe(OnNewDay);
+        EventBus<OnDayEndedEvent>.Unsubscribe(OnDayEnded);
     }
 
     
@@ -36,11 +44,11 @@ public class PlantManager : MonoBehaviour
         DespawnPrefabs(evt.CellPos);
     }
     
-    private void OnNewDay(OnNewDayStartedEvent evt)
+    private void OnDayEnded(OnDayEndedEvent evt)
     {
         GrowAllPlant();   
     }
-
+    #endregion
     #region Spawn And Despawn
     private GameObject SpawnPrefabs(GameObject prefab, Vector3 position)
     {
@@ -59,7 +67,7 @@ public class PlantManager : MonoBehaviour
     private void RegisterSpawnedPrefabs(GameObject prefab, Vector3Int cellPos, PlantData plantData)
     {
         _spawnedPlantsByCell[cellPos] = prefab.GetComponent<Plant>();;
-        _spawnedPlantsByCell[cellPos].Initialize(plantData);
+        _spawnedPlantsByCell[cellPos].Initialize(plantData, cellPos);
     }
 
     private void UnRegisterSpawnedPrefabs(Vector3Int position)
@@ -72,7 +80,8 @@ public class PlantManager : MonoBehaviour
     {
         foreach (var plant in _spawnedPlantsByCell.Values)
         {
-            plant.Grow();
+            if (_grid.IsWatered(plant.transform.position))
+                plant.Grow();
         }
     }
 

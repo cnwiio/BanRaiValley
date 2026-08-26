@@ -13,7 +13,6 @@ public class WateringCan : FarmingToolBase
 {
     [SerializeField] private Animator wateringCanAnimator;
     [SerializeField] private GameObject hologramPrefabs;
-    [SerializeField] private Material WateringMaterial;
 
     private WaterCanState _currentState = WaterCanState.Farm;
     private WaterCanState CurrentState
@@ -79,7 +78,7 @@ public class WateringCan : FarmingToolBase
     {
         if (grid.TryWatering(_wateringPos, out var cellPos))
         {
-            EventBus<OnWateringEvent>.Raise(new OnWateringEvent() { CellPos = cellPos, Material = WateringMaterial});
+            EventBus<OnWateringEvent>.Raise(new OnWateringEvent() { CellPos = cellPos});
             EventBus<PreviewingEvent>.Raise(new PreviewingEvent() { Position = _lastCellWorldPos, IsValid = false, YRotation = 0 });
         }
 

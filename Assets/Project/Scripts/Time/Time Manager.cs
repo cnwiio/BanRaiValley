@@ -42,7 +42,7 @@ public class TimeManager : MonoBehaviour
 
     private void OnSleep(OnSleepEvent evt)
     {
-        AdvanceToNextDay(false);
+        SleepToNextMorning();
     }
     
     
@@ -130,11 +130,11 @@ public class TimeManager : MonoBehaviour
     /// </summary>
     public void SleepToNextMorning()
     {
-        // EventBus<OnDayEndedEvent>.Raise(new OnDayEndedEvent
-        // {
-        //     EndedDateTime = _currentDateTime,
-        //     IsPassOut     = false
-        // });
+        EventBus<OnDayEndedEvent>.Raise(new OnDayEndedEvent
+        {
+            EndedDateTime = _currentDateTime,
+            IsPassOut     = false
+        });
 
         AdvanceToNextDay(wasPassout: false);
     }
@@ -150,11 +150,11 @@ public class TimeManager : MonoBehaviour
         //     StaminaPenaltyPercent = 0.5f
         // });
         //
-        // EventBus<OnDayEndedEvent>.Raise(new OnDayEndedEvent
-        // {
-        //     EndedDateTime = _currentDateTime,
-        //     IsPassout     = true
-        // });
+        EventBus<OnDayEndedEvent>.Raise(new OnDayEndedEvent
+        {
+            EndedDateTime = _currentDateTime,
+            IsPassOut     = true
+        });
         EventBus<OnPlayerPassedOutEvent>.Raise(new OnPlayerPassedOutEvent());
         AdvanceToNextDay(wasPassout: true);
     }

@@ -17,10 +17,12 @@ public class Plant : MonoBehaviour, IPoolable
     private PlantState _currentState = PlantState.CannotHarvest;
     public PlantState currentState => _currentState;
     private PlantData data;
+    public Vector3Int cellPos;
 
-    public void Initialize(PlantData plantData)
+    public void Initialize(PlantData plantData, Vector3Int cellPos)
     {
-        data = plantData; 
+        data = plantData;
+        this.cellPos = cellPos;
         meshFillter.sharedMesh = data.Stages[_currentGrowStages].StageVisualMesh;
     }
 

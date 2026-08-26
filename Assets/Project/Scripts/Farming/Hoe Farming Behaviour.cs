@@ -5,14 +5,21 @@ using UnityEngine;
 
 public class HoeFarmingBehaviour : MonoBehaviour
 {
-    private readonly Dictionary<Vector3Int, GameObject> _spawnedTilesByCell = new Dictionary<Vector3Int, GameObject>();
-
+    [SerializeField] private FarmingGridReference gridReference;
+    private readonly Dictionary<Vector3Int, Dirt> _spawnedTilesByCell = new Dictionary<Vector3Int, Dirt>();
+    
+    private IFarmingGrid _grid;
+    private void Start()
+    {
+        _grid = gridReference.Grid;
+    }
     #region Bind Events
     private void OnEnable()
     {
         EventBus<OnTillingImpactEvent>.Subscribe(OnTillingImpact);
         EventBus<OnTileClearEvent>.Subscribe(OnTileClear);
         EventBus<OnWateringEvent>.Subscribe(OnWatering);
+        EventBus<OnNewDayStartedEvent>.Subscribe(OnNewDay);
     }
 
     private void OnDisable()
@@ -20,6 +27,7 @@ public class HoeFarmingBehaviour : MonoBehaviour
         EventBus<OnTillingImpactEvent>.Unsubscribe(OnTillingImpact);
         EventBus<OnTileClearEvent>.Unsubscribe(OnTileClear);
         EventBus<OnWateringEvent>.Unsubscribe(OnWatering);
+        EventBus<OnNewDayStartedEvent>.Unsubscribe(OnNewDay);
     }
 
     private void OnTillingImpact(OnTillingImpactEvent evt)
@@ -33,7 +41,12 @@ public class HoeFarmingBehaviour : MonoBehaviour
     }
     private void OnWatering(OnWateringEvent evt)
     {
-        WateringSoil(evt.CellPos, evt.Material);
+        WateringSoil(evt.CellPos);
+    }
+
+    private void OnNewDay(OnNewDayStartedEvent evt)
+    {
+        UnWateredAllSoil();
     }
     #endregion
     #region Spawn And Despawn
@@ -52,7 +65,7 @@ public class HoeFarmingBehaviour : MonoBehaviour
     #region Register 
     private void RegisterSpawnedPrefabs(GameObject prefab, Vector3Int cellPos)
     {
-        _spawnedTilesByCell[cellPos] = prefab;
+        _spawnedTilesByCell[cellPos] = prefab.GetComponent<Dirt>();
     }
 
     private void UnRegisterSpawnedPrefabs(Vector3Int position)
@@ -60,20 +73,28 @@ public class HoeFarmingBehaviour : MonoBehaviour
         _spawnedTilesByCell.Remove(position);
     }
 
-    private GameObject GetSpawnedPrefabs(Vector3Int position)
-    {
-        _spawnedTilesByCell.TryGetValue(position, out var value);
-        return value;
-    }
+    // private GameObject GetSpawnedPrefabs(Vector3Int position)
+    // {
+    //     _spawnedTilesByCell.TryGetValue(position, out var value);
+    //     return value;
+    // }
     #endregion
 
-    private void WateringSoil(Vector3Int cellPos, Material material)
+    private void WateringSoil(Vector3Int cellPos)
     {
         if (_spawnedTilesByCell.TryGetValue(cellPos, out var value))
         {
-            var meshRenderer = value.GetComponent<MeshRenderer>();
-            meshRenderer.sharedMaterial = material;
+            value.Watering();
         }
     }
-    
+
+    private void UnWateredAllSoil()
+    {
+        foreach (var soil in _spawnedTilesByCell.Values)
+        {
+            if(_grid.TryUnWatered(soil.transform.position))
+                soil.ResetWateredVisual();
+        }
+    }
+
 }

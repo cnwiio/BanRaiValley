@@ -43,6 +43,7 @@ public interface ITileStore
     void SetTilled(Vector3Int cellPos);
     void SetUnTill(Vector3Int cellPos);
     void SetWatered(Vector3Int cellPos);
+    void SetUnWatered(Vector3Int cellPos);
     void SetPlanted(Vector3Int cellPos);
     void SetUnPlant(Vector3Int cellPos);
 }
@@ -75,7 +76,15 @@ public class TileStore : ITileStore
         
         _tiles[cellPos] = current.WithWatered(true);
     }
-
+    public void SetUnWatered(Vector3Int cellPos)
+    {
+        var current = _tiles.TryGetValue(cellPos, out var tile)
+            ? tile
+            : new TileData(true, false, false);
+        
+        _tiles[cellPos] = current.WithWatered(false);
+    }
+    
     public void SetPlanted(Vector3Int cellPos)
     {
         var current = _tiles.TryGetValue(cellPos, out var tile)

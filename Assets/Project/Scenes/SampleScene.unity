@@ -2110,7 +2110,7 @@ GameObject:
   - component: {fileID: 1287466715}
   - component: {fileID: 1287466714}
   - component: {fileID: 1287466719}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Bed
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3337,6 +3337,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7044b0ebde5ff784dafc56edf3960170, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlantManager
+  gridReference: {fileID: 11400000, guid: 5ea848fd122f7cd48a93832bd2e00c19, type: 2}
 --- !u!4 &1982549506
 Transform:
   m_ObjectHideFlags: 0
@@ -3889,6 +3890,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2091949063}
     - target: {fileID: 3237870357853340737, guid: 0b29d41089b94e043b272fa4d64e8b6c, type: 3}
+      propertyPath: DebugAction
+      value: 
+      objectReference: {fileID: -2429492104494996083, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
+    - target: {fileID: 3237870357853340737, guid: 0b29d41089b94e043b272fa4d64e8b6c, type: 3}
       propertyPath: InteractAction
       value: 
       objectReference: {fileID: -4726570457938165820, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
@@ -3968,6 +3973,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1014281777736376146, guid: 61b4128b7b5fc974d8c6a720ce5a356c, type: 3}
+      propertyPath: obstacleLayerMask.m_Bits
+      value: 115
+      objectReference: {fileID: 0}
+    - target: {fileID: 1150347864120123306, guid: 61b4128b7b5fc974d8c6a720ce5a356c, type: 3}
+      propertyPath: gridReference
+      value: 
+      objectReference: {fileID: 11400000, guid: 5ea848fd122f7cd48a93832bd2e00c19, type: 2}
     - target: {fileID: 5291828001604092111, guid: 61b4128b7b5fc974d8c6a720ce5a356c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

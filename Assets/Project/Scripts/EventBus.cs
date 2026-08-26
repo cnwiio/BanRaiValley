@@ -126,7 +126,6 @@ public struct OnStartWateringEvent : IEvent { }
 public struct OnWateringEvent : IEvent
 {
     public Vector3Int CellPos;
-    public Material Material;
 }
 
 #region Plant Event
@@ -165,5 +164,11 @@ public struct OnNewDayStartedEvent : IEvent
 }
 
 public struct OnPlayerPassedOutEvent : IEvent { }
+
+public struct OnDayEndedEvent : IEvent
+{
+    public GameDateTime EndedDateTime;
+    public bool IsPassOut;
+}
 
 #endregion

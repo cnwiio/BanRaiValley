@@ -56,6 +56,12 @@ public class FarmingGrid : MonoBehaviour, IFarmingGrid
         return IsWaterable(cellPos);
     }
 
+    public bool IsWatered(Vector3 worldPos)
+    {
+        var cellPos = grid.WorldToCell(worldPos);
+        return _tileStore.IsWatered(cellPos);
+    }
+
     public bool IsPlanted(Vector3 worldPos, out Vector3 cellWorldPos)
     {
         var cellPos = grid.WorldToCell(worldPos);
@@ -98,8 +104,18 @@ public class FarmingGrid : MonoBehaviour, IFarmingGrid
         
         RegisterWateredSoil(cellPos);
         return true;
-    }    
-    
+    }
+
+    public bool TryUnWatered(Vector3 worldPos)
+    {
+        var cellPos = grid.WorldToCell(worldPos);
+        
+        if (!_tileStore.IsWatered(cellPos)) return false;
+        
+        UnRegisterWateredSoil(cellPos);
+        return true;
+    }
+
     public bool TryPlanting(Vector3 worldPos, out Vector3Int cellPos)
     {
         cellPos = grid.WorldToCell(worldPos);
@@ -146,6 +162,7 @@ public class FarmingGrid : MonoBehaviour, IFarmingGrid
 
     private void UnRegisterTiledSoil(Vector3Int cellPos) => _tileStore.SetUnTill(cellPos);
     private void RegisterWateredSoil(Vector3Int cellPos) => _tileStore.SetWatered(cellPos);
+    private void UnRegisterWateredSoil(Vector3Int cellPos) => _tileStore.SetUnWatered(cellPos);
     private void RegisterPlantedSoil(Vector3Int cellPos) => _tileStore.SetPlanted(cellPos);
     private void UnRegisterPlantedSoil(Vector3Int cellPos) => _tileStore.SetUnPlant(cellPos);
 }
