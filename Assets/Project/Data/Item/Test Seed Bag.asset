@@ -27,3 +27,4 @@ MonoBehaviour:
     knockbackForce: 2
     attackBoxSize: {x: 1.2, y: 1.2, z: 2}
     attackBoxOffset: {x: 0, y: 0, z: 1.2}
+  _cropData: {fileID: 11400000, guid: 1369fc3c9049d594488f21a1b043880d, type: 2}

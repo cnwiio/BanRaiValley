@@ -61,7 +61,7 @@ namespace BanRaiValley.Time
         private void HandlePlayerPassedOut(OnPlayerPassedOutEvent evt)
         {
             _hasPendingPassoutPenalty = true;
-            Debug.Log("[PlayerSleepHandler] Player passed out at 2:00 AM. 50% stamina penalty applied.");
+            // Debug.Log("[PlayerSleepHandler] Player passed out at 2:00 AM. 50% stamina penalty applied.");
         }
 
         private void HandleNewDayStarted(OnNewDayStartedEvent evt)
@@ -118,7 +118,7 @@ namespace BanRaiValley.Time
         {
             // TODO: staminaComponent.RestoreToPercent(0.5f);
             // TODO: healthComponent.RestoreToMax(); // HP still fully restored
-            Debug.Log("[PlayerSleepHandler] 50% stamina restored after passout penalty.");
+            // Debug.Log("[PlayerSleepHandler] 50% stamina restored after passout penalty.");
         }
     }
 }

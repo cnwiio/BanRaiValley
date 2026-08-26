@@ -21,13 +21,13 @@ public class PlantManager : MonoBehaviour
 
     private void OnPlanting(OnPlantingEvent evt)
     {
-        GameObject go = SpawnPrefabs(evt.Prefab, evt.Position);
-        RegisterSpawnedPrefabs(go, evt.CellPos);
+        // GameObject go = SpawnPrefabs(evt.Prefab, evt.Position); 
+        // RegisterSpawnedPrefabs(go, evt.CellPos);
     }
 
     private void OnClearPlant(OnClearPlant evt)
     {
-        DespawnPrefabs(evt.CellPos);
+        // DespawnPrefabs(evt.CellPos);
     }
 
     #region Spawn And Despawn

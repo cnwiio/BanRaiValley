@@ -66,6 +66,7 @@ public class CropGrowthManager : MonoBehaviour
     /// </summary>
     private void OnPlanting(OnPlantingEvent evt)
     {
+        Debug.Log("Receive planting event");
         if (evt.CropData == null)
         {
             // Legacy planting path without crop data — spawn the raw prefab if provided.

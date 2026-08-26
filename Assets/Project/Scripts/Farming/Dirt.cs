@@ -15,7 +15,7 @@ public class Dirt : MonoBehaviour, IPoolable
 
     public void OnDespawn()
     {
-        plant.Initialize(Vector3Int.zero);
-        plant.TriggerAwakening();
+        // plant.Initialize(Vector3Int.zero);
+        // plant.TriggerAwakening();
     }
 }
