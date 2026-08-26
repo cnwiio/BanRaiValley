@@ -47,7 +47,7 @@ public class PlantManager : MonoBehaviour
     #region Register 
     private void RegisterSpawnedPrefabs(GameObject prefab, Vector3Int cellPos, PlantData plantData)
     {
-        _spawnedPlantsByCell[cellPos] = prefab.GetComponent<Plant>();;
+        _spawnedPlantsByCell[cellPos] = prefab.GetComponentInChildren<Plant>();;
         _spawnedPlantsByCell[cellPos].Initialize(plantData);
     }
 

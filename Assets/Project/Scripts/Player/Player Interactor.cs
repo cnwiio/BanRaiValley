@@ -53,7 +53,7 @@ public class PlayerInteractor : MonoBehaviour
         // interactTimer = 0;
         
         _ray = RayCastAtCursor();
-        if (Physics.Raycast(_ray, out _hit, range) &&
+        if (Physics.Raycast(_ray, out _hit, range, layerMask) &&
             _hit.collider.TryGetComponent<IInteractable>(out var interactable))
         {
             if (!ReferenceEquals(interactable, _target))

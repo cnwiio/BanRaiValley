@@ -81,7 +81,8 @@ public class SeedBag : FarmingToolBase, IPoolable
         if (grid.TryPlanting(_plantingPos, out var cellPos))
         {
             EventBus<OnPlantingEvent>.Raise(new OnPlantingEvent() 
-                { Prefab = plantPrefab,
+                { 
+                    Prefab = plantPrefab,
                     Position = _plantingPos,
                     CellPos = cellPos,
                     PlantData = plantData
