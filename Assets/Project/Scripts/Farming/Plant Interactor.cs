@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Lean.Pool;
+using TMPro;
 using UnityEngine;
 
 public class PlantInteractor : MonoBehaviour, IInteractable

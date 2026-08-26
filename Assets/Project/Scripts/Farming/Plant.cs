@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Lean.Pool;
+using TMPro;
 using UnityEngine;
 
 public enum PlantState
@@ -12,12 +13,15 @@ public enum PlantState
 public class Plant : MonoBehaviour, IPoolable
 {
     [SerializeField] private MeshFilter meshFillter;
+
+    
     
     
     private PlantState _currentState = PlantState.CannotHarvest;
     public PlantState currentState => _currentState;
     private PlantData data;
     public Vector3Int cellPos;
+
 
     public void Initialize(PlantData plantData, Vector3Int cellPos)
     {

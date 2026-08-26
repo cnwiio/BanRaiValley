@@ -23,6 +23,7 @@ public abstract class FarmingToolBase : MonoBehaviour
     private Camera sceneCamera;
     private Mouse currentMouse;
     protected IFarmingGrid grid;
+    private LayerMask raycastTargetLayer;
 
     protected Ray _ray;
     protected RaycastHit _hit;
@@ -40,6 +41,7 @@ public abstract class FarmingToolBase : MonoBehaviour
     {
         sceneCamera = Camera.main;
         currentMouse = Mouse.current;
+        raycastTargetLayer = LayerMask.GetMask("Ground");
     }
 
     protected virtual void OnEnable()
@@ -87,7 +89,7 @@ public abstract class FarmingToolBase : MonoBehaviour
     protected void RunPreviewUpdate(int range, GameObject hologramPrefab, PreviewState previewState, GridCheck check, float yRotation)
     {
         _ray = RayCastAtCursor();
-        if (Physics.Raycast(_ray, out _hit, range))
+        if (Physics.Raycast(_ray, out _hit, range, raycastTargetLayer))
         {
             _isHit = true;
             _isValid = check(_hit.point, out var cellWorldPos);

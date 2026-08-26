@@ -158,11 +158,11 @@ public class FarmingGrid : MonoBehaviour, IFarmingGrid
         return !_tileStore.IsPlanted(cellPos);
     }
 
-    private void RegisterTilledSoil(Vector3Int cellPos) => _tileStore.SetTilled(cellPos);
+    private void RegisterTilledSoil(Vector3Int cellPos) => _tileStore.SetTilled(cellPos, true);
 
-    private void UnRegisterTiledSoil(Vector3Int cellPos) => _tileStore.SetUnTill(cellPos);
-    private void RegisterWateredSoil(Vector3Int cellPos) => _tileStore.SetWatered(cellPos);
-    private void UnRegisterWateredSoil(Vector3Int cellPos) => _tileStore.SetUnWatered(cellPos);
-    private void RegisterPlantedSoil(Vector3Int cellPos) => _tileStore.SetPlanted(cellPos);
-    private void UnRegisterPlantedSoil(Vector3Int cellPos) => _tileStore.SetUnPlant(cellPos);
+    private void UnRegisterTiledSoil(Vector3Int cellPos) => _tileStore.SetTilled(cellPos, false);
+    private void RegisterWateredSoil(Vector3Int cellPos) => _tileStore.SetWatered(cellPos, true);
+    private void UnRegisterWateredSoil(Vector3Int cellPos) => _tileStore.SetWatered(cellPos, false);
+    private void RegisterPlantedSoil(Vector3Int cellPos) => _tileStore.SetPlanted(cellPos, true);
+    private void UnRegisterPlantedSoil(Vector3Int cellPos) => _tileStore.SetPlanted(cellPos, false);
 }

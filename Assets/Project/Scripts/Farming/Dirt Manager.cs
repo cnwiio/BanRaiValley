@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Lean.Pool;
 using UnityEngine;
 
-public class HoeFarmingBehaviour : MonoBehaviour
+public class DirtManager : MonoBehaviour
 {
     [SerializeField] private FarmingGridReference gridReference;
     private readonly Dictionary<Vector3Int, Dirt> _spawnedTilesByCell = new Dictionary<Vector3Int, Dirt>();
