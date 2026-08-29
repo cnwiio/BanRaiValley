@@ -54,9 +54,8 @@ public class Plant : MonoBehaviour, IPoolable
     public void Harvest()
     {
         if (_currentState != PlantState.ReadyToHarvest) return;
-        // LeanPool.Despawn(this);
-        // Vector3Int pos = new Vector3Int((int)transform.position.x, (int)transform.position.y, (int)transform.position.z);
-        // EventBus<OnHarvestPlantEvent>.Raise(new OnHarvestPlantEvent(){Plant = this, CellPos = pos});
+        LeanPool.Spawn(data.plantMonsterPrefabs, transform.position, transform.rotation);
+        EventBus<OnHarvestPlant>.Raise(new OnHarvestPlant() { Data = data, Position = transform.position});
     }
 
     public void OnSpawn()

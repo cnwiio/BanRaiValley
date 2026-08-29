@@ -119,7 +119,7 @@ public class SeedBag : FarmingToolBase, IPoolable
 
     public void OnSpawn()
     {
-        plantPrefab = plantData.prefabs;
+        plantPrefab = plantData.plantPrefabs;
     }
 
     public void OnDespawn()

@@ -22,6 +22,7 @@ public class PlantManager : MonoBehaviour
     {
         EventBus<OnPlantingEvent>.Subscribe(OnPlanting);
         EventBus<OnClearPlant>.Subscribe(OnClearPlant);
+        EventBus<OnHarvestPlant>.Subscribe(OnHarvest);
         EventBus<OnDayEndedEvent>.Subscribe(OnDayEnded);
     }
 
@@ -29,6 +30,7 @@ public class PlantManager : MonoBehaviour
     {
         EventBus<OnPlantingEvent>.Unsubscribe(OnPlanting);
         EventBus<OnClearPlant>.Unsubscribe(OnClearPlant);
+        EventBus<OnHarvestPlant>.Unsubscribe(OnHarvest);
         EventBus<OnDayEndedEvent>.Unsubscribe(OnDayEnded);
     }
 
@@ -42,6 +44,11 @@ public class PlantManager : MonoBehaviour
     private void OnClearPlant(OnClearPlant evt)
     {
         DespawnPrefabs(evt.CellPos);
+    }
+
+    private void OnHarvest(OnHarvestPlant evt)
+    {
+        DespawnPrefabs(evt.Position);
     }
     
     private void OnDayEnded(OnDayEndedEvent evt)
@@ -57,6 +64,15 @@ public class PlantManager : MonoBehaviour
     
     private void DespawnPrefabs(Vector3Int cellPos)
     {
+        if (!_spawnedPlantsByCell.TryGetValue(cellPos, out var plant)) return;
+
+        LeanPool.Despawn(plant);
+        UnRegisterSpawnedPrefabs(cellPos);
+    }
+    
+    private void DespawnPrefabs(Vector3 Pos)
+    {
+        if (!_grid.TryClearPlant(Pos, out var cellPos)) return;
         if (!_spawnedPlantsByCell.TryGetValue(cellPos, out var plant)) return;
 
         LeanPool.Despawn(plant);

@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42c183bdd6f480e4d9c5eb805327f825, type: 3}
   m_Name: PlantData Test
   m_EditorClassIdentifier: Assembly-CSharp::PlantData
-  prefabs: {fileID: 2147524051394071840, guid: db90fca8afdcf304ea5eeab516fadf91, type: 3}
+  plantPrefabs: {fileID: 2147524051394071840, guid: db90fca8afdcf304ea5eeab516fadf91, type: 3}
+  plantMonsterPrefabs: {fileID: 8500882108080917300, guid: 8385bc30df502f34ebbed263efd87e4a, type: 3}
   Stages:
   - StageIndex: 0
     DaysRequired: 1

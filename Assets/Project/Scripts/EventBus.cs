@@ -145,6 +145,12 @@ public struct OnClearPlant : IEvent
     public Vector3Int CellPos;
 }
 
+public struct OnHarvestPlant : IEvent
+{
+    public PlantData Data;
+    public Vector3 Position;
+}
+
 #endregion
 public struct OnPlayerRequestAttackEvent : IEvent { }
 

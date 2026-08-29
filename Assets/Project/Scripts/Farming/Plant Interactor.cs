@@ -13,7 +13,7 @@ public class PlantInteractor : MonoBehaviour, IInteractable
     [SerializeField] private MeshRenderer meshRenderer;
     [SerializeField] private Material outlineMaterial;
     
-    private List<Material> _mat = new List<Material>();
+    private readonly List<Material> _mat = new List<Material>();
 
     private void Awake()
     {
