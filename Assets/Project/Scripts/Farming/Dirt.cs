@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class Dirt : MonoBehaviour, IPoolable
 {
-    [SerializeField] private Material intialMaterial;
+    [SerializeField] private Material initialMaterial;
     [SerializeField] private Material wateredMaterial;
     [SerializeField] private MeshRenderer meshRenderer;
 
     public void OnSpawn()
     {
-        meshRenderer.sharedMaterial = intialMaterial;
+        meshRenderer.sharedMaterial = initialMaterial;
     }
 
     public void OnDespawn()
@@ -20,7 +20,7 @@ public class Dirt : MonoBehaviour, IPoolable
 
     public void ResetWateredVisual()
     {
-        meshRenderer.sharedMaterial = intialMaterial;
+        meshRenderer.sharedMaterial = initialMaterial;
     }
 
     public void Watering()

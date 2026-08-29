@@ -14,6 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlantData
   plantPrefabs: {fileID: 2147524051394071840, guid: db90fca8afdcf304ea5eeab516fadf91, type: 3}
   plantMonsterPrefabs: {fileID: 8500882108080917300, guid: 8385bc30df502f34ebbed263efd87e4a, type: 3}
+  DeathStages:
+    StageIndex: 0
+    DaysRequired: 1
+    StageVisualMesh: {fileID: 7859820949308486741, guid: b7cf12fb849f2ce4592a36e9c9c8d4f9, type: 3}
   Stages:
   - StageIndex: 0
     DaysRequired: 1

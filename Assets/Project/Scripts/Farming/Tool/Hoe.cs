@@ -174,7 +174,7 @@ public class Hoe : FarmingToolBase
     {
         if (!grid.TryClearPlant(pos, out var cellPos)) return;
         
-        EventBus<OnClearPlant>.Raise(new OnClearPlant() {CellPos = cellPos});
+        EventBus<OnClearPlantEvent>.Raise(new OnClearPlantEvent() {CellPos = cellPos});
     }
 
     public void OnTillingAnimationFinish()

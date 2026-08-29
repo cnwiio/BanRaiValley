@@ -126,6 +126,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd403a1ce5c78d44588398ed250b9c35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Dirt
-  intialMaterial: {fileID: 2100000, guid: 382e2b1b7fbf94945963320a17603c7c, type: 2}
+  initialMaterial: {fileID: 2100000, guid: 382e2b1b7fbf94945963320a17603c7c, type: 2}
   wateredMaterial: {fileID: 2100000, guid: 811d06cef11243f43bd247913095162c, type: 2}
   meshRenderer: {fileID: 8209775890507910426}

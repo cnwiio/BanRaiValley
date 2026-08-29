@@ -78,6 +78,7 @@ public class SeedBag : FarmingToolBase, IPoolable
 
     public void OnPlantingAnimationFinished()
     {
+        if (_currentState != SeedBagState.Planting) return;
         if (grid.TryPlanting(_plantingPos, out var cellPos))
         {
             EventBus<OnPlantingEvent>.Raise(new OnPlantingEvent() 

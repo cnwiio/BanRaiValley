@@ -27,7 +27,8 @@ public class PlantInteractor : MonoBehaviour, IInteractable
 
     public void IsLookAt(bool value)
     {
-        if (plant.currentState != PlantState.ReadyToHarvest) return;
+        if (plant.currentState != PlantState.ReadyToHarvest &&
+            plant.currentState != PlantState.Withered) return;
         if (value)
         {
             OnHover();

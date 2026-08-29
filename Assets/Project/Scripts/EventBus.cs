@@ -140,12 +140,14 @@ public struct OnPlantingEvent : IEvent
     public PlantData PlantData;
 }
 
-public struct OnClearPlant : IEvent
+public struct OnClearPlantEvent : IEvent
 {
     public Vector3Int CellPos;
+    public bool IsWithered;
+    public Vector3 Pos;
 }
 
-public struct OnHarvestPlant : IEvent
+public struct OnHarvestPlantEvent : IEvent
 {
     public PlantData Data;
     public Vector3 Position;

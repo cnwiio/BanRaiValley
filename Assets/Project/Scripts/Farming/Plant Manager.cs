@@ -21,16 +21,16 @@ public class PlantManager : MonoBehaviour
     private void OnEnable()
     {
         EventBus<OnPlantingEvent>.Subscribe(OnPlanting);
-        EventBus<OnClearPlant>.Subscribe(OnClearPlant);
-        EventBus<OnHarvestPlant>.Subscribe(OnHarvest);
+        EventBus<OnClearPlantEvent>.Subscribe(OnClearPlant);
+        EventBus<OnHarvestPlantEvent>.Subscribe(OnHarvest);
         EventBus<OnDayEndedEvent>.Subscribe(OnDayEnded);
     }
 
     private void OnDisable()
     {
         EventBus<OnPlantingEvent>.Unsubscribe(OnPlanting);
-        EventBus<OnClearPlant>.Unsubscribe(OnClearPlant);
-        EventBus<OnHarvestPlant>.Unsubscribe(OnHarvest);
+        EventBus<OnClearPlantEvent>.Unsubscribe(OnClearPlant);
+        EventBus<OnHarvestPlantEvent>.Unsubscribe(OnHarvest);
         EventBus<OnDayEndedEvent>.Unsubscribe(OnDayEnded);
     }
 
@@ -41,12 +41,19 @@ public class PlantManager : MonoBehaviour
         RegisterSpawnedPrefabs(go, evt.CellPos, evt.PlantData);
     }
 
-    private void OnClearPlant(OnClearPlant evt)
+    private void OnClearPlant(OnClearPlantEvent evt)
     {
-        DespawnPrefabs(evt.CellPos);
+        if (evt.IsWithered)
+        {
+            DespawnPrefabs(evt.Pos);
+        }
+        else
+        {
+            DespawnPrefabs(evt.CellPos);
+        }
     }
 
-    private void OnHarvest(OnHarvestPlant evt)
+    private void OnHarvest(OnHarvestPlantEvent evt)
     {
         DespawnPrefabs(evt.Position);
     }
@@ -83,7 +90,7 @@ public class PlantManager : MonoBehaviour
     private void RegisterSpawnedPrefabs(GameObject prefab, Vector3Int cellPos, PlantData plantData)
     {
         _spawnedPlantsByCell[cellPos] = prefab.GetComponent<Plant>();;
-        _spawnedPlantsByCell[cellPos].Initialize(plantData, cellPos);
+        _spawnedPlantsByCell[cellPos].Initialize(plantData);
     }
 
     private void UnRegisterSpawnedPrefabs(Vector3Int position)
@@ -97,7 +104,13 @@ public class PlantManager : MonoBehaviour
         foreach (var plant in _spawnedPlantsByCell.Values)
         {
             if (_grid.IsWatered(plant.transform.position))
+            {
                 plant.Grow();
+            }
+            else
+            {
+                plant.Withered();
+            }
         }
     }
 
