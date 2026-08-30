@@ -1,7 +1,13 @@
+using System;
+using TMPro;
 using UnityEngine;
 
 public class PlayerMoney : MonoBehaviour
 {
+    [SerializeField] private TextMeshProUGUI textUI;
+    
+    
+    
     private int money = 999;
 
     public int Money
@@ -10,9 +16,14 @@ public class PlayerMoney : MonoBehaviour
         set
         {
             money = value;
-            Debug.Log(money);
+            textUI.SetText($"Money : {money}$");
         }
-}
+    }
+
+    public void Start()
+    {
+        textUI.SetText($"Money : {money}$");
+    }
 
     public void SubtractMoney(int amount)
     {

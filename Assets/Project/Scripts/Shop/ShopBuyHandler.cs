@@ -1,11 +1,21 @@
+using System;
+using TMPro;
 using UnityEngine;
 
 public class ShopBuyHandler : MonoBehaviour
 {
     [SerializeField] private BaseInventory inventory;
     [SerializeField] private PlayerMoney playerMoney;
-    
-    
+
+    [Header("UI")]
+    [SerializeField] private TextMeshProUGUI moneyUI;
+
+
+    private void Start()
+    {
+        moneyUI.SetText($"Money : {playerMoney.Money}$");
+    }
+
     private bool TryAddItem(Item item)
     {
         return inventory.TryAddItem(item, 1);
@@ -18,6 +28,7 @@ public class ShopBuyHandler : MonoBehaviour
             if (TryAddItem(item))
             {
                 playerMoney.SubtractMoney(item.Price);
+                moneyUI.SetText($"Money : {playerMoney.Money}$");
             }
         }
     }
