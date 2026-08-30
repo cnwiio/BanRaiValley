@@ -4229,7 +4229,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1014281777736376146, guid: 61b4128b7b5fc974d8c6a720ce5a356c, type: 3}
       propertyPath: obstacleLayerMask.m_Bits
-      value: 1139
+      value: 3187
       objectReference: {fileID: 0}
     - target: {fileID: 1150347864120123306, guid: 61b4128b7b5fc974d8c6a720ce5a356c, type: 3}
       propertyPath: gridReference
@@ -4302,7 +4302,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3947792985913833930, guid: 10668fc03471fa94a8015b28fca30257, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.37
+      value: 0.04
       objectReference: {fileID: 0}
     - target: {fileID: 3947792985913833930, guid: 10668fc03471fa94a8015b28fca30257, type: 3}
       propertyPath: m_LocalPosition.z

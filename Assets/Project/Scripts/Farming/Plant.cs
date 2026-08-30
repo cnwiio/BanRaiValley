@@ -52,6 +52,8 @@ public class Plant : MonoBehaviour, IPoolable
 
     public void Withered()
     {
+        if (_currentDeathDays >= data.DeathStages.DaysRequired) return;
+        
         _currentDeathDays++;
         _currentStagesDays += 0.5f;
 

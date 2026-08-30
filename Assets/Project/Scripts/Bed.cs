@@ -18,9 +18,10 @@ public class Bed : MonoBehaviour, IInteractable
     
     private ITextTip _textTip;
     private List<Material> mats = new List<Material>();
-    private void Awake()
+    private void Start()
     {
-        _textTip = textTipReference.TextTip;
+        _textTip ??= textTipReference.TextTip;
+
         meshRenderer.GetSharedMaterials(mats);
     }
 
@@ -47,7 +48,8 @@ public class Bed : MonoBehaviour, IInteractable
         _textTip.SetActive(true);
         
         mats.Add(outlineMaterial);
-        meshRenderer.SetSharedMaterials(mats);
+        if (meshRenderer)
+            meshRenderer.SetSharedMaterials(mats);
     }
 
     private void OnStopHover()
@@ -55,6 +57,7 @@ public class Bed : MonoBehaviour, IInteractable
         _textTip.SetActive(false);
 
         mats.Remove(outlineMaterial);
-        meshRenderer.SetSharedMaterials(mats);
+        if (meshRenderer)
+            meshRenderer.SetSharedMaterials(mats);
     }
 }

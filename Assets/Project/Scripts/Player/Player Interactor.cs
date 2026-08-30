@@ -56,11 +56,15 @@ public class PlayerInteractor : MonoBehaviour
         if (Physics.Raycast(_ray, out _hit, range, layerMask) &&
             _hit.collider.TryGetComponent<IInteractable>(out var interactable))
         {
-            if (!ReferenceEquals(interactable, _target))
+            if (ReferenceEquals(interactable, _target)) return;
+            if (!ReferenceEquals(_target, null))
             {
-                _target = interactable;
-                _target.IsLookAt(true);
+                _target.IsLookAt(false);
+                _target = null;
             }
+            
+            _target = interactable;
+            _target.IsLookAt(true);
         } 
         else if (!ReferenceEquals(_target, null))
         {
