@@ -54,7 +54,7 @@ public class InventoryUI : MonoBehaviour
 
         
         CreateAndDestroyUI(!IsInventoryUIActive);
-        SetCursorState(!IsInventoryUIActive);
+        // SetCursorState(!IsInventoryUIActive);
         SetActionMapType(!IsInventoryUIActive);
 
         EventBus<InventoryUIRefreshEvent>.Raise(new InventoryUIRefreshEvent() { });

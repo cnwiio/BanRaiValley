@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Project.Scripts;
 using TMPro;
 using UnityEngine;
 
 public class Bed : MonoBehaviour, IInteractable
 {
     [Header("TextUI")]
-    [SerializeField] private TextMeshProUGUI tipTextUI;
+    [SerializeField] private TextTipReference textTipReference;
     [SerializeField] private String tipText;
     [Header("Outline")]
     [SerializeField] private MeshRenderer meshRenderer;
@@ -15,11 +16,11 @@ public class Bed : MonoBehaviour, IInteractable
     [Header("Sleep Ref")]
     [SerializeField] private SleepSequenceController sleepController;
     
-    private GameObject uiGameObject;
+    private ITextTip _textTip;
     private List<Material> mats = new List<Material>();
     private void Awake()
     {
-        uiGameObject = tipTextUI.gameObject;
+        _textTip = textTipReference.TextTip;
         meshRenderer.GetSharedMaterials(mats);
     }
 
@@ -42,8 +43,8 @@ public class Bed : MonoBehaviour, IInteractable
 
     private void OnHover()
     {
-        tipTextUI.text = tipText;
-        uiGameObject.SetActive(true);
+        _textTip.SetText(tipText);
+        _textTip.SetActive(true);
         
         mats.Add(outlineMaterial);
         meshRenderer.SetSharedMaterials(mats);
@@ -51,7 +52,7 @@ public class Bed : MonoBehaviour, IInteractable
 
     private void OnStopHover()
     {
-        uiGameObject.SetActive(false);
+        _textTip.SetActive(false);
 
         mats.Remove(outlineMaterial);
         meshRenderer.SetSharedMaterials(mats);

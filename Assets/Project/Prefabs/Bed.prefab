@@ -158,7 +158,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c23ced71d3742de8ce9dbcb049fe8ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bed
-  tipTextUI: {fileID: 0}
+  textTipReference: {fileID: 11400000, guid: b14b5bac2a8db0041a6c0df69200015b, type: 2}
   tipText: '"Press E to interact"'
   meshRenderer: {fileID: 828984707502751712}
   outlineMaterial: {fileID: 2100000, guid: f27e5fb461c11ec469150bb502e54254, type: 2}

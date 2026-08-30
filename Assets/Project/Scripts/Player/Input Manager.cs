@@ -122,6 +122,7 @@ public class InputManager : MonoBehaviour
         playerActionMap?.Enable();
         MovementActionMap?.Enable();
         HotbarActionMap?.Enable();
+        SetCursorState(false);
     }
 
     public void SwitchToUIActionMap()
@@ -131,6 +132,7 @@ public class InputManager : MonoBehaviour
         HotbarActionMap?.Disable();
 
         UIActionMap?.Enable();
+        SetCursorState(true);
     }
 
     public void SwitchToStaticUIActionMap()
@@ -139,5 +141,13 @@ public class InputManager : MonoBehaviour
         playerActionMap?.Disable();
         HotbarActionMap?.Disable();
         MovementActionMap?.Disable();
+        SetCursorState(false);
+
+    }
+    
+    void SetCursorState(bool isVisible)
+    {
+        Cursor.lockState = isVisible ? CursorLockMode.None : CursorLockMode.Locked;
+        Cursor.visible = isVisible;
     }
 }

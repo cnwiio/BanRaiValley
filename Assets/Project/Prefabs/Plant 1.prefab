@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e93e4b7f58ad7d647b8ddc99ceac3892, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Plant
-  meshFillter: {fileID: 4559907559804620536}
+  meshFilter: {fileID: 4559907559804620536}
 --- !u!1 &7829806146325339667
 GameObject:
   m_ObjectHideFlags: 0
@@ -172,5 +172,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlantInteractor
   plant: {fileID: 3448843598997336890}
+  textTipReference: {fileID: 11400000, guid: b14b5bac2a8db0041a6c0df69200015b, type: 2}
+  tipText: '"Press E to interact"'
   meshRenderer: {fileID: 4370724749959649947}
   outlineMaterial: {fileID: 2100000, guid: f27e5fb461c11ec469150bb502e54254, type: 2}

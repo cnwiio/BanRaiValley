@@ -13,9 +13,7 @@ public enum PlantState
 
 public class Plant : MonoBehaviour, IPoolable
 {
-    [SerializeField] private MeshFilter meshFillter;
-
-    
+    [SerializeField] private MeshFilter meshFilter;
     
     
     private PlantState _currentState = PlantState.CannotHarvest;
@@ -26,7 +24,7 @@ public class Plant : MonoBehaviour, IPoolable
     public void Initialize(PlantData plantData)
     {
         data = plantData;
-        meshFillter.sharedMesh = data.Stages[_currentGrowStages].StageVisualMesh;
+        meshFilter.sharedMesh = data.Stages[_currentGrowStages].StageVisualMesh;
     }
 
     private byte _currentGrowStages;
@@ -43,7 +41,7 @@ public class Plant : MonoBehaviour, IPoolable
         if (_currentStagesDays >= data.Stages[_currentGrowStages].DaysRequired)
         {
             _currentGrowStages++;
-            meshFillter.sharedMesh = data.Stages[_currentGrowStages].StageVisualMesh;
+            meshFilter.sharedMesh = data.Stages[_currentGrowStages].StageVisualMesh;
             if (_currentGrowStages >= data.FinalStageIndex)
             {
                 _currentState = PlantState.ReadyToHarvest;
@@ -59,7 +57,7 @@ public class Plant : MonoBehaviour, IPoolable
 
         if (_currentDeathDays >= data.DeathStages.DaysRequired)
         {
-            meshFillter.sharedMesh = data.DeathStages.StageVisualMesh;
+            meshFilter.sharedMesh = data.DeathStages.StageVisualMesh;
             _currentState = PlantState.Withered;
         }
     }
