@@ -17,6 +17,9 @@ public class Item : ScriptableObject
     public Sprite image;
     public GameObject prefab;
 
+    [Header("Shop")] 
+    public int Price;
+
     [Header("Combat")] 
     public ItemAttackData attackData;
 }

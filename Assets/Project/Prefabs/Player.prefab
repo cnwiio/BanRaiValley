@@ -82,6 +82,7 @@ GameObject:
   - component: {fileID: 8187068999090942818}
   - component: {fileID: 1736756575964896060}
   - component: {fileID: 3444719704361544511}
+  - component: {fileID: 4603167377105328444}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -224,6 +225,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   characterController: {fileID: 5518632834441925289}
   PlayerCam: {fileID: 0}
+  panTilt: {fileID: 0}
   Data: {fileID: 11400000, guid: 9da0044848d7623479f7d41199f7dd0c, type: 2}
   InputReader: {fileID: 3237870357853340737}
   Head: {fileID: 6850055571639333136}
@@ -256,6 +258,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01ec244b108694a40a75cc4721bdec9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInputReader
+  DebugAction: {fileID: 0}
   MoveAction: {fileID: -2822950199889475732, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
   JumpAction: {fileID: 3764721509380322806, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
   InventoryToggleAction_PlayerMap: {fileID: 4672973331285641741, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
@@ -266,6 +269,7 @@ MonoBehaviour:
   SecondaryAction: {fileID: 643901133655292448, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
   RotateAction: {fileID: -7105339716128872201, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
   DeleteAction: {fileID: -8238018659739259438, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
+  InteractAction: {fileID: 0}
 --- !u!114 &8187068999090942818
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -310,3 +314,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
   UI: {fileID: 0}
+--- !u!114 &4603167377105328444
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8128742679925487322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8d3dfddaf4b3284c8d8c915f2a69513, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerMoney
