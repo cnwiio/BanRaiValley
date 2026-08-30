@@ -33,16 +33,22 @@ public class TimeManager : MonoBehaviour
     private void OnEnable()
     {
         EventBus<OnSleepEvent>.Subscribe(OnSleep);
+        EventBus<OnPlayerOutOfHPEvent>.Subscribe(OnPlayerOutOfHP);
     }
 
     private void OnDisable()
     {
         EventBus<OnSleepEvent>.Unsubscribe(OnSleep);
+        EventBus<OnPlayerOutOfHPEvent>.Unsubscribe(OnPlayerOutOfHP);
     }
 
     private void OnSleep(OnSleepEvent evt)
     {
         SleepToNextMorning();
+    }
+    private void OnPlayerOutOfHP(OnPlayerOutOfHPEvent evt)
+    {
+        ForcePassout();
     }
     
     

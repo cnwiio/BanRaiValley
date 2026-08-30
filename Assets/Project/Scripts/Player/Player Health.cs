@@ -16,6 +16,7 @@ public class PlayerHealth : MonoBehaviour, IDamageable
         {
             _hp = Math.Clamp(value, 0, MAXHP);
             UI.fillAmount = (float)_hp / MAXHP;
+            if (_hp == 0) EventBus<OnPlayerOutOfHPEvent>.Raise(new OnPlayerOutOfHPEvent());
         }
     }
 

@@ -162,6 +162,9 @@ public struct OnRequestTeleportEvent : IEvent
 {
     public Transform AwakeTransform;
 }
+public struct OnPlayerOutOfHPEvent : IEvent { }
+
+
 
 #region Time Event
 
