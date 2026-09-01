@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class ShopBuyHandler : MonoBehaviour
 {
-    [SerializeField] private BaseInventory inventory;
+    [SerializeField] private InventoyModel inventory;
+    [SerializeField] private HotbarInventoryModel hotbar;
     [SerializeField] private PlayerMoney playerMoney;
 
     [Header("UI")]
@@ -18,6 +19,7 @@ public class ShopBuyHandler : MonoBehaviour
 
     private bool TryAddItem(Item item)
     {
+        if (hotbar.TryAddItem(item, 1)) return true;
         return inventory.TryAddItem(item, 1);
     }
 
