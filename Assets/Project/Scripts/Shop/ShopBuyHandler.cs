@@ -10,9 +10,8 @@ public class ShopBuyHandler : MonoBehaviour
 
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI moneyUI;
-
-
-    private void Start()
+    
+    private void OnEnable()
     {
         moneyUI.SetText($"Money : {playerMoney.Money}$");
     }

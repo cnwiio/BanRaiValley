@@ -37,6 +37,6 @@ public class PlayerMoney : MonoBehaviour
 
     public bool CanSubtract(int amount)
     {
-        return amount < Money;
+        return amount <= Money;
     }
 }
