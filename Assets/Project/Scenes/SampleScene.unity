@@ -2989,7 +2989,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &802393044
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5576,33 +5576,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1565800144}
   m_CullTransparentMesh: 1
---- !u!1 &1596709994 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8128742679925487322, guid: 0b29d41089b94e043b272fa4d64e8b6c, type: 3}
-  m_PrefabInstance: {fileID: 3146440083194429063}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1596710006
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1596709994}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b8f8f575ac66144ca68d548d4f500a6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerInteractor
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 2048
-  range: 5
 --- !u!114 &1596710018 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4603167377105328444, guid: 0b29d41089b94e043b272fa4d64e8b6c, type: 3}
   m_PrefabInstance: {fileID: 3146440083194429063}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1596709994}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a8d3dfddaf4b3284c8d8c915f2a69513, type: 3}
@@ -7871,11 +7850,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2091949063}
     - target: {fileID: 3237870357853340737, guid: 0b29d41089b94e043b272fa4d64e8b6c, type: 3}
-      propertyPath: DebugAction
+      propertyPath: InteractAction_UIMap
       value: 
-      objectReference: {fileID: -2429492104494996083, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
+      objectReference: {fileID: 3490089244214155330, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
     - target: {fileID: 3237870357853340737, guid: 0b29d41089b94e043b272fa4d64e8b6c, type: 3}
-      propertyPath: InteractAction
+      propertyPath: InteractAction_PlayerMap
       value: 
       objectReference: {fileID: -4726570457938165820, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
     - target: {fileID: 3444719704361544511, guid: 0b29d41089b94e043b272fa4d64e8b6c, type: 3}
@@ -7931,10 +7910,6 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 9220241301251801149, guid: 0b29d41089b94e043b272fa4d64e8b6c, type: 3}
-      propertyPath: vcam
-      value: 
-      objectReference: {fileID: 2091949062}
-    - target: {fileID: 9220241301251801149, guid: 0b29d41089b94e043b272fa4d64e8b6c, type: 3}
       propertyPath: panTilt
       value: 
       objectReference: {fileID: 2091949060}
@@ -7945,10 +7920,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8128742679925487322, guid: 0b29d41089b94e043b272fa4d64e8b6c, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1596710006}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0b29d41089b94e043b272fa4d64e8b6c, type: 3}
 --- !u!1001 &5834985642999751268
 PrefabInstance:

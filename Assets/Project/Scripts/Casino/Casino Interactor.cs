@@ -20,13 +20,20 @@ public class CasinoInteractor : MonoBehaviour, IInteractable
     private void OnEnable()
     {
         EventBus<InventoryToggleEvent>.Subscribe(OnInventoryToggle);
+        EventBus<OnUIInteractActionEvent>.Subscribe(OnInteract);
     }
 
     private void OnDisable()
     {
         EventBus<InventoryToggleEvent>.Unsubscribe(OnInventoryToggle);
+        EventBus<OnUIInteractActionEvent>.Unsubscribe(OnInteract);
     }
     private void OnInventoryToggle(InventoryToggleEvent evt)
+    {
+        if (ui.activeSelf)
+            ui.SetActive(false);
+    }
+    private void OnInteract(OnUIInteractActionEvent evt)
     {
         if (ui.activeSelf)
             SetUIActive(false);

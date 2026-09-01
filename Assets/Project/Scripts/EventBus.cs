@@ -86,6 +86,7 @@ public struct ChangeActionMap : IEvent
 public struct OnPrimaryActionEvent : IEvent { }
 public struct OnSecondaryActionEvent : IEvent { }
 public struct OnInteractActionEvent : IEvent { }
+public struct OnUIInteractActionEvent : IEvent { }
 public struct OnRotateActionEvent : IEvent { }
 public struct OnDeleteActionEvent : IEvent { }
 public struct OnDebugActionEvent : IEvent { }

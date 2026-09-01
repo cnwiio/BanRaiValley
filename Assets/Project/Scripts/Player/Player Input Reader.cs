@@ -22,7 +22,8 @@ public class PlayerInputReader : MonoBehaviour
     [SerializeField] private InputActionReference SecondaryAction;
     [SerializeField] private InputActionReference RotateAction;
     [SerializeField] private InputActionReference DeleteAction;
-    [SerializeField] private InputActionReference InteractAction;
+    [SerializeField] private InputActionReference InteractAction_PlayerMap;
+    [SerializeField] private InputActionReference InteractAction_UIMap;
     
 
     private void OnEnable()
@@ -49,7 +50,8 @@ public class PlayerInputReader : MonoBehaviour
 
         DeleteAction.action.performed += OnDeleteAction;
 
-        InteractAction.action.performed += OnInteractAction;
+        InteractAction_PlayerMap.action.performed += OnInteractAction;
+        InteractAction_UIMap.action.performed += OnUIInteractAction;
     }
 
     private void OnDisable()
@@ -76,7 +78,8 @@ public class PlayerInputReader : MonoBehaviour
 
         DeleteAction.action.performed -= OnDeleteAction;
         
-        InteractAction.action.performed -= OnInteractAction;
+        InteractAction_PlayerMap.action.performed -= OnInteractAction;
+        InteractAction_UIMap.action.performed -= OnUIInteractAction;
     }
 
     private void OnDebug(InputAction.CallbackContext ctx)
@@ -135,5 +138,10 @@ public class PlayerInputReader : MonoBehaviour
     private void OnInteractAction(InputAction.CallbackContext ctx)
     {
         EventBus<OnInteractActionEvent>.Raise(new OnInteractActionEvent());
+    }
+    
+    private void OnUIInteractAction(InputAction.CallbackContext ctx)
+    {
+        EventBus<OnUIInteractActionEvent>.Raise(new OnUIInteractActionEvent());
     }
 }
