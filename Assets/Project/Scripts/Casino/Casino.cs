@@ -60,6 +60,12 @@ public class Casino : MonoBehaviour
 
     private void OnDisable()
     {
+        if (currrentState == CasinoState.Playing)
+        {
+            Withdrawn();
+            currrentState = CasinoState.Idle;
+        }
+        
         EventBus<InventoryToggleEvent>.Unsubscribe(OnInventoryToggle);
     }
     

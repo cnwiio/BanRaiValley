@@ -51,6 +51,10 @@ public class SellZone : MonoBehaviour
         if (itemsSold > 0)
         {
             targetMoney.AddMoney(totalEarned);
+            if (targetInventory is HotbarInventoryModel horbarInventory)
+            {
+                horbarInventory.CheckSelectedSlotChanged();
+            }
             EventBus<InventoryUIRefreshEvent>.Raise(new InventoryUIRefreshEvent());
             Debug.Log($"Sold {itemsSold}x {type} for {totalEarned}$");
         }
