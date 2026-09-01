@@ -20,14 +20,16 @@ public class Item : ScriptableObject
     [Header("Shop")] 
     public int Price;
 
+    public int value;
+
     [Header("Combat")] 
     public ItemAttackData attackData;
 }
 
 public enum ItemType
 {
-    Equipment,
     Tool,
     Weapon,
-    Seed
+    Seed,
+    Plant
 }

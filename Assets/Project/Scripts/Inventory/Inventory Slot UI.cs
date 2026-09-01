@@ -42,7 +42,8 @@ public class InventorySlotUI : MonoBehaviour, IPoolable,IBeginDragHandler, IDrag
             iconImage.sprite = icon;
             iconImage.enabled = true;
 
-            if (SlotData.item.type == ItemType.Seed)
+            if (SlotData.item.type == ItemType.Seed ||
+                SlotData.item.type == ItemType.Plant)
             {
                 countText.SetText($"{count}");
                 countText.enabled = true;

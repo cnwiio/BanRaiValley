@@ -22,3 +22,7 @@ MonoBehaviour:
   AttackRange: 4
   AttackCooldown: 2
   StunTime: 2.5
+  dropItem: {fileID: 11400000, guid: 4e49f6ec31331184b9de2b4ba4a2c139, type: 2}
+  dropAmountMin: 1
+  dropAmountMax: 3
+  dropChance: 1

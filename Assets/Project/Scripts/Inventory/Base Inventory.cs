@@ -108,6 +108,90 @@ public abstract class BaseInventory : MonoBehaviour, IInventory
         return true;
     }
 
+    /// <summary>
+    /// Adds as much of the item as will fit (partial fill allowed) and returns the
+    /// amount that could NOT be added (0 if everything fit). Useful for spilling
+    /// overflow into a second inventory, e.g. hotbar -> main inventory.
+    /// Does not raise any events itself; caller is responsible for UI refresh.
+    /// </summary>
+    public virtual int AddItemGetLeftover(Item itemToAdd, int amount)
+    {
+        if (itemToAdd == null || amount <= 0) return amount;
+
+        int remainingAmount = amount;
+        bool isStackable = itemToAdd.stackable;
+        int maxStack = isStackable ? itemToAdd.MaxStack : 1;
+
+        // 1. Fill existing stackable slots first
+        if (isStackable)
+        {
+            for (int i = 0; i < inventorySlots.Length; i++)
+            {
+                if (!inventorySlots[i].IsEmpty && inventorySlots[i].item == itemToAdd)
+                {
+                    int spaceInSlot = maxStack - inventorySlots[i].count;
+                    if (spaceInSlot > 0)
+                    {
+                        int amountToAdd = Mathf.Min(remainingAmount, spaceInSlot);
+                        inventorySlots[i].count += amountToAdd;
+                        remainingAmount -= amountToAdd;
+
+                        if (remainingAmount <= 0) return 0;
+                    }
+                }
+            }
+        }
+
+        // 2. Fill empty slots
+        for (int i = 0; i < inventorySlots.Length; i++)
+        {
+            if (inventorySlots[i].IsEmpty)
+            {
+                int amountToAdd = Mathf.Min(remainingAmount, maxStack);
+                inventorySlots[i].item = itemToAdd;
+                inventorySlots[i].count = amountToAdd;
+                remainingAmount -= amountToAdd;
+
+                if (remainingAmount <= 0) return 0;
+            }
+        }
+
+        return remainingAmount;
+    }
+
+    /// <summary>
+    /// Tries to stack the item ONLY into existing matching, non-empty, non-full stacks.
+    /// Never touches empty slots. Returns the amount that could NOT be stacked
+    /// (0 if it all stacked in, or the full amount if the item isn't stackable /
+    /// there's no matching stack with room). Does not raise any events itself.
+    /// </summary>
+    public int StackExistingGetLeftover(Item itemToAdd, int amount)
+    {
+        if (itemToAdd == null || amount <= 0) return amount;
+        if (!itemToAdd.stackable) return amount;
+
+        int remainingAmount = amount;
+        int maxStack = itemToAdd.MaxStack;
+
+        for (int i = 0; i < inventorySlots.Length; i++)
+        {
+            if (!inventorySlots[i].IsEmpty && inventorySlots[i].item == itemToAdd)
+            {
+                int spaceInSlot = maxStack - inventorySlots[i].count;
+                if (spaceInSlot > 0)
+                {
+                    int amountToAdd = Mathf.Min(remainingAmount, spaceInSlot);
+                    inventorySlots[i].count += amountToAdd;
+                    remainingAmount -= amountToAdd;
+
+                    if (remainingAmount <= 0) return 0;
+                }
+            }
+        }
+
+        return remainingAmount;
+    }
+
     public int AddStackItemToSlot(int index, Item itemToAdd, int amount)
     {
         if (!itemToAdd.stackable) return amount;

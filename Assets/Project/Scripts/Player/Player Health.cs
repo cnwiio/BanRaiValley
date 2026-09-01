@@ -20,6 +20,28 @@ public class PlayerHealth : MonoBehaviour, IDamageable
         }
     }
 
+    private void OnEnable()
+    {
+        EventBus<OnNewDayStartedEvent>.Subscribe(OnNewDay);
+    }
+
+    private void OnDisable()
+    {
+        EventBus<OnNewDayStartedEvent>.Unsubscribe(OnNewDay);
+    }
+
+    private void OnNewDay(OnNewDayStartedEvent evt)
+    {
+        if (evt.WasPassOut)
+        {
+            Hp = MAXHP / 2;
+        }
+        else
+        {
+            Hp = MAXHP;
+        }
+    }
+
     public void Start()
     {
         MAXHP = _hp;
@@ -34,7 +56,5 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     public void TakeDamage(int amount)
     {
         Hp -= amount;
-        Debug.Log($"Player take {amount} damage");
-        Debug.Log("current HP = " + Hp);
     }
 }

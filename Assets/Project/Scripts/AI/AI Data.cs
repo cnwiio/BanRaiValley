@@ -18,6 +18,12 @@ public class AIData : ScriptableObject
     public float AttackRange = 5;
     public float AttackCooldown = 2;
     public float StunTime = 2.5f;
+    
+    [Header("Drop")]
+    public Item dropItem;
+    public int dropAmountMin = 1;
+    public int dropAmountMax = 1;
+    [Range(0f, 1f)] public float dropChance = 1f;
 
     // public WaitForSeconds DespawnTime = new WaitForSeconds(3f);
     // public WaitForSeconds chaseWaitInterval = new WaitForSeconds(3f);

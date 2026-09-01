@@ -275,6 +275,21 @@ public class AIBrain : MonoBehaviour, IPoolable
         currentState = PlantAIState.Die;
     }
 
+    private void RollDrop()
+    {
+        if (data.dropItem == null) return;
+        if (UnityEngine.Random.value > data.dropChance) return;
+ 
+        var amount = UnityEngine.Random.Range(data.dropAmountMin, data.dropAmountMax + 1);
+        if (amount <= 0) return;
+ 
+        EventBus<OnItemPickupEvent>.Raise(new OnItemPickupEvent
+        {
+            item = data.dropItem,
+            amount = amount
+        });
+    }
+
     public void OnAwakeAnimationEnd()
     {
         currentState = PlantAIState.Idle;
@@ -347,6 +362,7 @@ public class AIBrain : MonoBehaviour, IPoolable
     private IEnumerator DieCoroutine()
     {
         yield return deSpawnTime;
+        RollDrop();
         LeanPool.Despawn(this);
         dieCoroutine = null;
     }

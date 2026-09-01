@@ -152,7 +152,6 @@ public struct OnHarvestPlantEvent : IEvent
     public PlantData Data;
     public Vector3 Position;
 }
-
 #endregion
 public struct OnPlayerRequestAttackEvent : IEvent { }
 
@@ -164,7 +163,11 @@ public struct OnRequestTeleportEvent : IEvent
 }
 public struct OnPlayerOutOfHPEvent : IEvent { }
 
-
+public struct OnItemPickupEvent : IEvent
+{
+    public Item item;
+    public int amount;
+}
 
 #region Time Event
 

@@ -53,6 +53,7 @@ public class AIAttack : MonoBehaviour
             _cooldownCoroutine = null;
         }
         
+        hitBox.EnableHitBox(false);
         isAttacking = false;
         canAttack = true;
     }
