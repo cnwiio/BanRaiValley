@@ -1,13 +1,8 @@
-using Lean.Pool;
-using System;
 using System.Collections;
 using TMPro;
-using UnityEditor.Rendering;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using static UnityEngine.Rendering.VolumeComponent;
 
 public class InventoryUIController : MonoBehaviour
 {
