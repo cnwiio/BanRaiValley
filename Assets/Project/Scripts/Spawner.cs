@@ -10,15 +10,15 @@ public class Spawner : MonoBehaviour
 
     private void OnEnable()
     {
-        EventBus<OnJumpEvent>.Subscribe(OnSpace);
+        EventBus<OnDebugActionEvent>.Subscribe(OnSpace);
     }
 
     private void OnDisable()
     {
-        EventBus<OnJumpEvent>.Unsubscribe(OnSpace);
+        EventBus<OnDebugActionEvent>.Unsubscribe(OnSpace);
     }
 
-    private void OnSpace(OnJumpEvent evt)
+    private void OnSpace(OnDebugActionEvent evt)
     {
         Spawn();
     }

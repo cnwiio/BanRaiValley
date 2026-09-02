@@ -82,7 +82,8 @@ public class Casino : MonoBehaviour
     {
         if (int.TryParse(inputField.text, out inputMoney))
         {
-            if (playerMoney.CanSubtract(inputMoney))
+            if (playerMoney.CanSubtract(inputMoney) &&
+                inputMoney > 0)
             {
                 currentMoney = inputMoney;
                 return true;
