@@ -1,3 +1,4 @@
+using System;
 using NUnit.Framework.Internal.Commands;
 using Unity.Cinemachine;
 using Unity.VisualScripting;
@@ -62,18 +63,17 @@ public class PlayerMovement : MonoBehaviour
         Cursor.visible = false;
     }
 
-    void Update()
+    private void Update()
     {
-        CalculateRotation();
-        UpdateCamRotateToPlayer();
-    }
-
-    // Update is called once per frame
-    void FixedUpdate()
-    { 
         HandleVerticalMovement();
         HandleHorizontalMovement();
+        CalculateRotation();
         ApplyMovement();
+    }
+    
+    private void LateUpdate()
+    {
+        UpdateCamRotateToPlayer();
     }
 
     #region Handle Movement
@@ -101,7 +101,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            VerticalMovement += Physics.gravity.y * Data.GravityMultiplyer;
+            VerticalMovement += Physics.gravity.y * Data.GravityMultiplyer * Time.deltaTime;
         }
     }
 
@@ -110,7 +110,7 @@ public class PlayerMovement : MonoBehaviour
         FinalMovement = horizontalMovement;
         FinalMovement.y = VerticalMovement;
 
-        characterController.Move(FinalMovement * Time.fixedDeltaTime);
+        characterController.Move(FinalMovement * Time.deltaTime);
     }
     #endregion
 
