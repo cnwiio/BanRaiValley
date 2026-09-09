@@ -1629,7 +1629,7 @@ MonoBehaviour:
   IgnoreTimeScale: 0
   WorldUpOverride: {fileID: 0}
   ChannelMask: -1
-  UpdateMethod: 0
+  UpdateMethod: 2
   BlendUpdateMethod: 1
   LensModeOverride:
     Enabled: 0
@@ -5587,6 +5587,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8d3dfddaf4b3284c8d8c915f2a69513, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMoney
+--- !u!114 &1596710025 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4278678886193900730, guid: 0b29d41089b94e043b272fa4d64e8b6c, type: 3}
+  m_PrefabInstance: {fileID: 3146440083194429063}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a53aec8cb024acab7c547e944d18339, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InputManager
 --- !u!1 &1627843881
 GameObject:
   m_ObjectHideFlags: 0
@@ -7849,6 +7860,10 @@ PrefabInstance:
       propertyPath: playerCamTransform
       value: 
       objectReference: {fileID: 2091949063}
+    - target: {fileID: 3192691030571533802, guid: 0b29d41089b94e043b272fa4d64e8b6c, type: 3}
+      propertyPath: inputManager
+      value: 
+      objectReference: {fileID: 1596710025}
     - target: {fileID: 3237870357853340737, guid: 0b29d41089b94e043b272fa4d64e8b6c, type: 3}
       propertyPath: InteractAction_UIMap
       value: 

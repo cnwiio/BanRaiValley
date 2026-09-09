@@ -15,4 +15,4 @@ MonoBehaviour:
   Speed: 10
   JumpHeight: 5
   GroundSnapForce: -0.5
-  GravityMultiplyer: 0.1
+  GravityMultiplyer: 4

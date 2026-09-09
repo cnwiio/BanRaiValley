@@ -154,7 +154,7 @@ public class InventoryUIController : MonoBehaviour
     {
         DragImage.sprite = slot.item.image;
         DragImage.enabled = true;
-        if (slot.count > 1)
+        if (slot.item.stackable)
         {
             DragText.SetText($"{slot.count}");
             DragText.enabled = true;

@@ -6,6 +6,8 @@ public class PlayerInteractor : MonoBehaviour
 {
     [SerializeField] private LayerMask layerMask;
     [SerializeField] private float range;
+    [SerializeField] private InputManager inputManager;
+    
 
     private const float INTERACT_INTERVAL = 0.1f;
     private float interactTimer;
@@ -39,7 +41,7 @@ public class PlayerInteractor : MonoBehaviour
         _target?.Interact();
     }
     
-    protected Ray RayCastAtCursor()
+    private Ray RayCastAtCursor()
     {
         _mousePos = _mouse.position.ReadValue();
         _mousePos.z = _camera.nearClipPlane;
@@ -48,9 +50,7 @@ public class PlayerInteractor : MonoBehaviour
     
     private void Update()
     {
-        // interactTimer += Time.deltaTime;
-        // if (interactTimer <= INTERACT_INTERVAL) return;
-        // interactTimer = 0;
+        if (inputManager.CurrentActionMaptype != ActionMapType.Player) return;
         
         _ray = RayCastAtCursor();
         if (Physics.Raycast(_ray, out _hit, range, layerMask) &&

@@ -59,8 +59,6 @@ public class PlayerMovement : MonoBehaviour
         // cached
         _camTransform = PlayerCam.transform;
         Head.rotation = _camTransform.rotation;
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
     }
 
     private void Update()
@@ -124,10 +122,13 @@ public class PlayerMovement : MonoBehaviour
         CamRightDirection.y = 0;
         CamRightDirection.Normalize();
     }
+    
+    [SerializeField] private float turnSpeed = 15f;
 
     void UpdateCamRotateToPlayer()
     {
-        Head.rotation = _camTransform.rotation;
+        float t = 1f - Mathf.Exp(-turnSpeed * Time.deltaTime);
+        Head.rotation = Quaternion.Slerp(Head.rotation, _camTransform.rotation, t);
     }
 
     // Cached
