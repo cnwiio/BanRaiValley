@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum HoeState
@@ -14,6 +15,8 @@ public class Hoe : FarmingToolBase
     [SerializeField] private GameObject deleteHologramPrefabs;
     [SerializeField] private GameObject dirtPrefabs;
     [SerializeField] private Animator hoeAnimator;
+
+    private readonly List<Vector3Int> _pendingTillingCells = new List<Vector3Int>(MAX_TOOL_CELLS);
 
     private HoeState _currentState = HoeState.Idle;
     public HoeState CurrentState
@@ -54,7 +57,15 @@ public class Hoe : FarmingToolBase
 
     private const int HoeRange = 10;
     private float currentYRotate;
-    private Vector3 _dirtPos;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        if (toolData.patternDimension <= 0)
+        {
+            toolData = ItemToolData.DefaultHoe;
+        }
+    }
 
     protected override void OnEnable()
     {
@@ -108,9 +119,31 @@ public class Hoe : FarmingToolBase
 
             case HoeState.Farming:
                 if (!TryGetGrid()) return;
-                if (grid.IsValidForTilling(_hit.point, out var tillingPos))
+
+                Vector3Int centerCell = grid.WorldToCell(_hit.point);
+                Vector3 lookDir = sceneCamera != null ? sceneCamera.transform.forward : Vector3.forward;
+                Vector3Int cardinalDir = ToolAreaCalculator.GetCardinalFacingDirection(lookDir);
+
+                int cellCount = ToolAreaCalculator.CalculatePatternCells(
+                    centerCell,
+                    cardinalDir,
+                    toolData.patternShape,
+                    toolData.patternDimension,
+                    _cachedPatternCells
+                );
+
+                _pendingTillingCells.Clear();
+                for (int i = 0; i < cellCount; i++)
                 {
-                    _dirtPos = tillingPos;
+                    Vector3 cellWorldPos = grid.GetCellCenterWorld(_cachedPatternCells[i]);
+                    if (grid.IsValidForTilling(cellWorldPos, out _))
+                    {
+                        _pendingTillingCells.Add(_cachedPatternCells[i]);
+                    }
+                }
+
+                if (_pendingTillingCells.Count > 0)
+                {
                     StartTilling();
                 }
                 break;
@@ -143,9 +176,6 @@ public class Hoe : FarmingToolBase
 
     private void DeleteTile(Vector3 pos)
     {
-        // Only tell the world "a tile was cleared" if the grid's state actually
-        // changed - keeps HoeFarmingBehaviour's spawned-object registry in sync
-        // with FarmingGrid's logical TileState.
         if (!grid.TryUntill(pos, out var cellPos)) return;
 
         EventBus<OnTileClearEvent>.Raise(new OnTileClearEvent() { CellPos = cellPos });
@@ -155,17 +185,28 @@ public class Hoe : FarmingToolBase
     private void DeletePlant(Vector3 pos)
     {
         if (!grid.TryClearPlant(pos, out var cellPos)) return;
-        
-        EventBus<OnClearPlant>.Raise(new OnClearPlant() {CellPos = cellPos});
+
+        EventBus<OnClearPlant>.Raise(new OnClearPlant() { CellPos = cellPos });
     }
 
     public void OnTillingAnimationFinish()
     {
-        if (grid.TryTill(_dirtPos, out var cellPos))
+        for (int i = 0; i < _pendingTillingCells.Count; i++)
         {
-            EventBus<OnTillingImpactEvent>.Raise(new OnTillingImpactEvent() { prefabs = dirtPrefabs, Position = _dirtPos, YRotation = currentYRotate, CellPos = cellPos });
+            Vector3 cellWorldPos = grid.GetCellCenterWorld(_pendingTillingCells[i]);
+            if (grid.TryTill(cellWorldPos, out var cellPos))
+            {
+                EventBus<OnTillingImpactEvent>.Raise(new OnTillingImpactEvent
+                {
+                    prefabs = dirtPrefabs,
+                    Position = cellWorldPos,
+                    YRotation = currentYRotate,
+                    CellPos = cellPos
+                });
+            }
         }
 
+        _pendingTillingCells.Clear();
         CurrentState = HoeState.Farming;
     }
 
@@ -175,7 +216,7 @@ public class Hoe : FarmingToolBase
 
         if (CurrentState == HoeState.Farming)
         {
-            RunPreviewUpdate(HoeRange, dirtHologramPrefabs, PreviewState.Build, grid.IsValidForTilling, currentYRotate);
+            RunMultiPreviewUpdate(HoeRange, dirtHologramPrefabs, PreviewState.Build, grid.IsValidForTilling, currentYRotate);
         }
         else if (CurrentState == HoeState.Deleting)
         {

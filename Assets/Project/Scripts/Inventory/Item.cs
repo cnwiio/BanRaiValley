@@ -24,6 +24,14 @@ public class Item : ScriptableObject
     /// <summary>Attack parameters defined for this item.</summary>
     public ItemAttackData AttackData => _attackData;
 
+    [Header("Tool Upgrade Data")]
+    [Tooltip("Tool upgrade statistics, pattern shapes, and tier configurations.")]
+    [SerializeField] private ItemToolData _toolData = ItemToolData.DefaultHoe;
+
+    /// <summary>Tool upgrade parameters defined for this item.</summary>
+    public ItemToolData ToolData => _toolData;
+
+
     [Header("Farming / Seed Data")]
     [Tooltip("Crop growth configuration asset for this seed item. " +
              "Only required when ItemType is Seed. Leave null for non-seed items.")]

@@ -134,6 +134,18 @@ public class FarmingGrid : MonoBehaviour, IFarmingGrid
     /// <returns>The number of tiles whose hydration was cleared.</returns>
     public int ResetDailyHydration() => _tileStore.ResetDailyHydration();
 
+    public Vector3 CellSize => grid != null ? grid.cellSize : Vector3.one;
+
+    public Vector3Int WorldToCell(Vector3 worldPos)
+    {
+        return grid != null ? grid.WorldToCell(worldPos) : Vector3Int.zero;
+    }
+
+    public Vector3 GetCellCenterWorld(Vector3Int cellPos)
+    {
+        return grid != null ? grid.GetCellCenterWorld(cellPos) : Vector3.zero;
+    }
+
     #endregion
 
     #region Private Methods

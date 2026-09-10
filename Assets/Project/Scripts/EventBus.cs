@@ -117,6 +117,19 @@ public struct PreviewingEvent : IEvent
     public float YRotation;
 }
 
+public struct TilePreviewData
+{
+    public Vector3 Position;
+    public bool IsValid;
+}
+
+public struct MultiPreviewingEvent : IEvent
+{
+    public TilePreviewData[] PreviewTiles;
+    public int TileCount;
+    public float YRotation;
+}
+
 public struct EndPreviewEvent : IEvent
 {
 

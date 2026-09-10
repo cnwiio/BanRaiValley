@@ -32,4 +32,14 @@ public interface IFarmingGrid
     /// </summary>
     /// <returns>The number of tiles that had their hydration cleared.</returns>
     int ResetDailyHydration();
+
+    /// <summary>Dimensions of a single grid cell in world units.</summary>
+    Vector3 CellSize { get; }
+
+    /// <summary>Converts a world position to the nearest grid cell coordinate.</summary>
+    Vector3Int WorldToCell(Vector3 worldPos);
+
+    /// <summary>Returns the world-space center of a specific grid cell coordinate.</summary>
+    Vector3 GetCellCenterWorld(Vector3Int cellPos);
 }
+

@@ -88,6 +88,16 @@ public class PlayerHandVisualizer : MonoBehaviour
         _spawnTransform.localPosition += slotData.item.spawnOffset;
         _currentItem = LeanPool.Spawn(slotData.item.prefab, _spawnTransform);
         _currentAnimator = _currentItem.GetComponentInChildren<Animator>();
+
+        if (_currentItem.TryGetComponent<IToolItemReceiver>(out var receiver))
+        {
+            receiver.BindItemData(slotData.item);
+        }
+        else
+        {
+            var childReceiver = _currentItem.GetComponentInChildren<IToolItemReceiver>();
+            childReceiver?.BindItemData(slotData.item);
+        }
     }
 
     private void DespawnCurrentItem()
