@@ -3037,7 +3037,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7762035644728615176, guid: b3acce19ab968ee43aa0d264a5e2a7ee, type: 3}
       propertyPath: itemToSpawn.Array.size
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7762035644728615176, guid: b3acce19ab968ee43aa0d264a5e2a7ee, type: 3}
       propertyPath: 'itemToSpawn.Array.data[0]'
@@ -3054,7 +3054,11 @@ PrefabInstance:
     - target: {fileID: 7762035644728615176, guid: b3acce19ab968ee43aa0d264a5e2a7ee, type: 3}
       propertyPath: 'itemToSpawn.Array.data[3]'
       value: 
-      objectReference: {fileID: 11400000, guid: 6e2b63e163691f0478993537a4557b26, type: 2}
+      objectReference: {fileID: 11400000, guid: 585ead1139110a4459dee8877d914fd1, type: 2}
+    - target: {fileID: 7762035644728615176, guid: b3acce19ab968ee43aa0d264a5e2a7ee, type: 3}
+      propertyPath: 'itemToSpawn.Array.data[4]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 406c069e752e97847bab537163d13765, type: 2}
     - target: {fileID: 7873748987411122763, guid: b3acce19ab968ee43aa0d264a5e2a7ee, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
