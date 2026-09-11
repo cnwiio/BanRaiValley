@@ -14,10 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: CustomToolbar::OpalStudio.CustomToolbar.Editor.ToolbarElements.Favorites.Data.FavoritesManager
   allLists:
   - name: New List 1
-    items:
-    - itemType: 1
-      guid: 
-      instanceID: -11430
-      scenePath: Assets/Project/Scenes/terrain Test Scene.unity
-      alias: WateringCan_01 (1)
+    items: []
   lastUsedListIndex: 0

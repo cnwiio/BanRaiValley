@@ -2059,6 +2059,7 @@ MonoBehaviour:
   _configuration: {fileID: 11400000, guid: 6f96f8129bff25a40996ccb3982d795a, type: 2}
   _sunRotationOffsetDegrees: -90
   _sunYawDegrees: -30
+  _rotationSmoothSpeed: 1
 --- !u!1 &415393309
 GameObject:
   m_ObjectHideFlags: 0
