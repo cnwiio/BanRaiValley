@@ -2,9 +2,10 @@ using Lean.Pool;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class InventorySlotUI : MonoBehaviour, IPoolable,IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
+public class InventorySlotUI : MonoBehaviour, IPoolable, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerClickHandler
 {
     [Header("Model Reference")]
     [SerializeField] private IInventory inventoryModel;
@@ -42,7 +43,7 @@ public class InventorySlotUI : MonoBehaviour, IPoolable,IBeginDragHandler, IDrag
             iconImage.sprite = icon;
             iconImage.enabled = true;
 
-            if (SlotData.item.type == ItemType.Seed)
+            if (SlotData.item.stackable && count > 1)
             {
                 countText.SetText($"{count}");
                 countText.enabled = true;
@@ -70,6 +71,24 @@ public class InventorySlotUI : MonoBehaviour, IPoolable,IBeginDragHandler, IDrag
         if (boarderImage == null) return;
 
         boarderImage.color = isSelected ? SelectColor : UnSelectColor;
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (eventData.dragging) return;
+
+        bool isShift = Keyboard.current != null && (Keyboard.current.leftShiftKey.isPressed || Keyboard.current.rightShiftKey.isPressed);
+        bool isCtrl = Keyboard.current != null && (Keyboard.current.leftCtrlKey.isPressed || Keyboard.current.rightCtrlKey.isPressed);
+
+        EventBus<OnUISlotClickEvent>.Raise(new OnUISlotClickEvent
+        {
+            Index = SlotIndex,
+            Inventory = inventoryModel,
+            SlotUI = this,
+            Button = eventData.button,
+            IsShiftPressed = isShift,
+            IsCtrlPressed = isCtrl
+        });
     }
 
     public void OnBeginDrag(PointerEventData eventData)

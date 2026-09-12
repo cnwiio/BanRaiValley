@@ -808,6 +808,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1284894751}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &341117122 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2437347436421096926, guid: b3acce19ab968ee43aa0d264a5e2a7ee, type: 3}
+  m_PrefabInstance: {fileID: 1797427631}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!4 &380003555 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6850055571639333136, guid: 0b29d41089b94e043b272fa4d64e8b6c, type: 3}
@@ -2131,6 +2142,17 @@ Transform:
   - {fileID: 828763877}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1357579441 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6637454940736551260, guid: b3acce19ab968ee43aa0d264a5e2a7ee, type: 3}
+  m_PrefabInstance: {fileID: 1797427631}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1 &1370926591
 GameObject:
   m_ObjectHideFlags: 0
@@ -2712,6 +2734,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BanRaiValley.Time.PlayerSleepHandler
   _wakeUpSpawnPoint: {fileID: 1646557865}
   _playerTransform: {fileID: 1709661822}
+--- !u!114 &1737100077 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 840015874419128950, guid: b3acce19ab968ee43aa0d264a5e2a7ee, type: 3}
+  m_PrefabInstance: {fileID: 1797427631}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 326859bad33c0174fac979e0fc663ba4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InventoyModel
 --- !u!4 &1745594786 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4527114064535542650, guid: 0b29d41089b94e043b272fa4d64e8b6c, type: 3}
@@ -2927,6 +2960,22 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1742777945555001038, guid: b3acce19ab968ee43aa0d264a5e2a7ee, type: 3}
+      propertyPath: _dragText
+      value: 
+      objectReference: {fileID: 1357579441}
+    - target: {fileID: 1742777945555001038, guid: b3acce19ab968ee43aa0d264a5e2a7ee, type: 3}
+      propertyPath: _dragImage
+      value: 
+      objectReference: {fileID: 341117122}
+    - target: {fileID: 1742777945555001038, guid: b3acce19ab968ee43aa0d264a5e2a7ee, type: 3}
+      propertyPath: _mainInventory
+      value: 
+      objectReference: {fileID: 1737100077}
+    - target: {fileID: 1742777945555001038, guid: b3acce19ab968ee43aa0d264a5e2a7ee, type: 3}
+      propertyPath: _hotbarInventory
+      value: 
+      objectReference: {fileID: 618677820}
     - target: {fileID: 2090139610218660885, guid: b3acce19ab968ee43aa0d264a5e2a7ee, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0

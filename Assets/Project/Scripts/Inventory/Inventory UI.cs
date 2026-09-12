@@ -49,20 +49,26 @@ public class InventoryUI : MonoBehaviour
 
     public void ToggleInventoryUI()
     {
+        bool willBeActive = !IsInventoryUIActive;
+
+        if (!willBeActive)
+        {
+            EventBus<InventoryValidateHeldItemEvent>.Raise(new InventoryValidateHeldItemEvent());
+        }
+
         HotbarUICanvasGroup.alpha = 0;
         InventoryUICanvasGroup.alpha = 0;
 
-        
-        CreateAndDestroyUI(!IsInventoryUIActive);
-        SetCursorState(!IsInventoryUIActive);
-        SetActionMapType(!IsInventoryUIActive);
+        CreateAndDestroyUI(willBeActive);
+        SetCursorState(willBeActive);
+        SetActionMapType(willBeActive);
 
-        EventBus<InventoryUIRefreshEvent>.Raise(new InventoryUIRefreshEvent() { });
+        EventBus<InventoryUIRefreshEvent>.Raise(new InventoryUIRefreshEvent());
 
         HotbarUICanvasGroup.alpha = 1;
         InventoryUICanvasGroup.alpha = 1;
-        UIPanel.SetActive(!IsInventoryUIActive);
-        HotbarUIPanel.SetActive(!IsInventoryUIActive);
+        UIPanel.SetActive(willBeActive);
+        HotbarUIPanel.SetActive(willBeActive);
     }
 
     void CreateAndDestroyUI(bool value)

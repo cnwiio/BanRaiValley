@@ -78,6 +78,20 @@ public struct OnHotbarChangeEvent : IEvent
 {
     public SlotData slotData;
 }
+
+public struct OnUISlotClickEvent : IEvent
+{
+    public int Index;
+    public IInventory Inventory;
+    public InventorySlotUI SlotUI;
+    public UnityEngine.EventSystems.PointerEventData.InputButton Button;
+    public bool IsShiftPressed;
+    public bool IsCtrlPressed;
+}
+
+public struct OnUIBackgroundClickEvent : IEvent { }
+
+public struct InventoryValidateHeldItemEvent : IEvent { }
 #endregion
 
 public struct ChangeActionMap : IEvent

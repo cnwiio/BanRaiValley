@@ -158,6 +158,85 @@ public abstract class BaseInventory : MonoBehaviour, IInventory
         return inventorySlots[index];
     }
 
+    public virtual SlotData TakeStack(int index)
+    {
+        if (!IsValidIndex(index) || inventorySlots[index].IsEmpty) return default;
+        SlotData taken = inventorySlots[index];
+        ClearSlot(index);
+        return taken;
+    }
+
+    public virtual SlotData TakeHalfStack(int index)
+    {
+        if (!IsValidIndex(index) || inventorySlots[index].IsEmpty) return default;
+        int halfCount = (inventorySlots[index].count + 1) / 2;
+        return inventorySlots[index].Split(halfCount);
+    }
+
+    public virtual SlotData TakeSingleItem(int index)
+    {
+        if (!IsValidIndex(index) || inventorySlots[index].IsEmpty) return default;
+        return inventorySlots[index].Split(1);
+    }
+
+    public virtual bool AddSingleItemToSlot(int index, Item item)
+    {
+        if (!IsValidIndex(index) || item == null) return false;
+
+        if (inventorySlots[index].IsEmpty)
+        {
+            inventorySlots[index] = new SlotData { item = item, count = 1 };
+            return true;
+        }
+
+        if (inventorySlots[index].item == item && item.stackable && inventorySlots[index].count < item.MaxStack)
+        {
+            inventorySlots[index].count++;
+            return true;
+        }
+
+        return false;
+    }
+
+    public virtual bool AutoStashItem(SlotData data, int preferredIndex = -1)
+    {
+        if (data.IsEmpty) return true;
+
+        if (preferredIndex >= 0 && IsValidIndex(preferredIndex))
+        {
+            if (inventorySlots[preferredIndex].IsEmpty)
+            {
+                inventorySlots[preferredIndex] = data;
+                return true;
+            }
+
+            if (inventorySlots[preferredIndex].item == data.item && data.item.stackable)
+            {
+                int spaceInPreferred = data.item.MaxStack - inventorySlots[preferredIndex].count;
+                if (data.count <= spaceInPreferred)
+                {
+                    inventorySlots[preferredIndex].count += data.count;
+                    return true;
+                }
+            }
+        }
+
+        if (CanAddItem(data.item, data.count))
+        {
+            if (preferredIndex >= 0 && IsValidIndex(preferredIndex) && inventorySlots[preferredIndex].item == data.item && data.item.stackable)
+            {
+                int remaining = inventorySlots[preferredIndex].AddToStack(data.count);
+                if (remaining <= 0) return true;
+                data.count = remaining;
+            }
+
+            AddItem(data.item, data.count);
+            return true;
+        }
+
+        return false;
+    }
+
     protected bool IsValidIndex(int index)
     {
         if (inventorySlots == null) return false;

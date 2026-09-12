@@ -11,4 +11,9 @@ public interface IInventory
     public void SetSlotData(SlotData data, int indexToSwap);
     public int AddStackItemToSlot(int slot, Item itemToAdd, int amount);
     public void ClearSlot(int index);
+    public SlotData TakeStack(int index);
+    public SlotData TakeHalfStack(int index);
+    public SlotData TakeSingleItem(int index);
+    public bool AddSingleItemToSlot(int index, Item item);
+    public bool AutoStashItem(SlotData data, int preferredIndex = -1);
 }
