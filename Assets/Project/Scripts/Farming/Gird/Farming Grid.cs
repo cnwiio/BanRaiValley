@@ -135,7 +135,17 @@ public class FarmingGrid : MonoBehaviour, IFarmingGrid
         UnRegisterPlantedSoil(cellPos);
         return true;
     }
-    
+
+    public Vector3Int WorldToCell(Vector3 worldPos)
+    {
+        return grid.WorldToCell(worldPos);
+    }
+
+    public Vector3 GetCellCenterWorld(Vector3Int cellPos)
+    {
+        return grid.GetCellCenterWorld(cellPos);
+    }
+
     #endregion
     
     private bool IsTilled(Vector3Int cellPos) => _tileStore.IsTilled(cellPos);

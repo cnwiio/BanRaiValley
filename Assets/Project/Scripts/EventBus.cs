@@ -110,17 +110,26 @@ public struct OnStartTillingEvent : IEvent
 }
 #endregion
 
+#region PreviewEvent
 public struct StartPreviewEvent : IEvent
 {
     public GameObject prefabs;
     public PreviewState previewState;
+    public int TileCount;
 }
 public struct PreviewingEvent : IEvent
 {
-    public Vector3 Position;
-    public bool IsValid;
+    // public Vector3 Position;
+    // public bool IsValid;
+    public PreviewTileData[] PreviewTileData;
     public float YRotation;
 }
+
+public struct MultiPreviewingEvent : IEvent
+{
+    public PreviewTileData[] PreviewTileData;
+    public float YRotation;
+} 
 
 public struct EndPreviewEvent : IEvent { }
 public struct OnStartWateringEvent : IEvent { }
@@ -128,6 +137,7 @@ public struct OnWateringEvent : IEvent
 {
     public Vector3Int CellPos;
 }
+#endregion
 
 #region Plant Event
 

@@ -23,8 +23,10 @@ public class PlacementPreviewer : MonoBehaviour
             { PreviewState.Planting, new PlantingPreviewStrategy() }
         };
 
-    GameObject _hologramPrefabs;
+    GameObject _hologramPrefabsSource;
     MeshRenderer _meshRenderer;
+    private List<GameObject> _spawnedHologram = new List<GameObject>();
+    private List<MeshRenderer> _spawnedMeshRenderers = new List<MeshRenderer>();
     [SerializeField] Material validMaterial;
     [SerializeField] Material inValidMaterial;
 
@@ -46,38 +48,71 @@ public class PlacementPreviewer : MonoBehaviour
 
     private void OnStartPreview(StartPreviewEvent evt)
     {
-        if (_hologramPrefabs == null)
+        if (!_hologramPrefabsSource)
         {
-            _hologramPrefabs = LeanPool.Spawn(evt.prefabs);
-            _hologramPrefabs.SetActive(false);
-            _meshRenderer = _hologramPrefabs.GetComponent<MeshRenderer>();
+            _hologramPrefabsSource = evt.prefabs;
 
+            for (int i = 0; i < evt.TileCount; i++)
+            {
+                _spawnedHologram.Add(LeanPool.Spawn(_hologramPrefabsSource));
+            }
+        
+            foreach (var hologram in _spawnedHologram)
+            {
+                hologram.SetActive(false);
+                if (hologram.TryGetComponent<MeshRenderer>(out var meshRenderer))
+                {
+                    _spawnedMeshRenderers.Add(meshRenderer);
+                }
+                else
+                {
+                    Debug.LogError(name + " cannot access meshRenderer");
+                }
+            }
+            
             if (!_strategies.TryGetValue(evt.previewState, out _currentStrategy))
                 Debug.LogWarning($"PlacementPreviewer: no visual strategy registered for {evt.previewState}");
         }
+        
+        
     }
 
     private void OnPreviewing(PreviewingEvent evt)
     {
-        if (_hologramPrefabs == null || _currentStrategy == null) return;
+        if (_spawnedHologram.Count < 1 || _currentStrategy == null) return;
 
-        _currentStrategy.Apply(_hologramPrefabs, _meshRenderer, validMaterial, inValidMaterial, evt.IsValid);
-        UpdatePreview(evt.Position, evt.YRotation);
+        for (int i = 0; i < _spawnedHologram.Count; i++)
+        {
+            _currentStrategy.Apply(_spawnedHologram[i], _spawnedMeshRenderers[i], validMaterial, inValidMaterial, evt.PreviewTileData[i].IsValid);
+            UpdatePreview(_spawnedHologram[i].transform, evt.PreviewTileData[i].Position, evt.YRotation);
+        }
+    }
+
+    private void OnMultiPreviewing()
+    {
+        if (_hologramPrefabsSource == null || _currentStrategy == null) return;
+
+        for (int i = 0; i < _spawnedHologram.Count; i++)
+        {
+            _currentStrategy.Apply(_spawnedHologram[i], _spawnedMeshRenderers[i], validMaterial, inValidMaterial, false);
+        }
     }
 
     private void OnEndPreview(EndPreviewEvent evt)
     {
-        if (_hologramPrefabs != null)
+        foreach (var hologram in _spawnedHologram)
         {
-            LeanPool.Despawn(_hologramPrefabs);
-            _hologramPrefabs = null;
-            _currentStrategy = null;
+            LeanPool.Despawn(hologram);
         }
+        _spawnedHologram.Clear();
+        _spawnedMeshRenderers.Clear();
+        _hologramPrefabsSource = null;
+        _currentStrategy = null;
     }
 
-    private void UpdatePreview(Vector3 pos, float yRotation)
+    private void UpdatePreview(Transform targetTransform, Vector3 pos, float yRotation)
     {
-        _hologramPrefabs.transform.position = pos;
-        _hologramPrefabs.transform.rotation = Quaternion.Euler(0, yRotation, 0);
+        targetTransform.position = pos;
+        targetTransform.rotation = Quaternion.Euler(0, yRotation, 0);
     }
 }

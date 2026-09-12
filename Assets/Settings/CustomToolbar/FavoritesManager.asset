@@ -14,5 +14,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: CustomToolbar::OpalStudio.CustomToolbar.Editor.ToolbarElements.Favorites.Data.FavoritesManager
   allLists:
   - name: New List 1
-    items: []
+    items:
+    - itemType: 0
+      guid: bd54ffd2009c41344a039b3a6dcaa659
+      instanceID: 0
+      scenePath: 
+      alias: Hoe_Upgrade
+    - itemType: 0
+      guid: a91cd18eaf2d19742b5681b7c29ed65d
+      instanceID: 0
+      scenePath: 
+      alias: Watering Can Upgrade
+    - itemType: 0
+      guid: b5ad36419f19a3942983d0b8dfdba146
+      instanceID: 0
+      scenePath: 
+      alias: Test_Hoe_Upgrade
+    - itemType: 0
+      guid: 053f58c07928d11419b7bd72882cb368
+      instanceID: 0
+      scenePath: 
+      alias: Watering Can Upgrade
   lastUsedListIndex: 0

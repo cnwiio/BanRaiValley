@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum HoeState
@@ -53,7 +54,8 @@ public class Hoe : FarmingToolBase
             _currentState = value;
         }
     }
-
+    
+    private readonly List<Vector3Int> _pendingTillingCells = new List<Vector3Int>(MAX_TOOL_CELLS);
     private ComboAttackController combo;
     
     private const int HoeRange = 10;
@@ -97,7 +99,15 @@ public class Hoe : FarmingToolBase
         if (CurrentState == HoeState.Farming)
         {
             currentYRotate += 90;
-            EventBus<PreviewingEvent>.Raise(new PreviewingEvent() { Position = _lastCellWorldPos, IsValid = lastCheckWasValid, YRotation = currentYRotate });
+            for (int i = 0; i < _cachedPatternCellCount; i++)
+            {
+                _cachedPreviewData[i] = new PreviewTileData()
+                {
+                    Position = _cachedPreviewData[i].Position,
+                    IsValid = _cachedPreviewData[i].IsValid
+                };
+            }
+            EventBus<PreviewingEvent>.Raise(new PreviewingEvent() { PreviewTileData = _cachedPreviewData, YRotation = currentYRotate });
         }
     }
 
@@ -115,9 +125,30 @@ public class Hoe : FarmingToolBase
         if (CurrentState == HoeState.Farming)
         {
             if (!_isHit) return;
-            if (grid.IsValidForTilling(_hit.point, out var cellWorldPos))
+            Vector3Int centerCell = grid.WorldToCell(_hit.point);
+            Vector3 lookDir = sceneCamera.transform.forward;
+            Vector3Int cardinalDir = ToolAreaCalculator.GetCardinalFacingDirection(lookDir);
+            
+            int cellCount = ToolAreaCalculator.CalculatePatternCells(
+                centerCell,
+                cardinalDir,
+                toolData.toolPattern,
+                toolData.patternDimension,
+                _cachedPatternCells
+            );
+
+            _pendingTillingCells.Clear();
+            for (int i = 0; i < cellCount; i++)
             {
-                _dirtPos = cellWorldPos;
+                Vector3 cellWorldPos = grid.GetCellCenterWorld(_cachedPatternCells[i]);
+                if (grid.IsValidForTilling(cellWorldPos, out _))
+                {
+                    _pendingTillingCells.Add(_cachedPatternCells[i]);
+                }
+            }
+
+            if (_pendingTillingCells.Count > 0)
+            {
                 StartTilling();
             }
         }
@@ -167,7 +198,16 @@ public class Hoe : FarmingToolBase
         if (!grid.TryUntill(pos, out var cellPos)) return;
 
         EventBus<OnTileClearEvent>.Raise(new OnTileClearEvent() { CellPos = cellPos });
-        EventBus<PreviewingEvent>.Raise(new PreviewingEvent() { Position = _lastCellWorldPos, IsValid = false, YRotation = currentYRotate });
+ 
+        for (int i = 0; i < _cachedPatternCellCount; i++)
+        {
+            _cachedPreviewData[i] = new PreviewTileData()
+            {
+                Position = _cachedPreviewData[i].Position,
+                IsValid = false
+            };
+        }
+        EventBus<PreviewingEvent>.Raise(new PreviewingEvent() { PreviewTileData = _cachedPreviewData, YRotation = currentYRotate });
     }
 
     private void DeletePlant(Vector3 pos)
@@ -179,10 +219,22 @@ public class Hoe : FarmingToolBase
 
     public void OnTillingAnimationFinish()
     {
-        if (grid.TryTill(_dirtPos, out var cellPos))
+        for (int i = 0; i < _pendingTillingCells.Count; i++)
         {
-            EventBus<OnTillingImpactEvent>.Raise(new OnTillingImpactEvent() { prefabs = dirtPrefabs, Position = _dirtPos, YRotation = currentYRotate, CellPos = cellPos });
+            Vector3 cellWorldPos = grid.GetCellCenterWorld(_pendingTillingCells[i]);
+            if (grid.TryTill(cellWorldPos, out var cellPos))
+            {
+                EventBus<OnTillingImpactEvent>.Raise(new OnTillingImpactEvent
+                {
+                    prefabs = dirtPrefabs,
+                    Position = cellWorldPos,
+                    YRotation = currentYRotate,
+                    CellPos = cellPos
+                });
+            }
         }
+
+        _pendingTillingCells.Clear();
 
         CurrentState = HoeState.Farming;
     }
@@ -200,7 +252,14 @@ public class Hoe : FarmingToolBase
 
         if (CurrentState == HoeState.Farming)
         {
-            RunPreviewUpdate(HoeRange, dirtHologramPrefabs, PreviewState.Build, grid.IsValidForTilling, currentYRotate);
+            if (toolData.toolPattern == ToolAreaPattern.Single || toolData.patternDimension <= 1)
+            {
+                RunPreviewUpdate(HoeRange, dirtHologramPrefabs, PreviewState.Build, grid.IsValidForTilling, currentYRotate);
+            }
+            else
+            {
+                RunMultiPreviewUpdate(HoeRange, dirtHologramPrefabs, PreviewState.Build, grid.IsValidForTilling, currentYRotate);
+            }
         }
         else if (CurrentState == HoeState.Deleting)
         {
