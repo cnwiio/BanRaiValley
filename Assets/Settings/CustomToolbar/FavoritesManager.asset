@@ -14,5 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: CustomToolbar::OpalStudio.CustomToolbar.Editor.ToolbarElements.Favorites.Data.FavoritesManager
   allLists:
   - name: New List 1
-    items: []
+    items:
+    - itemType: 0
+      guid: 4cb127cd75fd9f34181127e5c0d6c24e
+      instanceID: 0
+      scenePath: 
+      alias: Tree_04 (cell shade)
+    - itemType: 0
+      guid: c4a0d820725d2c148a2feedd7df50123
+      instanceID: 0
+      scenePath: 
+      alias: Tree_04 (cell shade) (LOD)
   lastUsedListIndex: 0
