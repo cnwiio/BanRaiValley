@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public interface IEvent {}
 
@@ -56,7 +57,16 @@ public struct OnUIDropEvent : IEvent
     public int Index;
     public IInventory Inventory;
     public InventorySlotUI SlotUI;
+}
 
+public struct OnUISlotClickEvent : IEvent 
+{
+    public int Index;
+    public IInventory Inventory;
+    public InventorySlotUI SlotUI;
+    public PointerEventData.InputButton Button;
+    public bool IsShiftPressed;
+    public bool IsCtrlPressed;
 }
 
 public struct InventoryUIRefreshEvent : IEvent { }

@@ -334,3 +334,4 @@ MonoBehaviour:
   countText: {fileID: 3092274961843372750}
   SelectColor: {r: 0.6509434, g: 0.6509434, b: 0.6509434, a: 1}
   UnSelectColor: {r: 1, g: 1, b: 1, a: 1}
+  dragHoldDelay: 0.03

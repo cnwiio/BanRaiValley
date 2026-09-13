@@ -197,15 +197,27 @@ public abstract class BaseInventory : MonoBehaviour, IInventory
         if (!itemToAdd.stackable) return amount;
 
         int remainingAmount = amount;
-        int maxStack = itemToAdd.MaxStack;
         if (!inventorySlots[index].IsEmpty && inventorySlots[index].item == itemToAdd)
         {
             //Debug.Log(inventorySlots[index].AddToStack(remainingAmount));
             remainingAmount = inventorySlots[index].AddToStack(remainingAmount);
-            return remainingAmount;
         }
 
         return remainingAmount;
+    }
+
+    public int AddItemToEmptySlot(int index, Item itemToAdd, int amount)
+    {
+        if (!inventorySlots[index].IsEmpty || amount < 1) return amount;
+        
+        inventorySlots[index].item = itemToAdd;
+        
+        if (itemToAdd.stackable)
+        {
+            var remainingAmount = inventorySlots[index].AddToStack(amount);
+            return remainingAmount;
+        }
+        return 0;
     }
 
     public void ClearSlot(int index)
@@ -242,6 +254,21 @@ public abstract class BaseInventory : MonoBehaviour, IInventory
         return inventorySlots[index];
     }
 
+    public virtual SlotData TakeStack(int index)
+    {
+        if (!IsValidIndex(index) || inventorySlots[index].IsEmpty) return default;
+        SlotData taken = inventorySlots[index];
+        ClearSlot(index);
+        return taken;
+    }
+    
+    public virtual SlotData TakeHalfStack(int index)
+    {
+        if (!IsValidIndex(index) || inventorySlots[index].IsEmpty) return default;
+        int halfCount = (inventorySlots[index].count + 1) / 2;
+        return inventorySlots[index].Split(halfCount);
+    }
+    
     protected bool IsValidIndex(int index)
     {
         if (inventorySlots == null) return false;
