@@ -16,13 +16,23 @@ MonoBehaviour:
   - name: New List 1
     items:
     - itemType: 0
-      guid: 4cb127cd75fd9f34181127e5c0d6c24e
-      instanceID: 0
-      scenePath: 
-      alias: Tree_04 (cell shade)
-    - itemType: 0
       guid: c4a0d820725d2c148a2feedd7df50123
       instanceID: 0
       scenePath: 
       alias: Tree_04 (cell shade) (LOD)
+    - itemType: 0
+      guid: 0706d40f702fbad43a5a858efd54234e
+      instanceID: 0
+      scenePath: 
+      alias: Material.005
+    - itemType: 0
+      guid: cb6f63c6b7ae75042aa9071f277a4307
+      instanceID: 0
+      scenePath: 
+      alias: Grass Material
+    - itemType: 0
+      guid: 18c98828121abda43bfc43a33819bc3b
+      instanceID: 0
+      scenePath: 
+      alias: Mesh
   lastUsedListIndex: 0
