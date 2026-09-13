@@ -230,6 +230,7 @@ MonoBehaviour:
   Data: {fileID: 11400000, guid: 9da0044848d7623479f7d41199f7dd0c, type: 2}
   InputReader: {fileID: 3237870357853340737}
   Head: {fileID: 6850055571639333136}
+  turnSpeed: 15
 --- !u!114 &4278678886193900730
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -270,8 +271,8 @@ MonoBehaviour:
   SecondaryAction: {fileID: 643901133655292448, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
   RotateAction: {fileID: -7105339716128872201, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
   DeleteAction: {fileID: -8238018659739259438, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
-  InteractAction_PlayerMap: {fileID: 0}
-  InteractAction_UIMap: {fileID: 0}
+  InteractAction_PlayerMap: {fileID: -4726570457938165820, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
+  InteractAction_UIMap: {fileID: 3490089244214155330, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
 --- !u!114 &8187068999090942818
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -345,3 +346,4 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2048
   range: 5
+  inputManager: {fileID: 4278678886193900730}

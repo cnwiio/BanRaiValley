@@ -30,4 +30,9 @@ MonoBehaviour:
       instanceID: 0
       scenePath: 
       alias: Environment
+    - itemType: 0
+      guid: f65009bb2b80d77489ef6b52b7a91c89
+      instanceID: 0
+      scenePath: 
+      alias: UI
   lastUsedListIndex: 0
