@@ -16,16 +16,6 @@ MonoBehaviour:
   - name: New List 1
     items:
     - itemType: 0
-      guid: c4a0d820725d2c148a2feedd7df50123
-      instanceID: 0
-      scenePath: 
-      alias: Tree_04 (cell shade) (LOD)
-    - itemType: 0
-      guid: 0706d40f702fbad43a5a858efd54234e
-      instanceID: 0
-      scenePath: 
-      alias: Material.005
-    - itemType: 0
       guid: cb6f63c6b7ae75042aa9071f277a4307
       instanceID: 0
       scenePath: 
@@ -35,4 +25,9 @@ MonoBehaviour:
       instanceID: 0
       scenePath: 
       alias: Mesh
+    - itemType: 0
+      guid: 4e1a9dcd0f02faf4ba1a0f8743a7b8bd
+      instanceID: 0
+      scenePath: 
+      alias: Environment
   lastUsedListIndex: 0
