@@ -9710,11 +9710,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8801442420171781805, guid: 61b4128b7b5fc974d8c6a720ce5a356c, type: 3}
       propertyPath: m_CellSize.x
-      value: 5
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8801442420171781805, guid: 61b4128b7b5fc974d8c6a720ce5a356c, type: 3}
       propertyPath: m_CellSize.z
-      value: 5
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
