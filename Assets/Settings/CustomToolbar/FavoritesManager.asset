@@ -74,4 +74,16 @@ MonoBehaviour:
       instanceID: 0
       scenePath: 
       alias: Cabbage Plant
-  lastUsedListIndex: 2
+  - name: New List 4
+    items:
+    - itemType: 0
+      guid: 001679ff7fad9b34dacdcc2174602372
+      instanceID: 0
+      scenePath: 
+      alias: Cabbage
+    - itemType: 0
+      guid: 6ae71de3d3de2db4db6c48d8cce934ac
+      instanceID: 0
+      scenePath: 
+      alias: Ui_Icon_cabbage_Test
+  lastUsedListIndex: 0

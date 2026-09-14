@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3395382924879716630}
   - component: {fileID: 1724741180066006902}
   m_Layer: 0
-  m_Name: Seed bag
+  m_Name: Seed bag Tier 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -132,4 +132,4 @@ MonoBehaviour:
     patternDimension: 0
   seedBagAnimator: {fileID: 3395382924879716630}
   hologramPrefab: {fileID: 6940088763359480455, guid: 9913c6916dc2ed44296d0667c8f28a30, type: 3}
-  plantData: {fileID: 11400000, guid: a13509fd0d8ac5e41b17ae2e16d8ddbd, type: 2}
+  plantData: {fileID: 11400000, guid: 0e489cd3f9009fc40a2cba5199a4f793, type: 2}

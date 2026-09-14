@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8d4523333e702c4439aa77764e85a4da, type: 3}
-  m_Name: Test Seed Bag
+  m_Name: Seed Bag Tier 1
   m_EditorClassIdentifier: Assembly-CSharp::Item
   type: 2
   spawnOffset: {x: 0, y: 0.4, z: 0}
   stackable: 1
   MaxStack: 64
   image: {fileID: 21300000, guid: f7faa51816b1c9c46b159a0cf4208b9e, type: 3}
-  prefab: {fileID: 2509925977032215398, guid: 9d012ee2d6cce1f4b84a2842ee51edbb, type: 3}
+  prefab: {fileID: 2509925977032215398, guid: 13b6d83671336f445beb2f5c587bc812, type: 3}
   Price: 1
   value: 0
   attackData:

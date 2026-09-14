@@ -85,7 +85,7 @@ GameObject:
   - component: {fileID: 3765050570257624883}
   - component: {fileID: 1653372159810784989}
   m_Layer: 10
-  m_Name: Cabbage Monster
+  m_Name: Cabbage Monster Tier 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -188,7 +188,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 129c327fbf3a1984bbbf882c949282f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AIBrain
-  data: {fileID: 11400000, guid: 3230bf0ae3988664699fbe62c70bef63, type: 2}
+  data: {fileID: 11400000, guid: a0f9e3df1b24b5148976dd0315d8d6a6, type: 2}
   movement: {fileID: 7062104129550860087}
   detection: {fileID: 8275500833609944525}
   attack: {fileID: 173291752851820372}
