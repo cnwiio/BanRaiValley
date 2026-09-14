@@ -13,15 +13,15 @@ MonoBehaviour:
   m_Name: PlantData Test
   m_EditorClassIdentifier: Assembly-CSharp::PlantData
   plantPrefabs: {fileID: 2147524051394071840, guid: db90fca8afdcf304ea5eeab516fadf91, type: 3}
-  plantMonsterPrefabs: {fileID: 8500882108080917300, guid: 8385bc30df502f34ebbed263efd87e4a, type: 3}
+  plantMonsterPrefabs: {fileID: 8500882108080917300, guid: de286fed8bc248f4bb6450bcb8416c2f, type: 3}
   DeathStages:
     StageIndex: 0
-    DaysRequired: 1
+    DaysRequired: 99
     StageVisualMesh: {fileID: 7859820949308486741, guid: b7cf12fb849f2ce4592a36e9c9c8d4f9, type: 3}
   Stages:
   - StageIndex: 0
     DaysRequired: 1
-    StageVisualMesh: {fileID: -6320001982633638869, guid: 88133688ce354be4c85e1c167e475c5a, type: 3}
+    StageVisualMesh: {fileID: 1353746659569323740, guid: a6b03742eaa667a46aaca2786031b018, type: 3}
   - StageIndex: 1
     DaysRequired: 0
-    StageVisualMesh: {fileID: 4300000, guid: 1a2e91ebc86d2c84ca817eb30abe86d4, type: 3}
+    StageVisualMesh: {fileID: -8936622394817868014, guid: 7d2268dba798cea4a84c957fbd7eef43, type: 3}

@@ -52,4 +52,26 @@ MonoBehaviour:
       instanceID: 0
       scenePath: 
       alias: Demo Dirt Hologram
-  lastUsedListIndex: 0
+  - name: New List 3
+    items:
+    - itemType: 0
+      guid: f95d93bc0c4811748ac826621ca1c055
+      instanceID: 0
+      scenePath: 
+      alias: Cabbage Animation Controller
+    - itemType: 0
+      guid: f6482d4ee17f77042b91e0a421b67d08
+      instanceID: 0
+      scenePath: 
+      alias: MonsterMutant7 Animator Controller
+    - itemType: 0
+      guid: de286fed8bc248f4bb6450bcb8416c2f
+      instanceID: 0
+      scenePath: 
+      alias: Teststsets
+    - itemType: 0
+      guid: db90fca8afdcf304ea5eeab516fadf91
+      instanceID: 0
+      scenePath: 
+      alias: Cabbage Plant
+  lastUsedListIndex: 2

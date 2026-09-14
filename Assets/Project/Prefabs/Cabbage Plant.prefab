@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4162661205128346402}
   - component: {fileID: 5207881457317534851}
   m_Layer: 11
-  m_Name: Plant 1
+  m_Name: Cabbage Plant
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78,14 +78,14 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 1527
+    m_Bits: 0
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 3.7808595, y: 4.950954, z: 3.134452}
-  m_Center: {x: 0.10087067, y: 2.475477, z: -0.120905876}
+  m_Size: {x: 2, y: 0.45, z: 2}
+  m_Center: {x: 0, y: 0.1, z: 0}
 --- !u!1 &7829806146325339667
 GameObject:
   m_ObjectHideFlags: 0
@@ -126,7 +126,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7829806146325339667}
-  m_Mesh: {fileID: 4300000, guid: 1a2e91ebc86d2c84ca817eb30abe86d4, type: 3}
+  m_Mesh: {fileID: -8936622394817868014, guid: 7d2268dba798cea4a84c957fbd7eef43, type: 3}
 --- !u!23 &4370724749959649947
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -152,7 +152,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 382e2b1b7fbf94945963320a17603c7c, type: 2}
+  - {fileID: 2100000, guid: e0a7fc8b9bc5b5e4e82f6bac719e8608, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
