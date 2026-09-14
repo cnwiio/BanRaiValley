@@ -16,13 +16,13 @@ public class PlayerMoney : MonoBehaviour
         set
         {
             money = value;
-            textUI.SetText($"Money : {money}$");
+            textUI.SetText($"{money} $");
         }
     }
 
     public void Start()
     {
-        textUI.SetText($"Money : {money}$");
+        textUI.SetText($"{money} $");
     }
 
     public void SubtractMoney(int amount)
