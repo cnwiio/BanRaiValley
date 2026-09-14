@@ -100,6 +100,7 @@ public struct OnUIInteractActionEvent : IEvent { }
 public struct OnRotateActionEvent : IEvent { }
 public struct OnDeleteActionEvent : IEvent { }
 public struct OnDebugActionEvent : IEvent { }
+public struct OnEscapeActionEvent : IEvent { }
 
 #endregion
 

@@ -146,5 +146,6 @@ public class PlayerMovement : MonoBehaviour
         _euler = targetTransform.eulerAngles;
         panTilt.PanAxis.Value = _euler.y;
         panTilt.TiltAxis.Value = _euler.x;
+        // panTilt.TiltAxis. = _euler.x;
     }
 }
