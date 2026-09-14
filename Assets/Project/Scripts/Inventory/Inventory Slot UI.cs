@@ -6,7 +6,10 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using IPoolable = Lean.Pool.IPoolable;
 
-public class InventorySlotUI : MonoBehaviour, IPoolable,IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerClickHandler, IPointerDownHandler
+public class InventorySlotUI : MonoBehaviour, IPoolable, 
+    IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, 
+    IPointerClickHandler, /*IPointerDownHandler, */
+    IPointerEnterHandler, IPointerExitHandler
 {
     [Header("Model Reference")]
     [SerializeField] private IInventory inventoryModel;
@@ -24,7 +27,7 @@ public class InventorySlotUI : MonoBehaviour, IPoolable,IBeginDragHandler, IDrag
     [SerializeField] private float dragHoldDelay = 0.1f;
     
     private int SlotIndex;
-    private float _pointerDownTime;
+    // private float _pointerDownTime;
 
     public void Setup(int index, IInventory inventory)
     {
@@ -97,19 +100,19 @@ public class InventorySlotUI : MonoBehaviour, IPoolable,IBeginDragHandler, IDrag
         });
     }
 
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        _pointerDownTime = Time.unscaledTime;
-    }
+    // public void OnPointerDown(PointerEventData eventData)
+    // {
+    //     _pointerDownTime = Time.unscaledTime;
+    // }
     
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (Time.unscaledTime - _pointerDownTime < dragHoldDelay)
-        {
-            eventData.pointerDrag = null;
-            OnPointerClick(eventData);
-            return;
-        }
+        // if (Time.unscaledTime - _pointerDownTime < dragHoldDelay)
+        // {
+        //     eventData.pointerDrag = null;
+        //     OnPointerClick(eventData);
+        //     return;
+        // }
         EventBus<OnUIBeginDragEvent>.Raise(new OnUIBeginDragEvent() { Index = SlotIndex , Inventory = inventoryModel, SlotUI = this});
     }
 
@@ -125,6 +128,16 @@ public class InventorySlotUI : MonoBehaviour, IPoolable,IBeginDragHandler, IDrag
     public void OnDrop(PointerEventData eventData)
     {
         EventBus<OnUIDropEvent>.Raise(new OnUIDropEvent() { Index = SlotIndex, Inventory = inventoryModel , SlotUI = this });
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        SetHighlight(true);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        SetHighlight(false);
     }
 
     public void OnSpawn()

@@ -51,6 +51,7 @@ public class InventoryUIController : MonoBehaviour
     private void Awake()
     {
         DragTransform = DragImage.transform;
+        EventSystem.current.pixelDragThreshold = 60;
     }
     #endregion
 
