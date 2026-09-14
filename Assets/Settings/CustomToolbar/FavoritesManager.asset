@@ -86,4 +86,14 @@ MonoBehaviour:
       instanceID: 0
       scenePath: 
       alias: Ui_Icon_cabbage_Test
-  lastUsedListIndex: 0
+    - itemType: 0
+      guid: 7c90c4cccdada584cb89999ced8446ce
+      instanceID: 0
+      scenePath: 
+      alias: Bare Hand
+    - itemType: 0
+      guid: 43fc273620986bf40aa6de99879a24a2
+      instanceID: 0
+      scenePath: 
+      alias: Bare Hand
+  lastUsedListIndex: 3

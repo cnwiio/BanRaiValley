@@ -147,6 +147,7 @@ public class InventorySlotUI : MonoBehaviour, IPoolable,
 
     public void OnDespawn()
     {
+        SetHighlight(false);
         EventBus<InventoryUIRefreshEvent>.Unsubscribe(RenderVisual);
     }
 
