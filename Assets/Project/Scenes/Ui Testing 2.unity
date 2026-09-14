@@ -8488,14 +8488,6 @@ PrefabInstance:
       propertyPath: playerCamTransform
       value: 
       objectReference: {fileID: 2091949063}
-    - target: {fileID: 3237870357853340737, guid: 0b29d41089b94e043b272fa4d64e8b6c, type: 3}
-      propertyPath: EscapeAction_UIMap
-      value: 
-      objectReference: {fileID: -6895561873268185045, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
-    - target: {fileID: 3237870357853340737, guid: 0b29d41089b94e043b272fa4d64e8b6c, type: 3}
-      propertyPath: EscapeAction_PlayerMap
-      value: 
-      objectReference: {fileID: -7459211651728856566, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
     - target: {fileID: 3444719704361544511, guid: 0b29d41089b94e043b272fa4d64e8b6c, type: 3}
       propertyPath: UI
       value: 

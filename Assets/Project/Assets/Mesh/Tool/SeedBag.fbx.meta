@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 2889960493e5cdb4aa3b65722e01247e
+guid: 5e95a4a149f65d4489c820420a5d62fe
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
@@ -7,68 +7,13 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Material.002
-    second: {fileID: 2100000, guid: a19900b829387c04bbf5c5d8e7de027b, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Material.004
-    second: {fileID: 2100000, guid: 098db6b427e06cd4596e85ae3c6a0557, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Material.007
-    second: {fileID: 2100000, guid: 1bab19dc0aa366d4aa5725bfffeaa5ce, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Material.008
-    second: {fileID: 2100000, guid: 83f7ace3b81614442a455d65c0373ab7, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Material.009
-    second: {fileID: 2100000, guid: 6fc61834e9207bc47a1b1688b3f00f9b, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Material.010
-    second: {fileID: 2100000, guid: 71e14f73746c9d548b418f8048a95483, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Material.011
-    second: {fileID: 2100000, guid: f4114296840c15f49accfd8509222d98, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Material.013
-    second: {fileID: 2100000, guid: 53be1cc81726e9d4993394ed129f3642, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Material.014
-    second: {fileID: 2100000, guid: 2693f46bc7176f345912b7044bbbf351, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Material.018
-    second: {fileID: 2100000, guid: 6824fbbe4ef166e43b8875cd79ae8944, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Material.019
-    second: {fileID: 2100000, guid: 784dc4a88f735054498e6754b6da1c52, type: 2}
+      name: SeedBag_mat
+    second: {fileID: 2100000, guid: 6f64681c03326444b87ece63e04b3d42, type: 2}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
-      name: Slate roofing texture seamless 03940
-    second: {fileID: 2800000, guid: 5908c7bca65cb074fbab4bea63be1a2c, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: T_Wood
-    second: {fileID: 2800000, guid: e299a347c71a0ff4eabedc8bb60ae961, type: 3}
+      name: Seed_Bag_Color
+    second: {fileID: 2800000, guid: 0d96f37c4ecc51e43894de5fdbefa926, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -98,7 +43,7 @@ ModelImporter:
     isReadable: 0
   meshes:
     lODScreenPercentages: []
-    globalScale: 1
+    globalScale: 4
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
@@ -156,7 +101,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 1
+    globalScale: 0.04
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0

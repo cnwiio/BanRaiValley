@@ -273,8 +273,8 @@ MonoBehaviour:
   DeleteAction: {fileID: -8238018659739259438, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
   InteractAction_PlayerMap: {fileID: -4726570457938165820, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
   InteractAction_UIMap: {fileID: 3490089244214155330, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
-  EscapeAction_PlayerMap: {fileID: 0}
-  EscapeAction_UIMap: {fileID: 0}
+  EscapeAction_PlayerMap: {fileID: -7459211651728856566, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
+  EscapeAction_UIMap: {fileID: -6895561873268185045, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
 --- !u!114 &8187068999090942818
 MonoBehaviour:
   m_ObjectHideFlags: 0

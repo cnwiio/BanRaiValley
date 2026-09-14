@@ -96,4 +96,6 @@ MonoBehaviour:
       instanceID: 0
       scenePath: 
       alias: Bare Hand
-  lastUsedListIndex: 3
+  - name: New List 5
+    items: []
+  lastUsedListIndex: 4
