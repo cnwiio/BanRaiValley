@@ -35,4 +35,16 @@ MonoBehaviour:
       instanceID: 0
       scenePath: 
       alias: UI
-  lastUsedListIndex: 0
+  - name: New List 2
+    items:
+    - itemType: 0
+      guid: 1697fe7afa530d4479db6aa37247aad6
+      instanceID: 0
+      scenePath: 
+      alias: Demo Dirt 3.0
+    - itemType: 0
+      guid: 16125a66faf292249b94f0e5ea6b97a2
+      instanceID: 0
+      scenePath: 
+      alias: Demo Dirt 3.0 Hologram
+  lastUsedListIndex: 1
