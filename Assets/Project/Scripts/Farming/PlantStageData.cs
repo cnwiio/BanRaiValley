@@ -14,4 +14,5 @@ public class PlantStageData
 
     /// <summary>Prefab representing the visual model displayed while the crop is in this stage.</summary>
     public Mesh StageVisualMesh;
+    public Material StageVisualMaterial;
 }

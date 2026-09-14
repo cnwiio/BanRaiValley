@@ -59,7 +59,7 @@ public class AIBrain : MonoBehaviour, IPoolable
             EnterState(value);
 
             _currentState = value;
-            // Debug.Log(value);
+            Debug.Log(value);
         }
     }
     private PlantChaseState _currentChaseState = PlantChaseState.ChasePlayer;

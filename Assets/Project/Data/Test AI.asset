@@ -15,11 +15,11 @@ MonoBehaviour:
   Speed: 2.5
   Acceleration: 8
   TurnSpeed: 250
-  StopDistance: 2.5
+  StopDistance: 1
   DetectionRange: 15
   HP: 10
   Damage: 1
-  AttackRange: 4
+  AttackRange: 2.5
   AttackCooldown: 2
   StunTime: 2.5
   dropItem: {fileID: 11400000, guid: 4e49f6ec31331184b9de2b4ba4a2c139, type: 2}

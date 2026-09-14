@@ -2495,7 +2495,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: dc9cac155b5f7e146a01f81a7a3c4bae, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: fee51f77be04ee241ae664620e1b7393, type: 2}
   m_BuildHeightMesh: 0
 --- !u!4 &415393311
 Transform:
@@ -3643,7 +3643,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2eb3111f213c1eb40a88ca11ea76cdd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Spawner
-  prefab: {fileID: 8500882108080917300, guid: 8385bc30df502f34ebbed263efd87e4a, type: 3}
+  prefab: {fileID: 8500882108080917300, guid: de286fed8bc248f4bb6450bcb8416c2f, type: 3}
   Amount: 1
   spawnTransform: {fileID: 802393045}
 --- !u!4 &802393045
@@ -3655,7 +3655,7 @@ Transform:
   m_GameObject: {fileID: 802393043}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 5.51, z: 13.18}
+  m_LocalPosition: {x: 0, y: 0.88, z: 13.18}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []

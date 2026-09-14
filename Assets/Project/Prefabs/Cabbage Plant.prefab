@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 2147524051394071840}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 1.7}
+  m_LocalPosition: {x: 0, y: 0.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -48,6 +48,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Plant
   meshFilter: {fileID: 4559907559804620536}
+  meshRenderer: {fileID: 4370724749959649947}
 --- !u!114 &4162661205128346402
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -152,7 +153,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e0a7fc8b9bc5b5e4e82f6bac719e8608, type: 2}
+  - {fileID: 2100000, guid: 6988cbfe2b72a3345a40c4ed1dfafa80, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
