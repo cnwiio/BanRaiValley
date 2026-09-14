@@ -70,7 +70,7 @@ Material:
     - _WindSpeed: 0.01
     m_Colors:
     - _BottomColor: {r: 0.29169634, g: 0.6509434, b: 0.36530298, a: 1}
-    - _FarColor: {r: 0.8022646, g: 0.8679245, b: 0.2251691, a: 1}
+    - _FarColor: {r: 0.8039216, g: 0.8666667, b: 0.22352941, a: 1}
     - _NearColor: {r: 0.4912126, g: 0.8207547, b: 0.25938943, a: 1}
     - _NewFarRange: {r: 10, g: 25, b: 0, a: 0}
     - _WindNoiseContrast: {r: 0, g: 1, b: 0, a: 0}

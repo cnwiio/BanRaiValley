@@ -47,4 +47,9 @@ MonoBehaviour:
       instanceID: 0
       scenePath: 
       alias: Demo Dirt 3.0 Hologram
-  lastUsedListIndex: 1
+    - itemType: 0
+      guid: 9913c6916dc2ed44296d0667c8f28a30
+      instanceID: 0
+      scenePath: 
+      alias: Demo Dirt Hologram
+  lastUsedListIndex: 0
