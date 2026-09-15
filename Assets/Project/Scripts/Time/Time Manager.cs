@@ -63,7 +63,8 @@ public class TimeManager : MonoBehaviour
 
     private void Start()
     {
-        dayNightLightingController.HandleTimeTick(_currentDateTime.NormalizedDayTime);
+        dayNightLightingController.SetSunRotation(_currentDateTime.NormalizedDayTime);
+        // dayNightLightingController.HandleTimeTick(_currentDateTime.NormalizedDayTime);
         timeUI.HandleTimeTick(_currentDateTime);
     }
 
@@ -77,7 +78,7 @@ public class TimeManager : MonoBehaviour
         float secondsPerTick = configuration.realSecondsPerGameMinute
                                * configuration.minuteTickInterval;
 
-        while (_minuteAccumulator >= secondsPerTick)
+        while (_minuteAccumulator >= secondsPerTick && secondsPerTick > 0)
         {
             _minuteAccumulator -= secondsPerTick;
             AdvanceMinute(configuration.minuteTickInterval);
@@ -142,6 +143,7 @@ public class TimeManager : MonoBehaviour
             IsPassOut     = false
         });
 
+        _isPaused = true;
         AdvanceToNextDay(wasPassout: false);
     }
     
@@ -175,6 +177,7 @@ public class TimeManager : MonoBehaviour
         _currentDateTime.Minute = 0;
         _minuteAccumulator      = 0f;
         _hasPassedOutToday      = false;
+        _isPaused = false;
 
         // Advance day-of-season and day-of-week
         _currentDateTime.DayOfSeason++;
@@ -202,7 +205,7 @@ public class TimeManager : MonoBehaviour
         }
 
         timeUI.RefreshCalender(_currentDateTime);
-        dayNightLightingController.HandleTimeTick(_currentDateTime.NormalizedDayTime);
+        dayNightLightingController.SetSunRotation(_currentDateTime.NormalizedDayTime);
         timeUI.HandleTimeTick(_currentDateTime);
         EventBus<OnNewDayStartedEvent>.Raise(new OnNewDayStartedEvent
         {

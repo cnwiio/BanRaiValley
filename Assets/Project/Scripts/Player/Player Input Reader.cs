@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -24,8 +23,9 @@ public class PlayerInputReader : MonoBehaviour
     [SerializeField] private InputActionReference DeleteAction;
     [SerializeField] private InputActionReference InteractAction_PlayerMap;
     [SerializeField] private InputActionReference InteractAction_UIMap;
+    [SerializeField] private InputActionReference EscapeAction_PlayerMap;
+    [SerializeField] private InputActionReference EscapeAction_UIMap;
     
-
     private void OnEnable()
     {
         DebugAction.action.performed += OnDebug;
@@ -52,6 +52,9 @@ public class PlayerInputReader : MonoBehaviour
 
         InteractAction_PlayerMap.action.performed += OnInteractAction;
         InteractAction_UIMap.action.performed += OnUIInteractAction;
+
+        EscapeAction_PlayerMap.action.performed += OnEscapeAction;
+        EscapeAction_UIMap.action.performed += OnEscapeAction;
     }
 
     private void OnDisable()
@@ -80,6 +83,9 @@ public class PlayerInputReader : MonoBehaviour
         
         InteractAction_PlayerMap.action.performed -= OnInteractAction;
         InteractAction_UIMap.action.performed -= OnUIInteractAction;
+        
+        EscapeAction_PlayerMap.action.performed -= OnEscapeAction;
+        EscapeAction_UIMap.action.performed -= OnEscapeAction;
     }
 
     private void OnDebug(InputAction.CallbackContext ctx)
@@ -143,5 +149,10 @@ public class PlayerInputReader : MonoBehaviour
     private void OnUIInteractAction(InputAction.CallbackContext ctx)
     {
         EventBus<OnUIInteractActionEvent>.Raise(new OnUIInteractActionEvent());
+    }
+    
+    private void OnEscapeAction(InputAction.CallbackContext ctx)
+    {
+        EventBus<OnEscapeActionEvent>.Raise(new OnEscapeActionEvent());
     }
 }

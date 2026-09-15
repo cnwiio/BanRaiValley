@@ -11,6 +11,26 @@ public struct SlotData
         item = null;
         count = 0;
     }
+    
+    public SlotData Split(int amountToTake)
+    {
+        if (IsEmpty || amountToTake <= 0) return default;
+
+        int actualTaken = UnityEngine.Mathf.Clamp(amountToTake, 1, count);
+        SlotData splitData = new SlotData
+        {
+            item = item,
+            count = actualTaken
+        };
+
+        count -= actualTaken;
+        if (count <= 0)
+        {
+            Clear();
+        }
+
+        return splitData;
+    }
 
     public int AddToStack(int amount)
     {

@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public interface IEvent {}
 
@@ -56,7 +57,16 @@ public struct OnUIDropEvent : IEvent
     public int Index;
     public IInventory Inventory;
     public InventorySlotUI SlotUI;
+}
 
+public struct OnUISlotClickEvent : IEvent 
+{
+    public int Index;
+    public IInventory Inventory;
+    public InventorySlotUI SlotUI;
+    public PointerEventData.InputButton Button;
+    public bool IsShiftPressed;
+    public bool IsCtrlPressed;
 }
 
 public struct InventoryUIRefreshEvent : IEvent { }
@@ -90,6 +100,7 @@ public struct OnUIInteractActionEvent : IEvent { }
 public struct OnRotateActionEvent : IEvent { }
 public struct OnDeleteActionEvent : IEvent { }
 public struct OnDebugActionEvent : IEvent { }
+public struct OnEscapeActionEvent : IEvent { }
 
 #endregion
 
@@ -110,17 +121,26 @@ public struct OnStartTillingEvent : IEvent
 }
 #endregion
 
+#region PreviewEvent
 public struct StartPreviewEvent : IEvent
 {
     public GameObject prefabs;
     public PreviewState previewState;
+    public int TileCount;
 }
 public struct PreviewingEvent : IEvent
 {
-    public Vector3 Position;
-    public bool IsValid;
+    // public Vector3 Position;
+    // public bool IsValid;
+    public PreviewTileData[] PreviewTileData;
     public float YRotation;
 }
+
+public struct MultiPreviewingEvent : IEvent
+{
+    public PreviewTileData[] PreviewTileData;
+    public float YRotation;
+} 
 
 public struct EndPreviewEvent : IEvent { }
 public struct OnStartWateringEvent : IEvent { }
@@ -128,6 +148,7 @@ public struct OnWateringEvent : IEvent
 {
     public Vector3Int CellPos;
 }
+#endregion
 
 #region Plant Event
 

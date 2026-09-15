@@ -23,4 +23,7 @@ public interface IFarmingGrid
     
     bool TryPlanting(Vector3 worldPos, out Vector3Int cellPos);
     bool TryClearPlant(Vector3 worldPos, out Vector3Int cellPos);
+    
+    Vector3Int WorldToCell(Vector3 worldPos);
+    Vector3 GetCellCenterWorld(Vector3Int cellPos);
 }

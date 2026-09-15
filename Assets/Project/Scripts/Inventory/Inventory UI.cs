@@ -23,10 +23,23 @@ public class InventoryUI : MonoBehaviour
     private void OnEnable()
     {
         EventBus<InventoryToggleEvent>.Subscribe(ToggleInventoryUI);
+        EventBus<OnDayEndedEvent>.Subscribe(OnDayEnd);
     }
     private void OnDisable()
     {
         EventBus<InventoryToggleEvent>.Unsubscribe(ToggleInventoryUI);
+        EventBus<OnDayEndedEvent>.Unsubscribe(OnDayEnd);
+    }
+
+    public void ToggleInventoryUI(InventoryToggleEvent evt)
+    {
+        ToggleInventoryUI();
+    }
+    
+    private void OnDayEnd(OnDayEndedEvent evt)
+    {
+        if (IsInventoryUIActive)
+            EventBus<InventoryToggleEvent>.Raise(new InventoryToggleEvent());
     }
 
     private InventorySlotUI[] CreatSlotUI(int totalSlots, IInventory inventory, GameObject prefabs, Transform parentTransform)
@@ -41,12 +54,7 @@ public class InventoryUI : MonoBehaviour
 
         return slots;
     }
-
-    public void ToggleInventoryUI(InventoryToggleEvent evt)
-    {
-        ToggleInventoryUI();
-    }
-
+    
     public void ToggleInventoryUI()
     {
         HotbarUICanvasGroup.alpha = 0;
@@ -54,7 +62,6 @@ public class InventoryUI : MonoBehaviour
 
         
         CreateAndDestroyUI(!IsInventoryUIActive);
-        // SetCursorState(!IsInventoryUIActive);
         SetActionMapType(!IsInventoryUIActive);
 
         EventBus<InventoryUIRefreshEvent>.Raise(new InventoryUIRefreshEvent() { });
@@ -84,12 +91,6 @@ public class InventoryUI : MonoBehaviour
                 LeanPool.Despawn(_hotSlotUI[i]);
             }
         }
-    }
-
-    void SetCursorState(bool isVisible)
-    {
-        Cursor.lockState = isVisible ? CursorLockMode.None : CursorLockMode.Locked;
-        Cursor.visible = isVisible;
     }
 
     void SetActionMapType(bool value)

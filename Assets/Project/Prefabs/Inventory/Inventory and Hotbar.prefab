@@ -158,7 +158,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 66499836941527172}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
@@ -211,6 +211,14 @@ PrefabInstance:
       propertyPath: DragImage
       value: 
       objectReference: {fileID: 2437347436421096926}
+    - target: {fileID: 4450658217161590978, guid: 89db41b87ff4853488876e9f06963ce6, type: 3}
+      propertyPath: _mainInventory
+      value: 
+      objectReference: {fileID: 2951547152242197400}
+    - target: {fileID: 4450658217161590978, guid: 89db41b87ff4853488876e9f06963ce6, type: 3}
+      propertyPath: _hotbarInventory
+      value: 
+      objectReference: {fileID: 3427529152441689816}
     - target: {fileID: 5644196794530264836, guid: 89db41b87ff4853488876e9f06963ce6, type: 3}
       propertyPath: hotbarModel
       value: 

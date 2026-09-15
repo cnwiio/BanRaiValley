@@ -62,7 +62,7 @@ MonoBehaviour:
   grid: {fileID: 8801442420171781805}
   obstacleLayerMask:
     serializedVersion: 2
-    m_Bits: 627
+    m_Bits: 115
   farmingGridReference: {fileID: 11400000, guid: 5ea848fd122f7cd48a93832bd2e00c19, type: 2}
 --- !u!114 &8853531029058559928
 MonoBehaviour:
@@ -90,3 +90,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc53d445763a3f94e829bb0eb08e1ca9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HoeFarmingBehaviour
+  gridReference: {fileID: 0}

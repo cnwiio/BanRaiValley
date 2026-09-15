@@ -1,8 +1,6 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using Lean.Pool;
-using UnityEngine.Serialization;
 
 public enum PlantAIState
 {
@@ -59,7 +57,6 @@ public class AIBrain : MonoBehaviour, IPoolable
             EnterState(value);
 
             _currentState = value;
-            // Debug.Log(value);
         }
     }
     private PlantChaseState _currentChaseState = PlantChaseState.ChasePlayer;

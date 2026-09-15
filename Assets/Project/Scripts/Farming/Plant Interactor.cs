@@ -1,9 +1,6 @@
 using System.Collections.Generic;
 using Project.Scripts;
-using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
-
 public class PlantInteractor : MonoBehaviour, IInteractable
 {
     [Header("REF")] [SerializeField]

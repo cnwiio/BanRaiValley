@@ -42,7 +42,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2509925977032215398}
-  m_Mesh: {fileID: 7859820949308486741, guid: b7cf12fb849f2ce4592a36e9c9c8d4f9, type: 3}
+  m_Mesh: {fileID: 8467973019869391972, guid: 5e95a4a149f65d4489c820420a5d62fe, type: 3}
 --- !u!23 &307311213828903824
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -68,7 +68,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 382e2b1b7fbf94945963320a17603c7c, type: 2}
+  - {fileID: 2100000, guid: 6f64681c03326444b87ece63e04b3d42, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -127,6 +127,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SeedBag
   farmingGridReference: {fileID: 11400000, guid: 5ea848fd122f7cd48a93832bd2e00c19, type: 2}
+  toolData:
+    toolPattern: 0
+    patternDimension: 0
   seedBagAnimator: {fileID: 3395382924879716630}
   hologramPrefab: {fileID: 6940088763359480455, guid: 9913c6916dc2ed44296d0667c8f28a30, type: 3}
-  plantData: {fileID: 11400000, guid: 366f6879a385eae48b627fb779d9cdd3, type: 2}
+  plantData: {fileID: 11400000, guid: a13509fd0d8ac5e41b17ae2e16d8ddbd, type: 2}

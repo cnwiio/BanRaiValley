@@ -1,4 +1,3 @@
-using System;
 using TMPro;
 using UnityEngine;
 
@@ -8,7 +7,7 @@ public class PlayerMoney : MonoBehaviour
     
     
     
-    private int money = 999;
+    private int money = 5;
 
     public int Money
     {
@@ -16,13 +15,28 @@ public class PlayerMoney : MonoBehaviour
         set
         {
             money = value;
-            textUI.SetText($"Money : {money}$");
+            textUI.SetText($"{money} $");
         }
+    }
+
+    private void OnEnable()
+    {
+        EventBus<OnDebugActionEvent>.Subscribe(OnDebugAction);
+    }
+
+    private void OnDisable()
+    {
+        EventBus<OnDebugActionEvent>.Unsubscribe(OnDebugAction);
+    }
+
+    private void OnDebugAction(OnDebugActionEvent evt)
+    {
+        AddMoney(100);
     }
 
     public void Start()
     {
-        textUI.SetText($"Money : {money}$");
+        textUI.SetText($"{money} $");
     }
 
     public void SubtractMoney(int amount)

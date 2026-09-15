@@ -1,8 +1,5 @@
-using NUnit.Framework.Internal.Commands;
 using Unity.Cinemachine;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -58,22 +55,19 @@ public class PlayerMovement : MonoBehaviour
         // cached
         _camTransform = PlayerCam.transform;
         Head.rotation = _camTransform.rotation;
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
     }
 
-    void Update()
+    private void Update()
     {
-        CalculateRotation();
-        UpdateCamRotateToPlayer();
-    }
-
-    // Update is called once per frame
-    void FixedUpdate()
-    { 
         HandleVerticalMovement();
         HandleHorizontalMovement();
+        CalculateRotation();
         ApplyMovement();
+    }
+    
+    private void LateUpdate()
+    {
+        UpdateCamRotateToPlayer();
     }
 
     #region Handle Movement
@@ -101,7 +95,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            VerticalMovement += Physics.gravity.y * Data.GravityMultiplyer;
+            VerticalMovement += Physics.gravity.y * Data.GravityMultiplyer * Time.deltaTime;
         }
     }
 
@@ -110,7 +104,7 @@ public class PlayerMovement : MonoBehaviour
         FinalMovement = horizontalMovement;
         FinalMovement.y = VerticalMovement;
 
-        characterController.Move(FinalMovement * Time.fixedDeltaTime);
+        characterController.Move(FinalMovement * Time.deltaTime);
     }
     #endregion
 
@@ -124,10 +118,13 @@ public class PlayerMovement : MonoBehaviour
         CamRightDirection.y = 0;
         CamRightDirection.Normalize();
     }
+    
+    [SerializeField] private float turnSpeed = 15f;
 
     void UpdateCamRotateToPlayer()
     {
-        Head.rotation = _camTransform.rotation;
+        float t = 1f - Mathf.Exp(-turnSpeed * Time.deltaTime);
+        Head.rotation = Quaternion.Slerp(Head.rotation, _camTransform.rotation, t);
     }
 
     // Cached
@@ -145,5 +142,6 @@ public class PlayerMovement : MonoBehaviour
         _euler = targetTransform.eulerAngles;
         panTilt.PanAxis.Value = _euler.y;
         panTilt.TiltAxis.Value = _euler.x;
+        // panTilt.TiltAxis. = _euler.x;
     }
 }

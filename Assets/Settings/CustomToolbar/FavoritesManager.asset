@@ -12,5 +12,100 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 100e4a143c3940929103d94c9497ca85, type: 3}
   m_Name: FavoritesManager
   m_EditorClassIdentifier: CustomToolbar::OpalStudio.CustomToolbar.Editor.ToolbarElements.Favorites.Data.FavoritesManager
-  allLists: []
+  allLists:
+  - name: New List 1
+    items:
+    - itemType: 0
+      guid: cb6f63c6b7ae75042aa9071f277a4307
+      instanceID: 0
+      scenePath: 
+      alias: Grass Material
+    - itemType: 0
+      guid: 18c98828121abda43bfc43a33819bc3b
+      instanceID: 0
+      scenePath: 
+      alias: Mesh
+    - itemType: 0
+      guid: 4e1a9dcd0f02faf4ba1a0f8743a7b8bd
+      instanceID: 0
+      scenePath: 
+      alias: Environment
+    - itemType: 0
+      guid: f65009bb2b80d77489ef6b52b7a91c89
+      instanceID: 0
+      scenePath: 
+      alias: UI
+    - itemType: 0
+      guid: 5cfab5b830208784a98940e948e4ce7f
+      instanceID: 0
+      scenePath: 
+      alias: Animation
+  - name: New List 2
+    items:
+    - itemType: 0
+      guid: 1697fe7afa530d4479db6aa37247aad6
+      instanceID: 0
+      scenePath: 
+      alias: Demo Dirt 3.0
+    - itemType: 0
+      guid: 16125a66faf292249b94f0e5ea6b97a2
+      instanceID: 0
+      scenePath: 
+      alias: Demo Dirt 3.0 Hologram
+    - itemType: 0
+      guid: 9913c6916dc2ed44296d0667c8f28a30
+      instanceID: 0
+      scenePath: 
+      alias: Demo Dirt Hologram
+  - name: New List 3
+    items:
+    - itemType: 0
+      guid: f95d93bc0c4811748ac826621ca1c055
+      instanceID: 0
+      scenePath: 
+      alias: Cabbage Animation Controller
+    - itemType: 0
+      guid: f6482d4ee17f77042b91e0a421b67d08
+      instanceID: 0
+      scenePath: 
+      alias: MonsterMutant7 Animator Controller
+    - itemType: 0
+      guid: de286fed8bc248f4bb6450bcb8416c2f
+      instanceID: 0
+      scenePath: 
+      alias: Teststsets
+    - itemType: 0
+      guid: db90fca8afdcf304ea5eeab516fadf91
+      instanceID: 0
+      scenePath: 
+      alias: Cabbage Plant
+  - name: New List 4
+    items:
+    - itemType: 0
+      guid: 001679ff7fad9b34dacdcc2174602372
+      instanceID: 0
+      scenePath: 
+      alias: Cabbage
+    - itemType: 0
+      guid: 6ae71de3d3de2db4db6c48d8cce934ac
+      instanceID: 0
+      scenePath: 
+      alias: Ui_Icon_cabbage_Test
+    - itemType: 0
+      guid: 7c90c4cccdada584cb89999ced8446ce
+      instanceID: 0
+      scenePath: 
+      alias: Bare Hand
+    - itemType: 0
+      guid: 43fc273620986bf40aa6de99879a24a2
+      instanceID: 0
+      scenePath: 
+      alias: Bare Hand
+  - name: New List 5
+    items:
+    - itemType: 0
+      guid: 529b9805cad5d4346a3fabd425c4b3b4
+      instanceID: 0
+      scenePath: 
+      alias: Bleu Salad SDF
   lastUsedListIndex: 0

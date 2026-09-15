@@ -82,13 +82,19 @@ public class SeedBag : FarmingToolBase, IPoolable
         if (grid.TryPlanting(_plantingPos, out var cellPos))
         {
             EventBus<OnPlantingEvent>.Raise(new OnPlantingEvent() 
-                { 
-                    Prefab = plantPrefab,
-                    Position = _plantingPos,
-                    CellPos = cellPos,
-                    PlantData = plantData
-                });
-            EventBus<PreviewingEvent>.Raise(new PreviewingEvent() { Position = _plantingPos, IsValid = false, YRotation = 0 });
+            { 
+                Prefab = plantPrefab,
+                Position = _plantingPos,
+                CellPos = cellPos,
+                PlantData = plantData
+            });
+            
+            _cachedPreviewData[0] = new PreviewTileData()
+            {
+                Position = _plantingPos,
+                IsValid = false
+            };
+            EventBus<PreviewingEvent>.Raise(new PreviewingEvent() { PreviewTileData = _cachedPreviewData, YRotation = 0 });
         }
 
         CurrentState = SeedBagState.Farm;

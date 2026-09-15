@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 2609127134243138013}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 0.7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -122,7 +122,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8128742679925487322}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -184,7 +184,7 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
-  m_Height: 2
+  m_Height: 1.7
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!143 &5518632834441925289
@@ -205,7 +205,7 @@ CharacterController:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Height: 2
+  m_Height: 1.7
   m_Radius: 0.5
   m_SlopeLimit: 45
   m_StepOffset: 0.3
@@ -230,6 +230,7 @@ MonoBehaviour:
   Data: {fileID: 11400000, guid: 9da0044848d7623479f7d41199f7dd0c, type: 2}
   InputReader: {fileID: 3237870357853340737}
   Head: {fileID: 6850055571639333136}
+  turnSpeed: 15
 --- !u!114 &4278678886193900730
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -270,8 +271,10 @@ MonoBehaviour:
   SecondaryAction: {fileID: 643901133655292448, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
   RotateAction: {fileID: -7105339716128872201, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
   DeleteAction: {fileID: -8238018659739259438, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
-  InteractAction_PlayerMap: {fileID: 0}
-  InteractAction_UIMap: {fileID: 0}
+  InteractAction_PlayerMap: {fileID: -4726570457938165820, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
+  InteractAction_UIMap: {fileID: 3490089244214155330, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
+  EscapeAction_PlayerMap: {fileID: -7459211651728856566, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
+  EscapeAction_UIMap: {fileID: -6895561873268185045, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
 --- !u!114 &8187068999090942818
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -345,3 +348,4 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2048
   range: 5
+  inputManager: {fileID: 4278678886193900730}

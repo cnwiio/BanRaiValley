@@ -19,8 +19,14 @@ using UnityEngine.InputSystem;
 public abstract class FarmingToolBase : MonoBehaviour
 {
     [SerializeField] protected FarmingGridReference farmingGridReference;
+    [SerializeField] protected ToolData toolData;
+       
+    protected int _cachedPatternCellCount;
+    protected const int MAX_TOOL_CELLS = 49;
+    protected readonly Vector3Int[] _cachedPatternCells = new Vector3Int[MAX_TOOL_CELLS];
+    protected readonly PreviewTileData[] _cachedPreviewData  = new PreviewTileData[MAX_TOOL_CELLS];
 
-    private Camera sceneCamera;
+    protected Camera sceneCamera;
     private Mouse currentMouse;
     protected IFarmingGrid grid;
     private LayerMask raycastTargetLayer;
@@ -29,6 +35,7 @@ public abstract class FarmingToolBase : MonoBehaviour
     protected RaycastHit _hit;
     protected bool _isHit;
     protected Vector3 _lastCellWorldPos;
+    private Vector3Int _lastCardinalDir;
     /// <summary>Result of the most recent RunPreviewUpdate check - handy for handlers
     /// (like a rotate action) that need "is the currently-aimed cell valid?" without
     /// re-running the grid check themselves.</summary>
@@ -86,7 +93,12 @@ public abstract class FarmingToolBase : MonoBehaviour
     /// (grid.IsValidForTilling, grid.IsTilled, grid.IsWaterable, ...).
     /// </summary>
     bool _isValid;
-    protected void RunPreviewUpdate(int range, GameObject hologramPrefab, PreviewState previewState, GridCheck check, float yRotation)
+    protected void RunPreviewUpdate(
+        int range, 
+        GameObject hologramPrefab, 
+        PreviewState previewState, 
+        GridCheck check, 
+        float yRotation)
     {
         _ray = RayCastAtCursor();
         if (Physics.Raycast(_ray, out _hit, range, raycastTargetLayer))
@@ -97,8 +109,71 @@ public abstract class FarmingToolBase : MonoBehaviour
             if (_lastCellWorldPos != cellWorldPos)
             {
                 _lastCellWorldPos = cellWorldPos;
-                EventBus<StartPreviewEvent>.Raise(new StartPreviewEvent() { prefabs = hologramPrefab, previewState = previewState });
-                EventBus<PreviewingEvent>.Raise(new PreviewingEvent() { Position = cellWorldPos, IsValid = _isValid, YRotation = yRotation });
+                _cachedPatternCellCount = 1;
+                _cachedPreviewData[0] = new PreviewTileData()
+                {
+                    Position = cellWorldPos,
+                    IsValid = _isValid
+                };
+                EventBus<StartPreviewEvent>.Raise(new StartPreviewEvent() { prefabs = hologramPrefab, previewState = previewState, TileCount = _cachedPatternCellCount});
+                EventBus<PreviewingEvent>.Raise(new PreviewingEvent() { PreviewTileData = _cachedPreviewData, YRotation = yRotation });
+            }
+        }
+        else
+        {
+            _isHit = false;
+            EndPreviewNow();
+        }
+    }
+    
+    protected void RunMultiPreviewUpdate(
+        int range, 
+        GameObject hologramPrefab, 
+        PreviewState previewState,
+        GridCheck check, 
+        float yRotation)
+    {
+        _ray = RayCastAtCursor();
+        if (Physics.Raycast(_ray, out _hit, range, raycastTargetLayer))
+        {
+            _isHit = true;
+            Vector3Int centerCell = grid.WorldToCell(_hit.point);
+            var raycastCellPos = grid.GetCellCenterWorld(centerCell);
+            Vector3 lookDir = sceneCamera.transform.forward;
+            Vector3Int cardinalDir = ToolAreaCalculator.GetCardinalFacingDirection(lookDir);
+            if (_lastCellWorldPos != raycastCellPos || cardinalDir != _lastCardinalDir)
+            {
+                _lastCellWorldPos = raycastCellPos;
+                _lastCardinalDir = cardinalDir;
+                
+                
+                _cachedPatternCellCount = ToolAreaCalculator.CalculatePatternCells(
+                    centerCell,
+                    cardinalDir,
+                    toolData.toolPattern,
+                    toolData.patternDimension,
+                    _cachedPatternCells
+                );
+                
+                for (int i = 0; i < _cachedPatternCellCount; i++)
+                {
+                    Vector3 cachedCellWorldPos = grid.GetCellCenterWorld(_cachedPatternCells[i]);
+                    bool isValid = check(cachedCellWorldPos, out _);
+                    // if (isValid) lastCheckWasValid = true;
+
+                    _cachedPreviewData[i] = new PreviewTileData()
+                    {
+                        Position = cachedCellWorldPos,
+                        IsValid = isValid
+                    };
+                }
+                EventBus<StartPreviewEvent>.Raise(new StartPreviewEvent() 
+                { 
+                    prefabs = hologramPrefab,
+                    previewState = previewState,
+                    TileCount = _cachedPatternCellCount
+                });
+                EventBus<PreviewingEvent>.Raise(new PreviewingEvent() { PreviewTileData = _cachedPreviewData, YRotation = yRotation });
             }
         }
         else
@@ -111,6 +186,7 @@ public abstract class FarmingToolBase : MonoBehaviour
     protected void EndPreviewNow()
     {
         _lastCellWorldPos = Vector3.zero;
+        _lastCardinalDir = Vector3Int.zero;
         EventBus<EndPreviewEvent>.Raise(new EndPreviewEvent() { });
     }
 }

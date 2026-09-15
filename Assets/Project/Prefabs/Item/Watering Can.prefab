@@ -127,9 +127,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WateringCan
   farmingGridReference: {fileID: 11400000, guid: 5ea848fd122f7cd48a93832bd2e00c19, type: 2}
+  toolData:
+    toolPattern: 2
+    patternDimension: 1
   wateringCanAnimator: {fileID: 3395382924879716630}
   hologramPrefabs: {fileID: 6940088763359480455, guid: 9913c6916dc2ed44296d0667c8f28a30, type: 3}
-  WateringMaterial: {fileID: 2100000, guid: 811d06cef11243f43bd247913095162c, type: 2}
 --- !u!95 &3395382924879716630
 Animator:
   serializedVersion: 7
