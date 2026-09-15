@@ -10,7 +10,7 @@ public class ShopUIHandler : MonoBehaviour, IInteractable
 
     [Header("Interactor Ref")]
     [SerializeField] private Material outlineMaterial;
-    [SerializeField] private MeshRenderer meshRenderer;
+    [SerializeField] private SkinnedMeshRenderer skinMeshRenderer;
     [SerializeField] private TextTipReference textTipReference;
     [SerializeField] private String tipText;
     
@@ -42,7 +42,7 @@ public class ShopUIHandler : MonoBehaviour, IInteractable
     }
     private void Start()
     {
-        meshRenderer.GetSharedMaterials(_mats);
+        skinMeshRenderer?.GetSharedMaterials(_mats);
         _textTip = textTipReference.TextTip;
     }
 
@@ -83,8 +83,8 @@ public class ShopUIHandler : MonoBehaviour, IInteractable
         _textTip.SetActive(true);
         
         _mats.Add(outlineMaterial);
-        if (meshRenderer)
-            meshRenderer.SetSharedMaterials(_mats);
+        if (skinMeshRenderer)
+            skinMeshRenderer.SetSharedMaterials(_mats);
     }
 
     private void OnStopHover()
@@ -92,7 +92,8 @@ public class ShopUIHandler : MonoBehaviour, IInteractable
         _textTip.SetActive(false);
         
         _mats.Remove(outlineMaterial);
-        if (meshRenderer)
-            meshRenderer.SetSharedMaterials(_mats);
+
+        if (skinMeshRenderer)
+            skinMeshRenderer.SetSharedMaterials(_mats);
     }
 }

@@ -35,6 +35,11 @@ MonoBehaviour:
       instanceID: 0
       scenePath: 
       alias: UI
+    - itemType: 0
+      guid: 5cfab5b830208784a98940e948e4ce7f
+      instanceID: 0
+      scenePath: 
+      alias: Animation
   - name: New List 2
     items:
     - itemType: 0
@@ -103,4 +108,4 @@ MonoBehaviour:
       instanceID: 0
       scenePath: 
       alias: Bleu Salad SDF
-  lastUsedListIndex: 4
+  lastUsedListIndex: 0
