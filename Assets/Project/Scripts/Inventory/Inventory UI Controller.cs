@@ -290,6 +290,7 @@ public class InventoryUIController : MonoBehaviour
         {
             evt.Inventory.ClearSlot(evt.Index);
         }
+        _hotbarInventory.CheckSelectedSlotChanged();
     }
 
     private IEnumerator UpdateDragIconPosCoroutine()

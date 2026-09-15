@@ -77,11 +77,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3683098914427193177, guid: d4d5f2b6b4950ec4b8de4ff42b336410, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 100
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 3683098914427193177, guid: d4d5f2b6b4950ec4b8de4ff42b336410, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 100
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 3683098914427193177, guid: d4d5f2b6b4950ec4b8de4ff42b336410, type: 3}
       propertyPath: m_LocalPosition.x
@@ -287,6 +287,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: 'InventoryManager '
       objectReference: {fileID: 0}
+    - target: {fileID: 8085531038618211861, guid: 89db41b87ff4853488876e9f06963ce6, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -297,6 +301,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8085531038618211861, guid: 89db41b87ff4853488876e9f06963ce6, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2951547152242197400}
+    - targetCorrespondingSourceObject: {fileID: 8085531038618211861, guid: 89db41b87ff4853488876e9f06963ce6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6058827386259123360}
   m_SourcePrefab: {fileID: 100100000, guid: 89db41b87ff4853488876e9f06963ce6, type: 3}
 --- !u!114 &955554670543116486 stripped
 MonoBehaviour:
@@ -344,7 +351,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 326859bad33c0174fac979e0fc663ba4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventoyModel
-  inventorySlotsSize: 16
+  inventorySlotsSize: 36
+--- !u!114 &6058827386259123360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6186238327870193689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98084c6a80179c2438004728843cda58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInventoryCoordinator
+  hotbar: {fileID: 3427529152441689816}
+  inventory: {fileID: 2951547152242197400}
 --- !u!1001 &6975654898608778376
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -515,11 +536,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2832145401473325172, guid: e3c83a6137f9fb44bb81275bc54d341e, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 1000
+      value: 900
       objectReference: {fileID: 0}
     - target: {fileID: 2832145401473325172, guid: e3c83a6137f9fb44bb81275bc54d341e, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 200
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 2832145401473325172, guid: e3c83a6137f9fb44bb81275bc54d341e, type: 3}
       propertyPath: m_LocalPosition.x
