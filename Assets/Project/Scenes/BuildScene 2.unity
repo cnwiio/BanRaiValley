@@ -2516,8 +2516,8 @@ Transform:
   m_GameObject: {fileID: 584396641}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.757, y: 0.192, z: 0}
-  m_LocalScale: {x: 0.72703, y: 1.227854, z: 1.7115351}
+  m_LocalPosition: {x: -0.711, y: 0.192, z: 0}
+  m_LocalScale: {x: 0.72703, y: 1.227854, z: 1.7}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1025582517}
@@ -3497,7 +3497,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CasinoInteractor
   textTipReference: {fileID: 11400000, guid: b14b5bac2a8db0041a6c0df69200015b, type: 2}
   tipText: '"Go big or go home"'
-  meshRenderer: {fileID: 1487644906}
+  meshRenderer:
+  - {fileID: 1487644906}
+  - {fileID: 584396644}
   outlineMaterial: {fileID: 2100000, guid: f27e5fb461c11ec469150bb502e54254, type: 2}
   ui: {fileID: 1027001088}
 --- !u!65 &1025582514
@@ -3513,14 +3515,14 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 1527
+    m_Bits: 0
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1.6216316, y: 2.735494, z: 1.7108574}
+  m_Center: {x: -0.3108158, y: 0.8677472, z: -0.029356003}
 --- !u!4 &1025582517
 Transform:
   m_ObjectHideFlags: 0
@@ -4821,7 +4823,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1369353297}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.015}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -4829,7 +4831,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 2.985}
+  m_AnchoredPosition: {x: -0.418, y: 1.559}
   m_SizeDelta: {x: 2, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1369353299
@@ -4879,7 +4881,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 6.4
+  m_fontSize: 5.25
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -4918,7 +4920,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0.19277197, y: 0, z: 0.17009544, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   _SortingLayer: 0
@@ -5148,7 +5150,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.86, z: 0}
-  m_LocalScale: {x: 0.72703, y: 2.64, z: 1.7115351}
+  m_LocalScale: {x: 0.72703, y: 2.64, z: 1.7}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1025582517}

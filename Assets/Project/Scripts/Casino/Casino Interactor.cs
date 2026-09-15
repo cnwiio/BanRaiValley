@@ -9,7 +9,7 @@ public class CasinoInteractor : MonoBehaviour, IInteractable
     [SerializeField] private TextTipReference textTipReference;
     [SerializeField] private String tipText;
     [Header("Outline")]
-    [SerializeField] private MeshRenderer meshRenderer;
+    [SerializeField] private MeshRenderer[] meshRenderer;
     [SerializeField] private Material outlineMaterial;
     [Header("UI Ref")] 
     [SerializeField] private GameObject ui;
@@ -42,7 +42,7 @@ public class CasinoInteractor : MonoBehaviour, IInteractable
     {
         _textTip ??= textTipReference.TextTip;
 
-        meshRenderer.GetSharedMaterials(mats);
+        meshRenderer[0].GetSharedMaterials(mats);
     }
     public void Interact()
     {
@@ -67,8 +67,10 @@ public class CasinoInteractor : MonoBehaviour, IInteractable
         _textTip.SetActive(true);
         
         mats.Add(outlineMaterial);
-        if (meshRenderer)
-            meshRenderer.SetSharedMaterials(mats);
+        foreach (var renderer in meshRenderer)
+        {
+            renderer.SetSharedMaterials(mats);
+        }
     }
 
     private void OnStopHover()
@@ -76,8 +78,11 @@ public class CasinoInteractor : MonoBehaviour, IInteractable
         _textTip.SetActive(false);
 
         mats.Remove(outlineMaterial);
-        if (meshRenderer)
-            meshRenderer.SetSharedMaterials(mats);
+
+        foreach (var renderer in meshRenderer)
+        {
+            renderer.SetSharedMaterials(mats);
+        };
     }
 
     public void SetUIActive(bool isActive)
