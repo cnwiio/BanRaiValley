@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TimeConfiguration
   m_EditorClassIdentifier: Assembly-CSharp::TimeConfiguration
   realSecondsPerGameMinute: 0.25
-  minuteTickInterval: 1
+  minuteTickInterval: 10
   startHour: 6
   passoutHour: 2
   daysPerSeason: 30
