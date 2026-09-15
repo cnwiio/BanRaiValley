@@ -50,11 +50,9 @@ public class SellZone : MonoBehaviour
 
         if (itemsSold > 0)
         {
-            Debug.Log("Item sold more than 0");
             targetMoney.AddMoney(totalEarned);
             if (targetInventory is HotbarInventoryModel)
             {
-                Debug.Log("Succes cast");
                 var hotbar = targetInventory as HotbarInventoryModel;
                 hotbar.CheckSelectedSlotChanged();
             }

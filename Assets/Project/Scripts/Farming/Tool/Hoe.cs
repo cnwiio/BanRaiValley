@@ -65,7 +65,7 @@ public class Hoe : FarmingToolBase
     protected override void Awake()
     {
         base.Awake();
-        combo = new ComboAttackController(hoeAnimator, 2);
+        combo = new ComboAttackController(hoeAnimator, 3);
     }
 
     protected override void OnEnable()
