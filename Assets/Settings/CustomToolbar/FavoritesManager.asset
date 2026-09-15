@@ -97,5 +97,10 @@ MonoBehaviour:
       scenePath: 
       alias: Bare Hand
   - name: New List 5
-    items: []
+    items:
+    - itemType: 0
+      guid: 529b9805cad5d4346a3fabd425c4b3b4
+      instanceID: 0
+      scenePath: 
+      alias: Bleu Salad SDF
   lastUsedListIndex: 4

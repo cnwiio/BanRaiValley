@@ -18,6 +18,9 @@ public class InventoryUIController : MonoBehaviour
     //[SerializeField] private GameObject InventoryUIPanel;
     //private InventorySlotUI[] inventorySlotUI;
 
+    [SerializeField] private InventoyModel _mainInventory;
+    [SerializeField] private HotbarInventoryModel _hotbarInventory;
+
 
     [Header("Drag UI")]
     [SerializeField] private Image DragImage;
@@ -158,14 +161,17 @@ public class InventoryUIController : MonoBehaviour
     
     void OnClick(OnUISlotClickEvent evt)
     {
-        if (evt.Button == PointerEventData.InputButton.Left)
+        if (evt.IsShiftPressed)
+        {
+            HandleShiftClick(evt);
+        }
+        else if (evt.Button == PointerEventData.InputButton.Left)
         {
             HandleLeftClick(evt);
         }
-
-        if (evt.Button == PointerEventData.InputButton.Right)
+        else if (evt.Button == PointerEventData.InputButton.Right)
         {
-         HandleRightClick(evt);   
+            HandleRightClick(evt);   
         }
         
         evt.SlotUI.RenderVisual();
@@ -253,7 +259,43 @@ public class InventoryUIController : MonoBehaviour
             }
         }
     }
-    
+
+    private void HandleShiftClick(OnUISlotClickEvent evt)
+    {
+        IInventory targetInventory = null;
+        if (evt.Inventory == (IInventory)_mainInventory)
+        {
+            targetInventory = _hotbarInventory;
+        }
+        else if (evt.Inventory == (IInventory)_hotbarInventory)
+        {
+            targetInventory = _mainInventory;
+        }
+
+        if (targetInventory == null) return;
+
+        SlotData sourceData = evt.Inventory.GetSlotData(evt.Index);
+        if (sourceData.IsEmpty) return;
+
+        int remaining = 0;
+        if (sourceData.item.stackable)
+        {
+            remaining = targetInventory.StackExistingGetLeftover(sourceData.item, sourceData.count);
+            sourceData.count = remaining;
+        }
+
+        if (sourceData.count > 0)
+        {
+            remaining = targetInventory.AddItemGetLeftover(sourceData.item, sourceData.count);
+            sourceData.count = remaining;
+        }
+
+        if (remaining == 0)
+        {
+            evt.Inventory.ClearSlot(evt.Index);
+        }
+    }
+
     private IEnumerator UpdateDragIconPosCoroutine()
     {
         while (HasHeldItem)

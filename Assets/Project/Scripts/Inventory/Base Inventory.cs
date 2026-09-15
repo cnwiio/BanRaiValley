@@ -136,7 +136,11 @@ public abstract class BaseInventory : MonoBehaviour, IInventory
                         inventorySlots[i].count += amountToAdd;
                         remainingAmount -= amountToAdd;
 
-                        if (remainingAmount <= 0) return 0;
+                        if (remainingAmount <= 0)
+                        {
+                            EventBus<InventoryUIRefreshEvent>.Raise(new InventoryUIRefreshEvent() { });
+                            return 0;
+                        }
                     }
                 }
             }
@@ -152,10 +156,16 @@ public abstract class BaseInventory : MonoBehaviour, IInventory
                 inventorySlots[i].count = amountToAdd;
                 remainingAmount -= amountToAdd;
 
-                if (remainingAmount <= 0) return 0;
+                if (remainingAmount <= 0)
+                {
+                    Debug.Log(remainingAmount);
+                    EventBus<InventoryUIRefreshEvent>.Raise(new InventoryUIRefreshEvent() { });
+                    return 0;
+                }
             }
         }
 
+        EventBus<InventoryUIRefreshEvent>.Raise(new InventoryUIRefreshEvent() { });
         return remainingAmount;
     }
 
@@ -184,11 +194,16 @@ public abstract class BaseInventory : MonoBehaviour, IInventory
                     inventorySlots[i].count += amountToAdd;
                     remainingAmount -= amountToAdd;
 
-                    if (remainingAmount <= 0) return 0;
+                    if (remainingAmount <= 0)
+                    {
+                        EventBus<InventoryUIRefreshEvent>.Raise(new InventoryUIRefreshEvent() { });
+                        return 0;
+                    }
                 }
             }
         }
 
+        EventBus<InventoryUIRefreshEvent>.Raise(new InventoryUIRefreshEvent() { });
         return remainingAmount;
     }
 
