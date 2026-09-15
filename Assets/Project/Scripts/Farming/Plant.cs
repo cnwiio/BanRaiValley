@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
 using Lean.Pool;
-using TMPro;
 using UnityEngine;
 
 public enum PlantState

@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.Toolbars;
 using UnityEngine;
 
 public enum WaterCanState

@@ -1,9 +1,5 @@
-using System;
-using NUnit.Framework.Internal.Commands;
 using Unity.Cinemachine;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {

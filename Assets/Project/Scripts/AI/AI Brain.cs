@@ -1,8 +1,6 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using Lean.Pool;
-using UnityEngine.Serialization;
 
 public enum PlantAIState
 {
