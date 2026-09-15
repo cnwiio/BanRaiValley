@@ -158,7 +158,6 @@ public abstract class BaseInventory : MonoBehaviour, IInventory
 
                 if (remainingAmount <= 0)
                 {
-                    Debug.Log(remainingAmount);
                     EventBus<InventoryUIRefreshEvent>.Raise(new InventoryUIRefreshEvent() { });
                     return 0;
                 }

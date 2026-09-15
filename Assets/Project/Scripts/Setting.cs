@@ -74,4 +74,9 @@ public class Setting : MonoBehaviour
             Application.targetFrameRate = 0; 
         }
     }
+
+    public void Exit()
+    {
+        Application.Quit();
+    }
 }

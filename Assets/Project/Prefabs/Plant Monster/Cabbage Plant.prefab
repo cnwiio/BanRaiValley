@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 2147524051394071840}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.2, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -49,6 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Plant
   meshFilter: {fileID: 4559907559804620536}
   meshRenderer: {fileID: 4370724749959649947}
+  plantTransform: {fileID: 2546563477657118504}
 --- !u!114 &4162661205128346402
 MonoBehaviour:
   m_ObjectHideFlags: 0

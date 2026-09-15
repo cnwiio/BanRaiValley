@@ -19,12 +19,15 @@ MonoBehaviour:
     DaysRequired: 99
     StageVisualMesh: {fileID: 7859820949308486741, guid: b7cf12fb849f2ce4592a36e9c9c8d4f9, type: 3}
     StageVisualMaterial: {fileID: 2100000, guid: 382e2b1b7fbf94945963320a17603c7c, type: 2}
+    OffSet: {x: 0, y: 0, z: 0}
   Stages:
   - StageIndex: 0
     DaysRequired: 1
     StageVisualMesh: {fileID: 1353746659569323740, guid: a6b03742eaa667a46aaca2786031b018, type: 3}
     StageVisualMaterial: {fileID: 2100000, guid: e0a7fc8b9bc5b5e4e82f6bac719e8608, type: 2}
+    OffSet: {x: 0, y: 0.1, z: 0}
   - StageIndex: 1
     DaysRequired: 0
     StageVisualMesh: {fileID: -8936622394817868014, guid: 7d2268dba798cea4a84c957fbd7eef43, type: 3}
     StageVisualMaterial: {fileID: 2100000, guid: 6988cbfe2b72a3345a40c4ed1dfafa80, type: 2}
+    OffSet: {x: 0, y: 0.2, z: 0}

@@ -15,6 +15,7 @@ public class Plant : MonoBehaviour, IPoolable
 {
     [SerializeField] private MeshFilter meshFilter;
     [SerializeField] private MeshRenderer meshRenderer;
+    [SerializeField] private Transform plantTransform;  
     
     
     
@@ -28,6 +29,7 @@ public class Plant : MonoBehaviour, IPoolable
         data = plantData;
         meshFilter.sharedMesh = data.Stages[_currentGrowStages].StageVisualMesh;
         meshRenderer.sharedMaterial = data.Stages[_currentGrowStages].StageVisualMaterial;
+        plantTransform.localPosition = Vector3.zero + data.Stages[_currentGrowStages].OffSet;
     }
 
     private byte _currentGrowStages;
@@ -46,6 +48,7 @@ public class Plant : MonoBehaviour, IPoolable
             _currentGrowStages++;
             meshFilter.sharedMesh = data.Stages[_currentGrowStages].StageVisualMesh;
             meshRenderer.sharedMaterial = data.Stages[_currentGrowStages].StageVisualMaterial;
+            plantTransform.localPosition = Vector3.zero + data.Stages[_currentGrowStages].OffSet;
             if (_currentGrowStages >= data.FinalStageIndex)
             {
                 _currentState = PlantState.ReadyToHarvest;
@@ -65,6 +68,7 @@ public class Plant : MonoBehaviour, IPoolable
         {
             meshFilter.sharedMesh = data.DeathStages.StageVisualMesh;
             meshRenderer.sharedMaterial = data.DeathStages.StageVisualMaterial;
+            plantTransform.localPosition = Vector3.zero + data.DeathStages.OffSet;
             _currentState = PlantState.Withered;
         }
     }

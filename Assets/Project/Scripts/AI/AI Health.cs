@@ -32,10 +32,11 @@ public class AIHealth : MonoBehaviour, IDamageable
         Hp -= amount;
         // Debug.Log(gameObject.name  + " Take Damage : " + amount);
         // Debug.Log(gameObject.name  + " current HP : " + Hp);
-        OnTakeDamageEvent?.Invoke();
         if (Hp <= 0)
         {
             OnDieEvent?.Invoke();
+            return;
         }
+        OnTakeDamageEvent?.Invoke();
     }
 }

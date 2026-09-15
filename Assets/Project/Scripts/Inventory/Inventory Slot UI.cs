@@ -23,8 +23,8 @@ public class InventorySlotUI : MonoBehaviour, IPoolable,
     [SerializeField] private Color SelectColor;
     [SerializeField] private Color UnSelectColor;
     
-    [Header("Drag Settings")]
-    [SerializeField] private float dragHoldDelay = 0.1f;
+    // [Header("Drag Settings")]
+    // [SerializeField] private float dragHoldDelay = 0.1f;
     
     private int SlotIndex;
     // private float _pointerDownTime;
