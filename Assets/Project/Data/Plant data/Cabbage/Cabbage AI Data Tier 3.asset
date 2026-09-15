@@ -17,12 +17,12 @@ MonoBehaviour:
   TurnSpeed: 250
   StopDistance: 1
   DetectionRange: 15
-  HP: 40
-  Damage: 1
+  HP: 70
+  Damage: 2
   AttackRange: 2.5
   AttackCooldown: 2
-  StunTime: 2.5
+  StunTime: 0.5
   dropItem: {fileID: 11400000, guid: 5ed930fb92a6e6b4d8bc370b69756fb1, type: 2}
-  dropAmountMin: 5
-  dropAmountMax: 10
+  dropAmountMin: 20
+  dropAmountMax: 35
   dropChance: 1

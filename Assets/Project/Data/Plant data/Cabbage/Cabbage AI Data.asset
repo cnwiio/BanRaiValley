@@ -18,10 +18,10 @@ MonoBehaviour:
   StopDistance: 1
   DetectionRange: 15
   HP: 10
-  Damage: 1
+  Damage: 2
   AttackRange: 2.5
   AttackCooldown: 2
-  StunTime: 2.5
+  StunTime: 1.5
   dropItem: {fileID: 11400000, guid: 5ed930fb92a6e6b4d8bc370b69756fb1, type: 2}
   dropAmountMin: 1
   dropAmountMax: 3

@@ -18,7 +18,7 @@ MonoBehaviour:
   MaxStack: 64
   image: {fileID: 21300000, guid: f7faa51816b1c9c46b159a0cf4208b9e, type: 3}
   prefab: {fileID: 2509925977032215398, guid: 13b6d83671336f445beb2f5c587bc812, type: 3}
-  Price: 1
+  Price: 25
   value: 0
   attackData:
     damage: 0

@@ -19,7 +19,7 @@ MonoBehaviour:
   image: {fileID: 21300000, guid: 6ae71de3d3de2db4db6c48d8cce934ac, type: 3}
   prefab: {fileID: 7022611657903807586, guid: 39fbec17757ebc344a5dc421c471c8b3, type: 3}
   Price: 0
-  value: 10
+  value: 25
   attackData:
     damage: 0
     hitboxOffset: {x: 0, y: 0, z: 0}
