@@ -7,29 +7,35 @@ using UnityEngine.InputSystem;
 ///
 /// What lives here vs. what stays in the subclass:
 /// - HERE: camera/mouse setup, raycasting, lazy grid resolution, the
-///   raycast->check->preview-event loop (RunPreviewUpdate / RunMultiPreviewUpdate), primary/secondary
-///   input wiring, item data binding via IToolItemReceiver.
+///   raycast->check->preview-event loop (RunPreviewUpdate), primary/secondary
+///   input wiring.
 /// - SUBCLASS: its own state machine (Hoe has 4 states, WateringCan has fewer),
 ///   which grid check + prefab + PreviewState to use, and what Primary/Secondary
 ///   actually do.
+///
+/// Adding a new tool no longer means copy-pasting the raycast/preview block -
+/// just inherit this and call RunPreviewUpdate with your own arguments.
 /// </summary>
-public abstract class FarmingToolBase : MonoBehaviour, IToolItemReceiver
+public abstract class FarmingToolBase : MonoBehaviour
 {
     [SerializeField] protected FarmingGridReference farmingGridReference;
-    [SerializeField] protected ItemToolData toolData = ItemToolData.DefaultHoe;
-
+    [SerializeField] protected ToolData toolData;
+       
+    protected int _cachedPatternCellCount;
     protected const int MAX_TOOL_CELLS = 49;
     protected readonly Vector3Int[] _cachedPatternCells = new Vector3Int[MAX_TOOL_CELLS];
-    protected readonly TilePreviewData[] _cachedPreviewData = new TilePreviewData[MAX_TOOL_CELLS];
-    protected int _cachedPatternCellCount;
+    protected readonly PreviewTileData[] _cachedPreviewData  = new PreviewTileData[MAX_TOOL_CELLS];
 
     protected Camera sceneCamera;
     private Mouse currentMouse;
     protected IFarmingGrid grid;
+    private LayerMask raycastTargetLayer;
 
     protected Ray _ray;
     protected RaycastHit _hit;
+    protected bool _isHit;
     protected Vector3 _lastCellWorldPos;
+    private Vector3Int _lastCardinalDir;
     /// <summary>Result of the most recent RunPreviewUpdate check - handy for handlers
     /// (like a rotate action) that need "is the currently-aimed cell valid?" without
     /// re-running the grid check themselves.</summary>
@@ -38,18 +44,11 @@ public abstract class FarmingToolBase : MonoBehaviour, IToolItemReceiver
     /// <summary>Matches the signature of IFarmingGrid.IsValidForTilling / IsTilled / IsWaterable / etc.</summary>
     public delegate bool GridCheck(Vector3 worldPos, out Vector3 cellWorldPos);
 
-    public virtual void BindItemData(Item item)
-    {
-        if (item != null)
-        {
-            toolData = item.ToolData;
-        }
-    }
-
     protected virtual void Awake()
     {
         sceneCamera = Camera.main;
         currentMouse = Mouse.current;
+        raycastTargetLayer = LayerMask.GetMask("Ground");
     }
 
     protected virtual void OnEnable()
@@ -89,81 +88,97 @@ public abstract class FarmingToolBase : MonoBehaviour, IToolItemReceiver
     }
 
     /// <summary>
-    /// The raycast -> validity-check -> preview-event loop shared by single-tile preview callers.
+    /// The raycast -> validity-check -> preview-event loop shared by every tool.
+    /// `check` is whichever IFarmingGrid method decides validity for this tool
+    /// (grid.IsValidForTilling, grid.IsTilled, grid.IsWaterable, ...).
     /// </summary>
     bool _isValid;
-    protected void RunPreviewUpdate(int range, GameObject hologramPrefab, PreviewState previewState, GridCheck check, float yRotation)
+    protected void RunPreviewUpdate(
+        int range, 
+        GameObject hologramPrefab, 
+        PreviewState previewState, 
+        GridCheck check, 
+        float yRotation)
     {
         _ray = RayCastAtCursor();
-        if (Physics.Raycast(_ray, out _hit, range))
+        if (Physics.Raycast(_ray, out _hit, range, raycastTargetLayer))
         {
+            _isHit = true;
             _isValid = check(_hit.point, out var cellWorldPos);
             lastCheckWasValid = _isValid;
             if (_lastCellWorldPos != cellWorldPos)
             {
                 _lastCellWorldPos = cellWorldPos;
-                EventBus<StartPreviewEvent>.Raise(new StartPreviewEvent() { prefabs = hologramPrefab, previewState = previewState });
-                EventBus<PreviewingEvent>.Raise(new PreviewingEvent() { Position = cellWorldPos, IsValid = _isValid, YRotation = yRotation });
+                _cachedPatternCellCount = 1;
+                _cachedPreviewData[0] = new PreviewTileData()
+                {
+                    Position = cellWorldPos,
+                    IsValid = _isValid
+                };
+                EventBus<StartPreviewEvent>.Raise(new StartPreviewEvent() { prefabs = hologramPrefab, previewState = previewState, TileCount = _cachedPatternCellCount});
+                EventBus<PreviewingEvent>.Raise(new PreviewingEvent() { PreviewTileData = _cachedPreviewData, YRotation = yRotation });
             }
         }
         else
         {
+            _isHit = false;
             EndPreviewNow();
         }
     }
-
-    /// <summary>
-    /// Multi-tile preview calculation loop using pre-allocated zero-GC buffers and ToolAreaCalculator.
-    /// </summary>
+    
     protected void RunMultiPreviewUpdate(
-        int range,
-        GameObject hologramPrefab,
+        int range, 
+        GameObject hologramPrefab, 
         PreviewState previewState,
-        GridCheck check,
+        GridCheck check, 
         float yRotation)
     {
         _ray = RayCastAtCursor();
-        if (Physics.Raycast(_ray, out _hit, range))
+        if (Physics.Raycast(_ray, out _hit, range, raycastTargetLayer))
         {
+            _isHit = true;
             Vector3Int centerCell = grid.WorldToCell(_hit.point);
-            Vector3 lookDir = sceneCamera != null ? sceneCamera.transform.forward : Vector3.forward;
+            var raycastCellPos = grid.GetCellCenterWorld(centerCell);
+            Vector3 lookDir = sceneCamera.transform.forward;
             Vector3Int cardinalDir = ToolAreaCalculator.GetCardinalFacingDirection(lookDir);
-
-            _cachedPatternCellCount = ToolAreaCalculator.CalculatePatternCells(
-                centerCell,
-                cardinalDir,
-                toolData.patternShape,
-                toolData.patternDimension,
-                _cachedPatternCells
-            );
-
-            bool hasAnyValid = false;
-            for (int i = 0; i < _cachedPatternCellCount; i++)
+            if (_lastCellWorldPos != raycastCellPos || cardinalDir != _lastCardinalDir)
             {
-                Vector3 cellWorldPos = grid.GetCellCenterWorld(_cachedPatternCells[i]);
-                bool isValid = check(cellWorldPos, out _);
-                if (isValid) hasAnyValid = true;
-
-                _cachedPreviewData[i] = new TilePreviewData
+                _lastCellWorldPos = raycastCellPos;
+                _lastCardinalDir = cardinalDir;
+                
+                
+                _cachedPatternCellCount = ToolAreaCalculator.CalculatePatternCells(
+                    centerCell,
+                    cardinalDir,
+                    toolData.toolPattern,
+                    toolData.patternDimension,
+                    _cachedPatternCells
+                );
+                
+                for (int i = 0; i < _cachedPatternCellCount; i++)
                 {
-                    Position = cellWorldPos,
-                    IsValid = isValid
-                };
+                    Vector3 cachedCellWorldPos = grid.GetCellCenterWorld(_cachedPatternCells[i]);
+                    bool isValid = check(cachedCellWorldPos, out _);
+                    // if (isValid) lastCheckWasValid = true;
+
+                    _cachedPreviewData[i] = new PreviewTileData()
+                    {
+                        Position = cachedCellWorldPos,
+                        IsValid = isValid
+                    };
+                }
+                EventBus<StartPreviewEvent>.Raise(new StartPreviewEvent() 
+                { 
+                    prefabs = hologramPrefab,
+                    previewState = previewState,
+                    TileCount = _cachedPatternCellCount
+                });
+                EventBus<PreviewingEvent>.Raise(new PreviewingEvent() { PreviewTileData = _cachedPreviewData, YRotation = yRotation });
             }
-
-            lastCheckWasValid = hasAnyValid;
-            _lastCellWorldPos = grid.GetCellCenterWorld(centerCell);
-
-            EventBus<StartPreviewEvent>.Raise(new StartPreviewEvent { prefabs = hologramPrefab, previewState = previewState });
-            EventBus<MultiPreviewingEvent>.Raise(new MultiPreviewingEvent
-            {
-                PreviewTiles = _cachedPreviewData,
-                TileCount = _cachedPatternCellCount,
-                YRotation = yRotation
-            });
         }
         else
         {
+            _isHit = false;
             EndPreviewNow();
         }
     }
@@ -171,6 +186,7 @@ public abstract class FarmingToolBase : MonoBehaviour, IToolItemReceiver
     protected void EndPreviewNow()
     {
         _lastCellWorldPos = Vector3.zero;
+        _lastCardinalDir = Vector3Int.zero;
         EventBus<EndPreviewEvent>.Raise(new EndPreviewEvent() { });
     }
 }

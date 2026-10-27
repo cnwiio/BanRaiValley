@@ -1,4 +1,4 @@
-using BanRaiValley.Farming;
+using Lean.Pool;
 using UnityEngine;
 
 public enum SeedBagState
@@ -8,41 +8,13 @@ public enum SeedBagState
     Planting
 }
 
-public class SeedBag : FarmingToolBase
+public class SeedBag : FarmingToolBase, IPoolable
 {
-    #region Serialized Fields
-
-    [Header("Visuals & Prefabs")]
-    [Tooltip("Animator on the seed bag model. Must have a 'Sowing' trigger parameter.")]
     [SerializeField] private Animator seedBagAnimator;
-
-    [Tooltip("Hologram preview prefab shown before planting.")]
     [SerializeField] private GameObject hologramPrefab;
-
-    [Tooltip("Fallback plant prefab used when no CropDataSO is available (legacy / debug use).")]
-    [SerializeField] private GameObject plantPrefab;
-
-    [Header("Farming / Seed Data")]
-    [Tooltip("Fallback CropDataSO used for editor testing when no seed item is equipped in the hotbar.")]
-    [SerializeField] private CropDataSO defaultCropData;
-
-    #endregion
-
-
-    #region Fields
-
-    private const int SEED_BAG_RANGE = 10;
-
+    [SerializeField] private PlantData plantData;
+    
     private SeedBagState _currentState = SeedBagState.Farm;
-    private Vector3 _plantingPos;
-
-    /// <summary>The CropDataSO resolved from the currently equipped hotbar seed item.</summary>
-    private CropDataSO _currentCropData;
-
-    #endregion
-
-
-    #region Properties
 
     public SeedBagState CurrentState
     {
@@ -65,82 +37,69 @@ public class SeedBag : FarmingToolBase
             _currentState = value;
         }
     }
+    
+    private const int SEED_BAG_RANGE = 10;
+    private Vector3 _plantingPos;
+    private GameObject plantPrefab;
 
-    #endregion
-
-
-    #region Unity Messages
-
+    #region Event Handles
     protected override void OnEnable()
     {
         base.OnEnable();
         EventBus<ChangeActionMap>.Subscribe(OnChangeActionMap);
-        EventBus<OnHotbarChangeEvent>.Subscribe(OnHotbarChange);
     }
 
     protected override void OnDisable()
     {
         base.OnDisable();
         EventBus<ChangeActionMap>.Unsubscribe(OnChangeActionMap);
-        EventBus<OnHotbarChangeEvent>.Unsubscribe(OnHotbarChange);
-
+        
         EndPreviewNow();
         CurrentState = SeedBagState.Farm;
     }
-
-    private void Update()
+    
+    void OnChangeActionMap(ChangeActionMap evt)
     {
-        if (CurrentState != SeedBagState.Farm) return;
-        if (!TryGetGrid()) return;
-
-        RunPreviewUpdate(SEED_BAG_RANGE, hologramPrefab, PreviewState.Planting, grid.IsPlantable, 0f);
-    }
-
-    #endregion
-
-
-    #region Public Methods
-
-    /// <summary>
-    /// Called by the seed bag's sowing animation event when the planting moment is reached.
-    /// Resolves final crop data, raises <see cref="OnPlantingEvent"/>, and returns to idle.
-    /// </summary>
-    public void OnPlantingAnimationFinished()
-    {
-        if (grid.TryPlanting(_plantingPos, out var cellPos))
+        if (evt.MapType != ActionMapType.Player)
         {
-            CropDataSO resolvedCropData = _currentCropData != null ? _currentCropData : defaultCropData;
-
-            EventBus<OnPlantingEvent>.Raise(new OnPlantingEvent
-            {
-                CropData = resolvedCropData,
-                Prefab   = plantPrefab,
-                Position = _plantingPos,
-                CellPos  = cellPos,
-            });
-
-            EventBus<PreviewingEvent>.Raise(new PreviewingEvent
-            {
-                Position  = _plantingPos,
-                IsValid   = false,
-                YRotation = 0,
-            });
+            CurrentState = SeedBagState.Idle;
         }
-
-        CurrentState = SeedBagState.Farm;
+        else
+        {
+            CurrentState = SeedBagState.Farm;
+        }
     }
-
     #endregion
-
-
-    #region Private Methods
-
     private void StartPlanting()
     {
         CurrentState = SeedBagState.Planting;
         seedBagAnimator.SetTrigger("Sowing");
     }
 
+    public void OnPlantingAnimationFinished()
+    {
+        if (_currentState != SeedBagState.Planting) return;
+        if (grid.TryPlanting(_plantingPos, out var cellPos))
+        {
+            EventBus<OnPlantingEvent>.Raise(new OnPlantingEvent() 
+            { 
+                Prefab = plantPrefab,
+                Position = _plantingPos,
+                CellPos = cellPos,
+                PlantData = plantData
+            });
+            
+            _cachedPreviewData[0] = new PreviewTileData()
+            {
+                Position = _plantingPos,
+                IsValid = false
+            };
+            EventBus<PreviewingEvent>.Raise(new PreviewingEvent() { PreviewTileData = _cachedPreviewData, YRotation = 0 });
+        }
+
+        CurrentState = SeedBagState.Farm;
+    }
+    
     protected override void PrimaryAction()
     {
         if (!TryGetGrid()) return;
@@ -154,42 +113,24 @@ public class SeedBag : FarmingToolBase
 
     protected override void SecondaryAction()
     {
-        // Reserved for future use (e.g. select seed type from bag).
+        // throw new System.NotImplementedException();
     }
-
-    #endregion
-
-
-    #region Event Handlers
-
-    private void OnChangeActionMap(ChangeActionMap evt)
+    
+    void Update()
     {
-        if (evt.MapType != ActionMapType.Player)
-        {
-            CurrentState = SeedBagState.Idle;
-        }
-        else
-        {
-            CurrentState = SeedBagState.Farm;
-        }
+        if (CurrentState != SeedBagState.Farm) return;
+        if (!TryGetGrid()) return;
+
+        RunPreviewUpdate(SEED_BAG_RANGE, hologramPrefab, PreviewState.Planting, grid.IsPlantable, 0f);
     }
 
-    /// <summary>
-    /// Tracks the currently equipped hotbar item and resolves its <see cref="CropDataSO"/>
-    /// when a <see cref="ItemType.Seed"/> item is selected.
-    /// Falls back to <see cref="defaultCropData"/> for non-seed or empty slots.
-    /// </summary>
-    private void OnHotbarChange(OnHotbarChangeEvent evt)
+    public void OnSpawn()
     {
-        if (evt.slotData.item != null && evt.slotData.item.type == ItemType.Seed)
-        {
-            _currentCropData = evt.slotData.item.CropData;
-        }
-        else
-        {
-            _currentCropData = defaultCropData;
-        }
+        plantPrefab = plantData.plantPrefabs;
     }
 
-    #endregion
+    public void OnDespawn()
+    {
+        // throw new System.NotImplementedException();
+    }
 }

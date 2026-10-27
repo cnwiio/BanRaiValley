@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public enum TileState
@@ -40,17 +40,10 @@ public interface ITileStore
     bool IsTilled(Vector3Int cellPos);
     bool IsWatered(Vector3Int cellPos);
     bool IsPlanted(Vector3Int cellPos);
-    void SetTilled(Vector3Int cellPos);
-    void SetUnTill(Vector3Int cellPos);
-    void SetWatered(Vector3Int cellPos);
-    void SetPlanted(Vector3Int cellPos);
-    void SetUnPlant(Vector3Int cellPos);
-
-    /// <summary>
-    /// Resets all hydrated tiles to dry for the start of a new day.
-    /// </summary>
-    /// <returns>The number of tiles whose hydration state was cleared.</returns>
-    int ResetDailyHydration();
+    
+    void SetTilled(Vector3Int cellPos, bool value);
+    void SetWatered(Vector3Int cellPos, bool value);
+    void SetPlanted(Vector3Int cellPos, bool value);
 }
 
 public class TileStore : ITileStore
@@ -67,59 +60,24 @@ public class TileStore : ITileStore
         _tiles.TryGetValue(cellPos, out var tile) && tile.IsPlanted;
 
 
-    public void SetTilled(Vector3Int cellPos) =>
-        _tiles[cellPos] = new TileData(true, false, false);
+    public void SetTilled(Vector3Int cellPos, bool isTilled) =>
+        _tiles[cellPos] = new TileData(isTilled, false, false);
 
-    public void SetUnTill(Vector3Int cellPos) =>
-        _tiles[cellPos] = new TileData(false, false, false);
-
-    public void SetWatered(Vector3Int cellPos)
+    public void SetWatered(Vector3Int cellPos, bool isWatered)
     {
         var current = _tiles.TryGetValue(cellPos, out var tile)
             ? tile
             : new TileData(true, false, false);
         
-        _tiles[cellPos] = current.WithWatered(true);
+        _tiles[cellPos] = current.WithWatered(isWatered);
     }
 
-    public void SetPlanted(Vector3Int cellPos)
+    public void SetPlanted(Vector3Int cellPos, bool isPlanted)
     {
         var current = _tiles.TryGetValue(cellPos, out var tile)
             ? tile
             : new TileData(true, false, false);
-        
-        _tiles[cellPos] = current.WithPlatable(true);
-    }
-    public void SetUnPlant(Vector3Int cellPos)
-    {
-        var current = _tiles.TryGetValue(cellPos, out var tile)
-            ? tile
-            : new TileData(true, false, false);
-        
-        _tiles[cellPos] = current.WithPlatable(false);
-    }
 
-    /// <summary>
-    /// Iterates all registered tiles and resets any watered tile to dry.
-    /// Called once per morning before growth evaluation writes new watered flags.
-    /// </summary>
-    /// <returns>The number of tiles whose <see cref="TileData.IsWatered"/> was cleared.</returns>
-    public int ResetDailyHydration()
-    {
-        int resetCount = 0;
-
-        // Collect keys first to avoid mutating the dictionary during iteration.
-        var keys = new System.Collections.Generic.List<Vector3Int>(_tiles.Keys);
-
-        foreach (Vector3Int cellPos in keys)
-        {
-            if (!_tiles[cellPos].IsWatered)
-                continue;
-
-            _tiles[cellPos] = _tiles[cellPos].WithWatered(false);
-            resetCount++;
-        }
-
-        return resetCount;
+        _tiles[cellPos] = current.WithPlatable(isPlanted);
     }
 }

@@ -1,12 +1,12 @@
-using NUnit.Framework.Internal.Commands;
-using Unity.VisualScripting;
+using Unity.Cinemachine;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private CharacterController characterController;
     [SerializeField] private Camera PlayerCam;
+    // [SerializeField] private CinemachineCamera vcam;
+    [SerializeField] private CinemachinePanTilt panTilt;
     [SerializeField] private PlayerMovementData Data;
     [SerializeField] private PlayerInputReader InputReader;
     [SerializeField] private Transform Head;
@@ -27,11 +27,13 @@ public class PlayerMovement : MonoBehaviour
     private void OnEnable()
     {
         EventBus<OnJumpEvent>.Subscribe(HandleJumpInput);
+        EventBus<OnRequestTeleportEvent>.Subscribe(OnRequestTeleport);
     }
 
     private void OnDisable()
     {
         EventBus<OnJumpEvent>.Unsubscribe(HandleJumpInput);
+        EventBus<OnRequestTeleportEvent>.Unsubscribe(OnRequestTeleport);
     }
 
     public void HandleJumpInput(OnJumpEvent ctx)
@@ -42,6 +44,10 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    public void OnRequestTeleport(OnRequestTeleportEvent evt)
+    {
+        TeleportTo(evt.AwakeTransform);
+    }
     #endregion
 
     private void Awake()
@@ -49,22 +55,19 @@ public class PlayerMovement : MonoBehaviour
         // cached
         _camTransform = PlayerCam.transform;
         Head.rotation = _camTransform.rotation;
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
     }
 
-    void Update()
+    private void Update()
     {
-        CalculateRotation();
-        UpdateCamRotateToPlayer();
-    }
-
-    // Update is called once per frame
-    void FixedUpdate()
-    { 
         HandleVerticalMovement();
         HandleHorizontalMovement();
+        CalculateRotation();
         ApplyMovement();
+    }
+    
+    private void LateUpdate()
+    {
+        UpdateCamRotateToPlayer();
     }
 
     #region Handle Movement
@@ -92,7 +95,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            VerticalMovement += Physics.gravity.y * Data.GravityMultiplyer;
+            VerticalMovement += Physics.gravity.y * Data.GravityMultiplyer * Time.deltaTime;
         }
     }
 
@@ -101,7 +104,7 @@ public class PlayerMovement : MonoBehaviour
         FinalMovement = horizontalMovement;
         FinalMovement.y = VerticalMovement;
 
-        characterController.Move(FinalMovement * Time.fixedDeltaTime);
+        characterController.Move(FinalMovement * Time.deltaTime);
     }
     #endregion
 
@@ -115,23 +118,30 @@ public class PlayerMovement : MonoBehaviour
         CamRightDirection.y = 0;
         CamRightDirection.Normalize();
     }
-
-
-    //[SerializeField] private float turnSpeed = 15f;
-
-    // cached
-    Vector3 _forward;
-    private const float MinForwardSqrMagnitude = 0.001f;
+    
+    [SerializeField] private float turnSpeed = 15f;
 
     void UpdateCamRotateToPlayer()
     {
-        // _forward = Vector3.ProjectOnPlane(CamForwardDirection, Vector3.up);
-        //
-        // if (_forward.sqrMagnitude > MinForwardSqrMagnitude)
-        // {
-        //     transform.rotation = Quaternion.LookRotation(_forward);
-        //     //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(_forward), 15 * Time.deltaTime);
-        // }
-        Head.rotation = _camTransform.rotation;
+        float t = 1f - Mathf.Exp(-turnSpeed * Time.deltaTime);
+        Head.rotation = Quaternion.Slerp(Head.rotation, _camTransform.rotation, t);
+    }
+
+    // Cached
+    private Vector3 _euler;
+    void TeleportTo(Transform targetTransform)
+    {
+        characterController.enabled = false;
+        transform.SetPositionAndRotation(targetTransform.position, targetTransform.rotation);
+        VerticalMovement = 0f;
+        characterController.enabled = true;
+
+        Head.rotation = targetTransform.rotation;
+
+        // รีเซ็ตค่ามุมที่ Cinemachine จำไว้
+        _euler = targetTransform.eulerAngles;
+        panTilt.PanAxis.Value = _euler.y;
+        panTilt.TiltAxis.Value = _euler.x;
+        // panTilt.TiltAxis. = _euler.x;
     }
 }

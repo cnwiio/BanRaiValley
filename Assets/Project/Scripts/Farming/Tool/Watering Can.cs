@@ -12,9 +12,6 @@ public class WateringCan : FarmingToolBase
 {
     [SerializeField] private Animator wateringCanAnimator;
     [SerializeField] private GameObject hologramPrefabs;
-    [SerializeField] private Material WateringMaterial;
-
-    private readonly List<Vector3Int> _pendingWateringCells = new List<Vector3Int>(MAX_TOOL_CELLS);
 
     private WaterCanState _currentState = WaterCanState.Farm;
     private WaterCanState CurrentState
@@ -39,17 +36,10 @@ public class WateringCan : FarmingToolBase
             _currentState = value;
         }
     }
-
+    
+    private readonly List<Vector3Int> _pendingWateringCells = new List<Vector3Int>(MAX_TOOL_CELLS);
     private const int WateringCanRange = 10;
-
-    protected override void Awake()
-    {
-        base.Awake();
-        if (toolData.patternDimension <= 0)
-        {
-            toolData = ItemToolData.DefaultWateringCan;
-        }
-    }
+    private Vector3 _wateringPos;
 
     protected override void OnEnable()
     {
@@ -84,7 +74,7 @@ public class WateringCan : FarmingToolBase
         wateringCanAnimator.SetTrigger("watering");
     }
 
-    public void OnWaterinAnimationFinished()
+    public void OnWateringAnimationFinished()
     {
         for (int i = 0; i < _pendingWateringCells.Count; i++)
         {
@@ -93,48 +83,63 @@ public class WateringCan : FarmingToolBase
             {
                 EventBus<OnWateringEvent>.Raise(new OnWateringEvent
                 {
-                    CellPos = cellPos,
-                    Material = WateringMaterial
+                    CellPos = cellPos
                 });
+                
             }
+            
         }
 
-        _pendingWateringCells.Clear();
+        for (int i = 0; i < _cachedPatternCellCount; i++)
+        {
+            _cachedPreviewData[i] = new PreviewTileData()
+            {
+                Position = _cachedPreviewData[i].Position,
+                IsValid = false
+            };
+        }
+        EventBus<PreviewingEvent>.Raise(new PreviewingEvent() { PreviewTileData = _cachedPreviewData, YRotation = 0 });
         CurrentState = WaterCanState.Farm;
     }
 
     protected override void PrimaryAction()
     {
         if (!TryGetGrid()) return;
-
-        Vector3Int centerCell = grid.WorldToCell(_hit.point);
-        int cellCount = ToolAreaCalculator.CalculatePatternCells(
-            centerCell,
-            Vector3Int.forward,
-            toolData.patternShape,
-            toolData.patternDimension,
-            _cachedPatternCells
-        );
-
-        _pendingWateringCells.Clear();
-        for (int i = 0; i < cellCount; i++)
+        if (CurrentState == WaterCanState.Farm)
         {
-            Vector3 cellWorldPos = grid.GetCellCenterWorld(_cachedPatternCells[i]);
-            if (grid.IsWaterable(cellWorldPos, out _))
+            if (!_isHit) return;
+            Vector3Int centerCell = grid.WorldToCell(_hit.point);
+            Vector3 lookDir = sceneCamera.transform.forward;
+            Vector3Int cardinalDir = ToolAreaCalculator.GetCardinalFacingDirection(lookDir);
+            
+            int cellCount = ToolAreaCalculator.CalculatePatternCells(
+                centerCell,
+                cardinalDir,
+                toolData.toolPattern,
+                toolData.patternDimension,
+                _cachedPatternCells
+            );
+            
+            _pendingWateringCells.Clear();
+            for (int i = 0; i < _cachedPatternCellCount; i++)
             {
-                _pendingWateringCells.Add(_cachedPatternCells[i]);
+                Vector3 cellWorldPos = grid.GetCellCenterWorld(_cachedPatternCells[i]);
+                if (grid.IsWaterable(cellWorldPos, out _))
+                {
+                    _pendingWateringCells.Add(_cachedPatternCells[i]);
+                }
             }
-        }
 
-        if (_pendingWateringCells.Count > 0)
-        {
-            StartWatering();
+            if (_pendingWateringCells.Count > 0)
+            {
+                StartWatering();
+            }
         }
     }
 
     protected override void SecondaryAction()
     {
-        // Reserved for secondary tool actions
+        //CurrentState = CurrentState == WaterCanState.Farm ? WaterCanState.Idle : WaterCanState.Farm;
     }
 
     void Update()
@@ -142,6 +147,13 @@ public class WateringCan : FarmingToolBase
         if (CurrentState != WaterCanState.Farm) return;
         if (!TryGetGrid()) return;
 
-        RunMultiPreviewUpdate(WateringCanRange, hologramPrefabs, PreviewState.Watering, grid.IsWaterable, 0f);
+        if (toolData.toolPattern == ToolAreaPattern.Single || toolData.patternDimension <= 1)
+        {
+            RunPreviewUpdate(WateringCanRange, hologramPrefabs, PreviewState.Watering, grid.IsWaterable, 0f);
+        }
+        else
+        {
+            RunMultiPreviewUpdate(WateringCanRange, hologramPrefabs, PreviewState.Watering, grid.IsWaterable, 0f);
+        }
     }
 }

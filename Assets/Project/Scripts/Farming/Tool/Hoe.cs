@@ -6,7 +6,8 @@ public enum HoeState
     Idle,
     Farming,
     Tilling,
-    Deleting
+    Deleting,
+    Attacking
 }
 
 public class Hoe : FarmingToolBase
@@ -15,8 +16,6 @@ public class Hoe : FarmingToolBase
     [SerializeField] private GameObject deleteHologramPrefabs;
     [SerializeField] private GameObject dirtPrefabs;
     [SerializeField] private Animator hoeAnimator;
-
-    private readonly List<Vector3Int> _pendingTillingCells = new List<Vector3Int>(MAX_TOOL_CELLS);
 
     private HoeState _currentState = HoeState.Idle;
     public HoeState CurrentState
@@ -50,21 +49,23 @@ public class Hoe : FarmingToolBase
                         break;
                 }
             }
-
+            
+            // Debug.Log(value);
             _currentState = value;
         }
     }
-
+    
+    private readonly List<Vector3Int> _pendingTillingCells = new List<Vector3Int>(MAX_TOOL_CELLS);
+    private ComboAttackController combo;
+    
     private const int HoeRange = 10;
     private float currentYRotate;
+    private Vector3 _dirtPos;
 
     protected override void Awake()
     {
         base.Awake();
-        if (toolData.patternDimension <= 0)
-        {
-            toolData = ItemToolData.DefaultHoe;
-        }
+        combo = new ComboAttackController(hoeAnimator, 3);
     }
 
     protected override void OnEnable()
@@ -98,73 +99,88 @@ public class Hoe : FarmingToolBase
         if (CurrentState == HoeState.Farming)
         {
             currentYRotate += 90;
-            EventBus<PreviewingEvent>.Raise(new PreviewingEvent() { Position = _lastCellWorldPos, IsValid = lastCheckWasValid, YRotation = currentYRotate });
+            for (int i = 0; i < _cachedPatternCellCount; i++)
+            {
+                _cachedPreviewData[i] = new PreviewTileData()
+                {
+                    Position = _cachedPreviewData[i].Position,
+                    IsValid = _cachedPreviewData[i].IsValid
+                };
+            }
+            EventBus<PreviewingEvent>.Raise(new PreviewingEvent() { PreviewTileData = _cachedPreviewData, YRotation = currentYRotate });
         }
     }
 
     void OnDeleteAction(OnDeleteActionEvent evt)
     {
-        if (CurrentState != HoeState.Tilling)
+        if (CurrentState != HoeState.Tilling && 
+            CurrentState != HoeState.Attacking)
             CurrentState = CurrentState == HoeState.Deleting ? HoeState.Idle : HoeState.Deleting;
     }
 
     protected override void PrimaryAction()
     {
-        switch (CurrentState)
+        if (!TryGetGrid()) return;
+
+        if (CurrentState == HoeState.Farming)
         {
-            case HoeState.Idle:
-                // Delegate to the combat system — PlayerCombatController handles the swing.
-                EventBus<OnPlayerRequestAttackEvent>.Raise(new OnPlayerRequestAttackEvent { });
-                break;
+            if (!_isHit) return;
+            Vector3Int centerCell = grid.WorldToCell(_hit.point);
+            Vector3 lookDir = sceneCamera.transform.forward;
+            Vector3Int cardinalDir = ToolAreaCalculator.GetCardinalFacingDirection(lookDir);
+            
+            int cellCount = ToolAreaCalculator.CalculatePatternCells(
+                centerCell,
+                cardinalDir,
+                toolData.toolPattern,
+                toolData.patternDimension,
+                _cachedPatternCells
+            );
 
-            case HoeState.Farming:
-                if (!TryGetGrid()) return;
-
-                Vector3Int centerCell = grid.WorldToCell(_hit.point);
-                Vector3 lookDir = sceneCamera != null ? sceneCamera.transform.forward : Vector3.forward;
-                Vector3Int cardinalDir = ToolAreaCalculator.GetCardinalFacingDirection(lookDir);
-
-                int cellCount = ToolAreaCalculator.CalculatePatternCells(
-                    centerCell,
-                    cardinalDir,
-                    toolData.patternShape,
-                    toolData.patternDimension,
-                    _cachedPatternCells
-                );
-
-                _pendingTillingCells.Clear();
-                for (int i = 0; i < cellCount; i++)
+            _pendingTillingCells.Clear();
+            for (int i = 0; i < cellCount; i++)
+            {
+                Vector3 cellWorldPos = grid.GetCellCenterWorld(_cachedPatternCells[i]);
+                if (grid.IsValidForTilling(cellWorldPos, out _))
                 {
-                    Vector3 cellWorldPos = grid.GetCellCenterWorld(_cachedPatternCells[i]);
-                    if (grid.IsValidForTilling(cellWorldPos, out _))
-                    {
-                        _pendingTillingCells.Add(_cachedPatternCells[i]);
-                    }
+                    _pendingTillingCells.Add(_cachedPatternCells[i]);
                 }
+            }
 
-                if (_pendingTillingCells.Count > 0)
-                {
-                    StartTilling();
-                }
-                break;
-
-            case HoeState.Deleting:
-                if (!TryGetGrid()) return;
-                if (grid.IsPlanted(_hit.point, out var plantedPos))
-                {
-                    DeletePlant(plantedPos);
-                }
-                else if (grid.IsTilled(_hit.point, out var tilledPos))
-                {
-                    DeleteTile(tilledPos);
-                }
-                break;
+            if (_pendingTillingCells.Count > 0)
+            {
+                StartTilling();
+            }
+        }
+        else if (CurrentState == HoeState.Deleting)
+        {
+            if (!_isHit) return;
+            if (grid.IsPlanted(_hit.point, out var cellWorldPos))
+            {
+                // _dirtPos = cellWorldPos1;
+                DeletePlant(cellWorldPos);
+            }
+            else if (grid.IsTilled(_hit.point, out cellWorldPos))
+            {
+                // _dirtPos = cellWorldPos2;
+                DeleteTile(cellWorldPos);
+            }
+        } 
+        else if (CurrentState == HoeState.Idle)
+        {
+            CurrentState = HoeState.Attacking;
+            combo.TryAttack();
+        }
+        else if (CurrentState == HoeState.Attacking)
+        {
+            combo.TryAttack();
         }
     }
 
     protected override void SecondaryAction()
     {
-        if (CurrentState != HoeState.Tilling)
+        if (CurrentState != HoeState.Tilling && 
+            CurrentState != HoeState.Attacking)
             CurrentState = CurrentState == HoeState.Farming ? HoeState.Idle : HoeState.Farming;
     }
 
@@ -176,17 +192,29 @@ public class Hoe : FarmingToolBase
 
     private void DeleteTile(Vector3 pos)
     {
+        // Only tell the world "a tile was cleared" if the grid's state actually
+        // changed - keeps HoeFarmingBehaviour's spawned-object registry in sync
+        // with FarmingGrid's logical TileState.
         if (!grid.TryUntill(pos, out var cellPos)) return;
 
         EventBus<OnTileClearEvent>.Raise(new OnTileClearEvent() { CellPos = cellPos });
-        EventBus<PreviewingEvent>.Raise(new PreviewingEvent() { Position = _lastCellWorldPos, IsValid = false, YRotation = currentYRotate });
+ 
+        for (int i = 0; i < _cachedPatternCellCount; i++)
+        {
+            _cachedPreviewData[i] = new PreviewTileData()
+            {
+                Position = _cachedPreviewData[i].Position,
+                IsValid = false
+            };
+        }
+        EventBus<PreviewingEvent>.Raise(new PreviewingEvent() { PreviewTileData = _cachedPreviewData, YRotation = currentYRotate });
     }
 
     private void DeletePlant(Vector3 pos)
     {
         if (!grid.TryClearPlant(pos, out var cellPos)) return;
-
-        EventBus<OnClearPlant>.Raise(new OnClearPlant() { CellPos = cellPos });
+        
+        EventBus<OnClearPlantEvent>.Raise(new OnClearPlantEvent() {CellPos = cellPos});
     }
 
     public void OnTillingAnimationFinish()
@@ -207,7 +235,15 @@ public class Hoe : FarmingToolBase
         }
 
         _pendingTillingCells.Clear();
+
         CurrentState = HoeState.Farming;
+    }
+
+    public void OnAttackAnimationHit()
+    {
+        combo.OnAnimationHit();
+        EventBus<OnPlayerRequestAttackEvent>.Raise(new OnPlayerRequestAttackEvent());
+        if (!combo.IsAttacking()) CurrentState = HoeState.Idle;
     }
 
     void Update()
@@ -216,7 +252,14 @@ public class Hoe : FarmingToolBase
 
         if (CurrentState == HoeState.Farming)
         {
-            RunMultiPreviewUpdate(HoeRange, dirtHologramPrefabs, PreviewState.Build, grid.IsValidForTilling, currentYRotate);
+            if (toolData.toolPattern == ToolAreaPattern.Single || toolData.patternDimension <= 1)
+            {
+                RunPreviewUpdate(HoeRange, dirtHologramPrefabs, PreviewState.Build, grid.IsValidForTilling, currentYRotate);
+            }
+            else
+            {
+                RunMultiPreviewUpdate(HoeRange, dirtHologramPrefabs, PreviewState.Build, grid.IsValidForTilling, currentYRotate);
+            }
         }
         else if (CurrentState == HoeState.Deleting)
         {

@@ -1,12 +1,11 @@
 using UnityEngine;
-using BanRaiValley.Farming;
+using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "Item", menuName = "Scriptable Objects/Item")]
 public class Item : ScriptableObject
 {
     [Header("Only gameplay")]
     public ItemType type;
-
     public Vector3 spawnOffset;
     //public Vector2Int range = new Vector2Int(5, 4);
 
@@ -18,36 +17,19 @@ public class Item : ScriptableObject
     public Sprite image;
     public GameObject prefab;
 
-    [Header("Combat")]
-    [SerializeField] private ItemAttackData _attackData = ItemAttackData.DefaultUnarmed;
+    [Header("Shop")] 
+    public int Price;
 
-    /// <summary>Attack parameters defined for this item.</summary>
-    public ItemAttackData AttackData => _attackData;
+    public int value;
 
-    [Header("Tool Upgrade Data")]
-    [Tooltip("Tool upgrade statistics, pattern shapes, and tier configurations.")]
-    [SerializeField] private ItemToolData _toolData = ItemToolData.DefaultHoe;
-
-    /// <summary>Tool upgrade parameters defined for this item.</summary>
-    public ItemToolData ToolData => _toolData;
-
-
-    [Header("Farming / Seed Data")]
-    [Tooltip("Crop growth configuration asset for this seed item. " +
-             "Only required when ItemType is Seed. Leave null for non-seed items.")]
-    [SerializeField] private CropDataSO _cropData;
-
-    /// <summary>
-    /// Crop growth configuration if this item is a seed.
-    /// Returns null for non-seed items.
-    /// </summary>
-    public CropDataSO CropData => _cropData;
+    [Header("Combat")] 
+    public ItemAttackData attackData;
 }
 
 public enum ItemType
 {
-    Equipment,
     Tool,
     Weapon,
-    Seed
+    Seed,
+    Plant
 }

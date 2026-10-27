@@ -90,7 +90,7 @@ public class HotbarInventoryModel : BaseInventory
         CheckSelectedSlotChanged();
         return true;
     }
-
+    
     #region Selected Slot
     public SlotData GetCurrentSelectSlotData()
     {
@@ -134,7 +134,7 @@ public class HotbarInventoryModel : BaseInventory
         _oldHotslotUI = _SlotUI[index];
     }
 
-    private void CheckSelectedSlotChanged()
+    public void CheckSelectedSlotChanged()
     {
         if (inventorySlots[SelectedIndex].item == _lastItem) return;
         _lastItem = inventorySlots[SelectedIndex].item;
@@ -149,7 +149,7 @@ public class HotbarInventoryModel : BaseInventory
             inventorySlots[SelectedIndex].count--;
             if (inventorySlots[SelectedIndex].count <= MIN_ITEM_COUNT)
             {
-                inventorySlots[SelectedIndex].Clear();
+                inventorySlots[SelectedIndex].Clear();  
             }
             _SlotUI[SelectedIndex].RenderVisual();
             // EventBus<InventoryUIRefreshEvent>.Raise(new InventoryUIRefreshEvent() { });

@@ -1,123 +1,92 @@
+using System;
 using Lean.Pool;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerHandVisualizer : MonoBehaviour
 {
-    [SerializeField] private Transform _spawnTransform;
+    [SerializeField] private Transform spawnTransform;
+    [SerializeField] private Item bareHand;
+    
+    private SlotData currentSlotData;
+    private GameObject currentSpawnedPrefab;
+    private Item currentSpawnedItem;
 
-    [Header("Bare Hand")]
-    [SerializeField] private GameObject _bareHandPrefab;
-
-    private SlotData _currentSlotData;
-    private GameObject _currentItem;
-    private Animator _currentAnimator;
-    private Vector3 _initialSpawnPosition;
-
-    // ── Public Accessors ──────────────────────────────────────────────────────
-
-    /// <summary>Animator on the currently visible hand or item model.</summary>
-    public Animator CurrentAnimator => _currentAnimator;
-
-    /// <summary>The currently spawned hand / item GameObject.</summary>
-    public GameObject CurrentItemInstance => _currentItem;
-
-    /// <summary>True when the active hotbar slot contains a valid item stack.</summary>
-    public bool IsHoldingItem =>
-        !_currentSlotData.IsUnityNull() &&
-        !_currentSlotData.IsEmpty &&
-        _currentSlotData.count > 0;
-
-    // ── Unity Lifecycle ───────────────────────────────────────────────────────
-
+    private Vector3 intialSpawnPostion;
     private void Awake()
     {
-        _initialSpawnPosition = _spawnTransform.localPosition;
+        intialSpawnPostion = spawnTransform.transform.localPosition;
     }
 
     private void OnEnable()
     {
-        EventBus<OnHotbarChangeEvent>.Subscribe(OnHotbarChanged);
+        EventBus<OnHotbarChangeEvent>.Subscribe(SpawnSlotItem);
     }
 
     private void OnDisable()
     {
-        EventBus<OnHotbarChangeEvent>.Unsubscribe(OnHotbarChanged);
+        EventBus<OnHotbarChangeEvent>.Unsubscribe(SpawnSlotItem);
     }
 
-    // ── Event Handlers ────────────────────────────────────────────────────────
-
-    private void OnHotbarChanged(OnHotbarChangeEvent evt)
+    private void SpawnSlotItem(OnHotbarChangeEvent evt)
     {
-        _currentSlotData = evt.slotData;
-        SpawnSlotItem(_currentSlotData);
-    }
-
-    // ── Core Spawn Logic ──────────────────────────────────────────────────────
-
-    private void SpawnSlotItem(SlotData slotData)
-    {
-        DespawnCurrentItem();
-
-        _spawnTransform.localPosition = _initialSpawnPosition;
-
-        bool slotIsEmpty = slotData.IsUnityNull() || slotData.IsEmpty || slotData.count == 0;
-
-        if (slotIsEmpty)
+        //if (evt.slotData == currentSlotData) return;
+        currentSlotData = evt.slotData;
+        
+        // check if next spawn item is the same one player have
+        if (currentSpawnedItem != null)
         {
-            SpawnBareHand();
+            if (currentSlotData.IsEmpty)
+            {
+                if (currentSpawnedItem == bareHand)
+                {
+                    return;
+                }
+            }
+        }
+        
+        SpawnSlotItem(currentSlotData);
+    }
+
+    private void SpawnSlotItem(SlotData slotdata)
+    {
+        DeSpawnCurrentItem();
+        
+        if (!slotdata.IsEmpty)
+        {
+            if (slotdata.count == 0) return;
+            spawnTransform.localPosition = intialSpawnPostion;
+            spawnTransform.localPosition += currentSlotData.item.spawnOffset;
+            currentSpawnedItem = slotdata.item;
+            currentSpawnedPrefab = LeanPool.Spawn(slotdata.item.prefab, spawnTransform);
+            // if (slotdata.item.type == ItemType.Tool)
+            // {
+            //     spawnTransform.localPosition = intialSpawnPostion;
+            //     spawnTransform.localPosition += currentSlotData.item.spawnOffset;
+            //     currentItem = LeanPool.Spawn(slotdata.item.prefab, spawnTransform);
+            // } else if (slotdata.item.type == ItemType.Seed)
+            // {
+            //     spawnTransform.localPosition = intialSpawnPostion;
+            //     spawnTransform.localPosition += currentSlotData.item.spawnOffset;
+            //     currentItem = LeanPool.Spawn(slotdata.item.prefab, spawnTransform);
+            // }
         }
         else
         {
-            SpawnItemModel(slotData);
+            spawnTransform.localPosition = intialSpawnPostion;
+            spawnTransform.localPosition += bareHand.spawnOffset;
+            currentSpawnedItem = bareHand;
+            currentSpawnedPrefab = LeanPool.Spawn(bareHand.prefab, spawnTransform);
         }
     }
 
-    private void SpawnBareHand()
+    private void DeSpawnCurrentItem()
     {
-        if (_bareHandPrefab == null) return;
-
-        _currentItem = LeanPool.Spawn(_bareHandPrefab, _spawnTransform);
-        _currentAnimator = _currentItem.GetComponentInChildren<Animator>();
-    }
-
-    private void SpawnItemModel(SlotData slotData)
-    {
-        if (slotData.item == null || slotData.item.prefab == null) return;
-
-        _spawnTransform.localPosition += slotData.item.spawnOffset;
-        _currentItem = LeanPool.Spawn(slotData.item.prefab, _spawnTransform);
-        _currentAnimator = _currentItem.GetComponentInChildren<Animator>();
-
-        if (_currentItem.TryGetComponent<IToolItemReceiver>(out var receiver))
+        if (currentSpawnedPrefab != null)
         {
-            receiver.BindItemData(slotData.item);
+            LeanPool.Despawn(currentSpawnedPrefab);
+            currentSpawnedPrefab = null;
+            currentSpawnedItem = null;
         }
-        else
-        {
-            var childReceiver = _currentItem.GetComponentInChildren<IToolItemReceiver>();
-            childReceiver?.BindItemData(slotData.item);
-        }
-    }
-
-    private void DespawnCurrentItem()
-    {
-        if (_currentItem == null) return;
-
-        LeanPool.Despawn(_currentItem);
-        _currentItem = null;
-        _currentAnimator = null;
-    }
-
-    // ── Animation Helpers ─────────────────────────────────────────────────────
-
-    /// <summary>
-    /// Triggers the "Attack" animation on the current hand or item Animator.
-    /// Safe to call when no Animator is present.
-    /// </summary>
-    public void TriggerAttackAnimation()
-    {
-        if (_currentAnimator == null) return;
-        _currentAnimator.SetTrigger("Attack");
     }
 }

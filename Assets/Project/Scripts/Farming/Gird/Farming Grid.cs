@@ -1,4 +1,3 @@
-using UnityEditorInternal;
 using UnityEngine;
 
 public class FarmingGrid : MonoBehaviour, IFarmingGrid
@@ -55,6 +54,12 @@ public class FarmingGrid : MonoBehaviour, IFarmingGrid
         return IsWaterable(cellPos);
     }
 
+    public bool IsWatered(Vector3 worldPos)
+    {
+        var cellPos = grid.WorldToCell(worldPos);
+        return _tileStore.IsWatered(cellPos);
+    }
+
     public bool IsPlanted(Vector3 worldPos, out Vector3 cellWorldPos)
     {
         var cellPos = grid.WorldToCell(worldPos);
@@ -68,7 +73,6 @@ public class FarmingGrid : MonoBehaviour, IFarmingGrid
         cellWorldPos = grid.GetCellCenterWorld(cellPos);
         return IsPlantable(cellPos);
     }
-
     public bool TryTill(Vector3 worldPos, out Vector3Int cellPos)
     {
         cellPos = grid.WorldToCell(worldPos);
@@ -88,15 +92,25 @@ public class FarmingGrid : MonoBehaviour, IFarmingGrid
 
         UnRegisterTiledSoil(cellPos);
         return true;
-    }
+    }    
 
     public bool TryWatering(Vector3 worldPos, out Vector3Int cellPos)
     {
         cellPos = grid.WorldToCell(worldPos);
 
         if (!IsWaterable(cellPos)) return false;
-
+        
         RegisterWateredSoil(cellPos);
+        return true;
+    }
+
+    public bool TryUnWatered(Vector3 worldPos)
+    {
+        var cellPos = grid.WorldToCell(worldPos);
+        
+        if (!_tileStore.IsWatered(cellPos)) return false;
+        
+        UnRegisterWateredSoil(cellPos);
         return true;
     }
 
@@ -105,11 +119,11 @@ public class FarmingGrid : MonoBehaviour, IFarmingGrid
         cellPos = grid.WorldToCell(worldPos);
 
         if (!IsPlantable(cellPos)) return false;
-
+        
         RegisterPlantedSoil(cellPos);
         return true;
     }
-
+    
     public bool TryClearPlant(Vector3 worldPos, out Vector3Int cellPos)
     {
         cellPos = grid.WorldToCell(worldPos);
@@ -120,36 +134,18 @@ public class FarmingGrid : MonoBehaviour, IFarmingGrid
         return true;
     }
 
-    /// <summary>
-    /// Returns true if the tile at <paramref name="cellPos"/> was watered during the current day.
-    /// Delegates directly to <see cref="ITileStore.IsWatered(Vector3Int)"/>.
-    /// </summary>
-    /// <param name="cellPos">The tilemap cell coordinate to query.</param>
-    public bool IsWatered(Vector3Int cellPos) => _tileStore.IsWatered(cellPos);
-
-    /// <summary>
-    /// Resets all watered tiles to dry for the new day.
-    /// Delegates to <see cref="ITileStore.ResetDailyHydration"/>.
-    /// </summary>
-    /// <returns>The number of tiles whose hydration was cleared.</returns>
-    public int ResetDailyHydration() => _tileStore.ResetDailyHydration();
-
-    public Vector3 CellSize => grid != null ? grid.cellSize : Vector3.one;
-
     public Vector3Int WorldToCell(Vector3 worldPos)
     {
-        return grid != null ? grid.WorldToCell(worldPos) : Vector3Int.zero;
+        return grid.WorldToCell(worldPos);
     }
 
     public Vector3 GetCellCenterWorld(Vector3Int cellPos)
     {
-        return grid != null ? grid.GetCellCenterWorld(cellPos) : Vector3.zero;
+        return grid.GetCellCenterWorld(cellPos);
     }
 
     #endregion
-
-    #region Private Methods
-
+    
     private bool IsTilled(Vector3Int cellPos) => _tileStore.IsTilled(cellPos);
 
     private bool IsValidForTilling(Vector3Int cellPos, Vector3 cellWorldPos)
@@ -170,11 +166,11 @@ public class FarmingGrid : MonoBehaviour, IFarmingGrid
         return !_tileStore.IsPlanted(cellPos);
     }
 
-    private void RegisterTilledSoil(Vector3Int cellPos) => _tileStore.SetTilled(cellPos);
-    private void UnRegisterTiledSoil(Vector3Int cellPos) => _tileStore.SetUnTill(cellPos);
-    private void RegisterWateredSoil(Vector3Int cellPos) => _tileStore.SetWatered(cellPos);
-    private void RegisterPlantedSoil(Vector3Int cellPos) => _tileStore.SetPlanted(cellPos);
-    private void UnRegisterPlantedSoil(Vector3Int cellPos) => _tileStore.SetUnPlant(cellPos);
+    private void RegisterTilledSoil(Vector3Int cellPos) => _tileStore.SetTilled(cellPos, true);
 
-    #endregion
+    private void UnRegisterTiledSoil(Vector3Int cellPos) => _tileStore.SetTilled(cellPos, false);
+    private void RegisterWateredSoil(Vector3Int cellPos) => _tileStore.SetWatered(cellPos, true);
+    private void UnRegisterWateredSoil(Vector3Int cellPos) => _tileStore.SetWatered(cellPos, false);
+    private void RegisterPlantedSoil(Vector3Int cellPos) => _tileStore.SetPlanted(cellPos, true);
+    private void UnRegisterPlantedSoil(Vector3Int cellPos) => _tileStore.SetPlanted(cellPos, false);
 }

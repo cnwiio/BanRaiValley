@@ -108,20 +108,130 @@ public abstract class BaseInventory : MonoBehaviour, IInventory
         return true;
     }
 
+    /// <summary>
+    /// Adds as much of the item as will fit (partial fill allowed) and returns the
+    /// amount that could NOT be added (0 if everything fit). Useful for spilling
+    /// overflow into a second inventory, e.g. hotbar -> main inventory.
+    /// Does not raise any events itself; caller is responsible for UI refresh.
+    /// </summary>
+    public virtual int AddItemGetLeftover(Item itemToAdd, int amount)
+    {
+        if (itemToAdd == null || amount <= 0) return amount;
+
+        int remainingAmount = amount;
+        bool isStackable = itemToAdd.stackable;
+        int maxStack = isStackable ? itemToAdd.MaxStack : 1;
+
+        // 1. Fill existing stackable slots first
+        if (isStackable)
+        {
+            for (int i = 0; i < inventorySlots.Length; i++)
+            {
+                if (!inventorySlots[i].IsEmpty && inventorySlots[i].item == itemToAdd)
+                {
+                    int spaceInSlot = maxStack - inventorySlots[i].count;
+                    if (spaceInSlot > 0)
+                    {
+                        int amountToAdd = Mathf.Min(remainingAmount, spaceInSlot);
+                        inventorySlots[i].count += amountToAdd;
+                        remainingAmount -= amountToAdd;
+
+                        if (remainingAmount <= 0)
+                        {
+                            EventBus<InventoryUIRefreshEvent>.Raise(new InventoryUIRefreshEvent() { });
+                            return 0;
+                        }
+                    }
+                }
+            }
+        }
+
+        // 2. Fill empty slots
+        for (int i = 0; i < inventorySlots.Length; i++)
+        {
+            if (inventorySlots[i].IsEmpty)
+            {
+                int amountToAdd = Mathf.Min(remainingAmount, maxStack);
+                inventorySlots[i].item = itemToAdd;
+                inventorySlots[i].count = amountToAdd;
+                remainingAmount -= amountToAdd;
+
+                if (remainingAmount <= 0)
+                {
+                    EventBus<InventoryUIRefreshEvent>.Raise(new InventoryUIRefreshEvent() { });
+                    return 0;
+                }
+            }
+        }
+
+        EventBus<InventoryUIRefreshEvent>.Raise(new InventoryUIRefreshEvent() { });
+        return remainingAmount;
+    }
+
+    /// <summary>
+    /// Tries to stack the item ONLY into existing matching, non-empty, non-full stacks.
+    /// Never touches empty slots. Returns the amount that could NOT be stacked
+    /// (0 if it all stacked in, or the full amount if the item isn't stackable /
+    /// there's no matching stack with room). Does not raise any events itself.
+    /// </summary>
+    public int StackExistingGetLeftover(Item itemToAdd, int amount)
+    {
+        if (itemToAdd == null || amount <= 0) return amount;
+        if (!itemToAdd.stackable) return amount;
+
+        int remainingAmount = amount;
+        int maxStack = itemToAdd.MaxStack;
+
+        for (int i = 0; i < inventorySlots.Length; i++)
+        {
+            if (!inventorySlots[i].IsEmpty && inventorySlots[i].item == itemToAdd)
+            {
+                int spaceInSlot = maxStack - inventorySlots[i].count;
+                if (spaceInSlot > 0)
+                {
+                    int amountToAdd = Mathf.Min(remainingAmount, spaceInSlot);
+                    inventorySlots[i].count += amountToAdd;
+                    remainingAmount -= amountToAdd;
+
+                    if (remainingAmount <= 0)
+                    {
+                        EventBus<InventoryUIRefreshEvent>.Raise(new InventoryUIRefreshEvent() { });
+                        return 0;
+                    }
+                }
+            }
+        }
+
+        EventBus<InventoryUIRefreshEvent>.Raise(new InventoryUIRefreshEvent() { });
+        return remainingAmount;
+    }
+
     public int AddStackItemToSlot(int index, Item itemToAdd, int amount)
     {
         if (!itemToAdd.stackable) return amount;
 
         int remainingAmount = amount;
-        int maxStack = itemToAdd.MaxStack;
         if (!inventorySlots[index].IsEmpty && inventorySlots[index].item == itemToAdd)
         {
             //Debug.Log(inventorySlots[index].AddToStack(remainingAmount));
             remainingAmount = inventorySlots[index].AddToStack(remainingAmount);
-            return remainingAmount;
         }
 
         return remainingAmount;
+    }
+
+    public int AddItemToEmptySlot(int index, Item itemToAdd, int amount)
+    {
+        if (!inventorySlots[index].IsEmpty || amount < 1) return amount;
+        
+        inventorySlots[index].item = itemToAdd;
+        
+        if (itemToAdd.stackable)
+        {
+            var remainingAmount = inventorySlots[index].AddToStack(amount);
+            return remainingAmount;
+        }
+        return 0;
     }
 
     public void ClearSlot(int index)
@@ -165,78 +275,14 @@ public abstract class BaseInventory : MonoBehaviour, IInventory
         ClearSlot(index);
         return taken;
     }
-
+    
     public virtual SlotData TakeHalfStack(int index)
     {
         if (!IsValidIndex(index) || inventorySlots[index].IsEmpty) return default;
         int halfCount = (inventorySlots[index].count + 1) / 2;
         return inventorySlots[index].Split(halfCount);
     }
-
-    public virtual SlotData TakeSingleItem(int index)
-    {
-        if (!IsValidIndex(index) || inventorySlots[index].IsEmpty) return default;
-        return inventorySlots[index].Split(1);
-    }
-
-    public virtual bool AddSingleItemToSlot(int index, Item item)
-    {
-        if (!IsValidIndex(index) || item == null) return false;
-
-        if (inventorySlots[index].IsEmpty)
-        {
-            inventorySlots[index] = new SlotData { item = item, count = 1 };
-            return true;
-        }
-
-        if (inventorySlots[index].item == item && item.stackable && inventorySlots[index].count < item.MaxStack)
-        {
-            inventorySlots[index].count++;
-            return true;
-        }
-
-        return false;
-    }
-
-    public virtual bool AutoStashItem(SlotData data, int preferredIndex = -1)
-    {
-        if (data.IsEmpty) return true;
-
-        if (preferredIndex >= 0 && IsValidIndex(preferredIndex))
-        {
-            if (inventorySlots[preferredIndex].IsEmpty)
-            {
-                inventorySlots[preferredIndex] = data;
-                return true;
-            }
-
-            if (inventorySlots[preferredIndex].item == data.item && data.item.stackable)
-            {
-                int spaceInPreferred = data.item.MaxStack - inventorySlots[preferredIndex].count;
-                if (data.count <= spaceInPreferred)
-                {
-                    inventorySlots[preferredIndex].count += data.count;
-                    return true;
-                }
-            }
-        }
-
-        if (CanAddItem(data.item, data.count))
-        {
-            if (preferredIndex >= 0 && IsValidIndex(preferredIndex) && inventorySlots[preferredIndex].item == data.item && data.item.stackable)
-            {
-                int remaining = inventorySlots[preferredIndex].AddToStack(data.count);
-                if (remaining <= 0) return true;
-                data.count = remaining;
-            }
-
-            AddItem(data.item, data.count);
-            return true;
-        }
-
-        return false;
-    }
-
+    
     protected bool IsValidIndex(int index)
     {
         if (inventorySlots == null) return false;
