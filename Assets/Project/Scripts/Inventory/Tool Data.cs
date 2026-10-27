@@ -9,9 +9,9 @@ public struct ToolData
     public int patternDimension;
 }
 
-public enum ToolAreaPattern
-{
-    Single = 0,
-    ForwardLine = 1,
-    CenteredSquare = 2
-}
+// public enum ToolAreaPattern
+// {
+//     Single = 0,
+//     ForwardLine = 1,
+//     CenteredSquare = 2
+// }

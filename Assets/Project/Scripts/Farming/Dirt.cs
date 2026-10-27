@@ -7,7 +7,7 @@ public class Dirt : MonoBehaviour, IPoolable
     [SerializeField] private Material initialMaterial;
     [SerializeField] private Material wateredMaterial;
     [SerializeField] private MeshRenderer meshRenderer;
-    [SerializeField] private AwakenedCropHarvestTrigger plant;
+    // [SerializeField] private AwakenedCropHarvestTrigger plant;
 
     public void OnSpawn()
     {
