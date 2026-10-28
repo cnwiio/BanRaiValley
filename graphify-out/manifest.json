@@ -630,10 +630,10 @@
     "semantic_hash": "717f0aecdc124de0dabb1088b3c64989"
   },
   "Assets/Project/Scripts/AI/AI Animation Controller.cs": {
-    "mtime": 1793126277.1479766,
-    "seen": 1793134880.1595538,
-    "ast_hash": "dec9407b1d06f3ce025d5cc26fd36d44",
-    "semantic_hash": "dec9407b1d06f3ce025d5cc26fd36d44"
+    "mtime": 1793156546.2882938,
+    "seen": 1793156886.257688,
+    "ast_hash": "60f96e04b3a16f8e8c22aa94a50f2460",
+    "semantic_hash": ""
   },
   "Assets/Project/Scripts/AI/AI Attack.cs": {
     "mtime": 1793126277.1479766,
@@ -642,10 +642,10 @@
     "semantic_hash": "ef358afce158ab339059833325a792fa"
   },
   "Assets/Project/Scripts/AI/AI Brain.cs": {
-    "mtime": 1793126277.148481,
-    "seen": 1793134880.1595554,
-    "ast_hash": "73c33d8575fefd467718da38ae6ed8fb",
-    "semantic_hash": "73c33d8575fefd467718da38ae6ed8fb"
+    "mtime": 1793156520.9294763,
+    "seen": 1793156886.2576926,
+    "ast_hash": "6de9234c58099dac2f4713524f206456",
+    "semantic_hash": ""
   },
   "Assets/Project/Scripts/AI/AI Data.cs": {
     "mtime": 1793126277.1494868,
@@ -666,10 +666,10 @@
     "semantic_hash": "db781274f29d179e00a13d98e84882ba"
   },
   "Assets/Project/Scripts/AI/AI Movement.cs": {
-    "mtime": 1793126277.1500242,
-    "seen": 1793134880.159559,
-    "ast_hash": "234f1bc1eb08b79e6e6e7414c0e3decf",
-    "semantic_hash": "234f1bc1eb08b79e6e6e7414c0e3decf"
+    "mtime": 1793156539.1488893,
+    "seen": 1793156886.2577004,
+    "ast_hash": "969e9df85b4b7846c3f0b01812494656",
+    "semantic_hash": ""
   },
   "Assets/Project/Scripts/AI/Attack HitBox.cs": {
     "mtime": 1793126277.1500242,
@@ -1116,9 +1116,9 @@
     "semantic_hash": "3620a2b0a1c79cc4ae4b6b6ad599ff4d"
   },
   ".agent/ai-docs/TaskOverview.md": {
-    "mtime": 1793149481.3379376,
-    "seen": 1793154132.332286,
-    "ast_hash": "398b1816a481a5290db6f8caed35a660",
+    "mtime": 1793154138.939795,
+    "seen": 1793156886.2578547,
+    "ast_hash": "e6059f335948e659a6043c13fa2fb315",
     "semantic_hash": ""
   },
   ".agent/ai-docs/TaskReview.md": {
@@ -1713,6 +1713,42 @@
     "mtime": 1793147876.4834454,
     "seen": 1793148777.361253,
     "ast_hash": "4eed5833ed0b1be1723b6a41b1e09c23",
+    "semantic_hash": ""
+  },
+  "Assets/Project/Scripts/AI/BasePlantAIBrain.cs": {
+    "mtime": 1793156515.655216,
+    "seen": 1793156886.2577045,
+    "ast_hash": "94c43e34c474d48e1322eedbb7a3e600",
+    "semantic_hash": ""
+  },
+  "Assets/Project/Scripts/AI/CarrotAIAttack.cs": {
+    "mtime": 1793156571.7459707,
+    "seen": 1793156886.2577064,
+    "ast_hash": "1636cd533c93c6c426d77ec65a5c424d",
+    "semantic_hash": ""
+  },
+  "Assets/Project/Scripts/AI/CarrotAIBrain.cs": {
+    "mtime": 1793156595.1603737,
+    "seen": 1793156886.2577085,
+    "ast_hash": "18449f5f6663d3e74d2a8730afe8a1db",
+    "semantic_hash": ""
+  },
+  "Assets/Project/Scripts/AI/CarrotAIMovement.cs": {
+    "mtime": 1793156558.6306553,
+    "seen": 1793156886.2577107,
+    "ast_hash": "5a9903c5368ca21fc74494c3ec587ff2",
+    "semantic_hash": ""
+  },
+  "Assets/Project/Scripts/AI/CarrotHoverVisual.cs": {
+    "mtime": 1793156579.7381656,
+    "seen": 1793156886.2577124,
+    "ast_hash": "dcb20de194f820276ef3337f3cc2daa7",
+    "semantic_hash": ""
+  },
+  ".agent/Manuals/FlyingCarrotManual.md": {
+    "mtime": 1793156801.8022265,
+    "seen": 1793156886.2578504,
+    "ast_hash": "fe640d32e27ac69b7e95a3f3b92bc8ab",
     "semantic_hash": ""
   }
 }

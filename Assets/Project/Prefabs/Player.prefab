@@ -231,6 +231,9 @@ MonoBehaviour:
   InputReader: {fileID: 3237870357853340737}
   Head: {fileID: 6850055571639333136}
   turnSpeed: 15
+  ceilingCheckMask:
+    serializedVersion: 2
+    m_Bits: 3315
 --- !u!114 &4278678886193900730
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -30,18 +30,21 @@ public class PlayerHandVisualizer : MonoBehaviour
 
     private void SpawnSlotItem(OnHotbarChangeEvent evt)
     {
-        //if (evt.slotData == currentSlotData) return;
         currentSlotData = evt.slotData;
         
-        // check if next spawn item is the same one player have
+        // check if next spawn item is the same one player already has equipped
         if (currentSpawnedItem != null)
         {
-            if (currentSlotData.IsEmpty)
+            if (currentSlotData.IsEmpty || currentSlotData.count == 0)
             {
                 if (currentSpawnedItem == bareHand)
                 {
                     return;
                 }
+            }
+            else if (currentSpawnedItem == currentSlotData.item)
+            {
+                return;
             }
         }
         
@@ -52,24 +55,12 @@ public class PlayerHandVisualizer : MonoBehaviour
     {
         DeSpawnCurrentItem();
         
-        if (!slotdata.IsEmpty)
+        if (!slotdata.IsEmpty && slotdata.count > 0)
         {
-            if (slotdata.count == 0) return;
             spawnTransform.localPosition = intialSpawnPostion;
             spawnTransform.localPosition += currentSlotData.item.spawnOffset;
             currentSpawnedItem = slotdata.item;
             currentSpawnedPrefab = LeanPool.Spawn(slotdata.item.prefab, spawnTransform);
-            // if (slotdata.item.type == ItemType.Tool)
-            // {
-            //     spawnTransform.localPosition = intialSpawnPostion;
-            //     spawnTransform.localPosition += currentSlotData.item.spawnOffset;
-            //     currentItem = LeanPool.Spawn(slotdata.item.prefab, spawnTransform);
-            // } else if (slotdata.item.type == ItemType.Seed)
-            // {
-            //     spawnTransform.localPosition = intialSpawnPostion;
-            //     spawnTransform.localPosition += currentSlotData.item.spawnOffset;
-            //     currentItem = LeanPool.Spawn(slotdata.item.prefab, spawnTransform);
-            // }
         }
         else
         {

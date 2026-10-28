@@ -11,10 +11,26 @@ This file tracks all completed tasks performed by Coder Agents across the projec
 | TASK-001: Shadow Stutter & Terrain Flickering Fix | Lighting & Time System / Scene Configuration | `Assets/Project/Scenes/BuildScene 2.unity`<br>`Assets/Project/Scripts/Time/DayNightLightingController.cs`<br>`Assets/Project/Scripts/Time/Time Manager.cs`<br>`.agent/Manuals/ShadowConfigurationManual.md` | 2026-10-28 |
 | TASK-002: Dirt Disappearance Over Inactivity | Farming System | `Assets/Project/Scripts/Farming/Dirt.cs`<br>`Assets/Project/Scripts/Farming/Dirt Manager.cs` | 2026-10-28 |
 | TASK-003: Sprint and Crouch System | Player Movement System | `Assets/Project/Scripts/Player/Player Movement Data.cs`<br>`Assets/Project/Data/PlayerMovementData.asset`<br>`Assets/Project/Scripts/Player/Player Input Reader.cs`<br>`Assets/Project/Scripts/Player/Player Movement.cs`<br>`Assets/Project/Prefabs/Player.prefab` | 2026-10-28 |
+| TASK-004: Continuous Planting and Harvesting System | Farming & Player Interaction | `Assets/Project/Scripts/EventBus.cs`<br>`Assets/Project/Scripts/Player/Player Input Reader.cs`<br>`Assets/Project/Scripts/Player/Player Interactor.cs`<br>`Assets/Project/Scripts/Farming/Tool/Seed Bag.cs`<br>`Assets/Project/Animation/Seed Bag/Planting.anim`<br>`Assets/Project/Animation/Seed Bag/Seed bag.controller`<br>`Assets/Project/Editor/BanRaiValleyEditorCLI.cs` | 2026-10-28 |
 
 ---
 
 ## Detailed Task Changelog
+
+### TASK-004: Continuous Planting and Harvesting System
+- **Feature & Requirements**:
+  1. Hold Left Mouse Button (`Primary Action`) with Seed Bag equipped to continuously plant seeds across tilled plots.
+  2. Sowing animation loops smoothly while held and cleanly returns to Idle when released or when seeds run out.
+  3. Hold `E` (`Interact`) to continuously harvest/awaken ready and withered crops targeted by the crosshair with a fast interval (~0.15s), avoiding click spam.
+  4. Unity CLI access and batchmode verification utility.
+- **Solution**:
+  1. Extended `EventBus.cs` with `OnPrimaryActionStartedEvent`, `OnPrimaryActionCanceledEvent`, `OnInteractActionStartedEvent`, and `OnInteractActionCanceledEvent`.
+  2. Updated `PlayerInputReader.cs` to track `IsPrimaryActionPressed` and `IsInteractPressed`, binding action `started` and `canceled` events.
+  3. Updated `PlayerInteractor.cs` with hold state and timer (`INTERACT_INTERVAL = 0.15f`) to automatically trigger `Interact()` when sweeping over or holding on `IInteractable` targets.
+  4. Updated `SeedBag.cs` with continuous planting loop (`PLANT_SWEEP_INTERVAL = 0.18f`), dynamically planting as the player sweeps over valid unplanted tilled tiles, and stopping cleanly when LMB is released or seeds run out.
+  5. Set `m_LoopTime: 1` in `Planting.anim` and added `IsPlanting` bool parameter with transitions in `Seed bag.controller` for looping animation.
+  6. Created `BanRaiValleyEditorCLI.cs` under `Assets/Project/Editor/` with static method `VerifyProject()` for headless Unity batchmode execution (`-executeMethod BanRaiValley.EditorCLI.VerifyProject`).
+  7. Verified clean compilation via Unity Editor log (0 errors) and updated knowledge graph via `graphify update .`.
 
 ### TASK-003: Sprint and Crouch System
 - **Feature & Requirements**:

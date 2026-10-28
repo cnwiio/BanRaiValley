@@ -7,6 +7,8 @@ public class PlayerInputReader : MonoBehaviour
     public Vector2 MovementInput { get; private set; }
     public bool IsSprintPressed { get; private set; }
     public bool IsCrouchPressed { get; private set; }
+    public bool IsPrimaryActionPressed { get; private set; }
+    public bool IsInteractPressed { get; private set; }
 
     [SerializeField] private InputActionReference DebugAction;
 
@@ -60,13 +62,17 @@ public class PlayerInputReader : MonoBehaviour
         HotbarSelectAction.action.performed += OnHotBarSelect;
         HotbarScrollAction.action.performed += OnHotBarScroll;
 
+        PrimaryAction.action.started += OnPrimaryActionStarted;
         PrimaryAction.action.performed += OnPrimaryAction;
+        PrimaryAction.action.canceled += OnPrimaryActionCanceled;
         SecondaryAction.action.performed += OnSecondaryAction;
 
         RotateAction.action.performed += OnRotateAction;
         DeleteAction.action.performed += OnDeleteAction;
 
+        InteractAction_PlayerMap.action.started += OnInteractActionStarted;
         InteractAction_PlayerMap.action.performed += OnInteractAction;
+        InteractAction_PlayerMap.action.canceled += OnInteractActionCanceled;
         InteractAction_UIMap.action.performed += OnUIInteractAction;
 
         EscapeAction_PlayerMap.action.performed += OnEscapeAction;
@@ -104,13 +110,19 @@ public class PlayerInputReader : MonoBehaviour
         HotbarSelectAction.action.performed -= OnHotBarSelect;
         HotbarScrollAction.action.performed -= OnHotBarScroll;
 
+        PrimaryAction.action.started -= OnPrimaryActionStarted;
         PrimaryAction.action.performed -= OnPrimaryAction;
+        PrimaryAction.action.canceled -= OnPrimaryActionCanceled;
         SecondaryAction.action.performed -= OnSecondaryAction;
 
         RotateAction.action.performed -= OnRotateAction;
         DeleteAction.action.performed -= OnDeleteAction;
 
+        InteractAction_PlayerMap.action.started -= OnInteractActionStarted;
         InteractAction_PlayerMap.action.performed -= OnInteractAction;
+        InteractAction_PlayerMap.action.canceled -= OnInteractActionCanceled;
+        IsPrimaryActionPressed = false;
+        IsInteractPressed = false;
         InteractAction_UIMap.action.performed -= OnUIInteractAction;
 
         EscapeAction_PlayerMap.action.performed -= OnEscapeAction;
@@ -173,9 +185,22 @@ public class PlayerInputReader : MonoBehaviour
             EventBus<OnJumpEvent>.Raise(new OnJumpEvent() { });
     }
 
+    private void OnPrimaryActionStarted(InputAction.CallbackContext ctx)
+    {
+        IsPrimaryActionPressed = true;
+        EventBus<OnPrimaryActionStartedEvent>.Raise(new OnPrimaryActionStartedEvent());
+    }
+
     private void OnPrimaryAction(InputAction.CallbackContext ctx)
     {
+        IsPrimaryActionPressed = true;
         EventBus<OnPrimaryActionEvent>.Raise(new OnPrimaryActionEvent() { });
+    }
+
+    private void OnPrimaryActionCanceled(InputAction.CallbackContext ctx)
+    {
+        IsPrimaryActionPressed = false;
+        EventBus<OnPrimaryActionCanceledEvent>.Raise(new OnPrimaryActionCanceledEvent());
     }
 
     private void OnSecondaryAction(InputAction.CallbackContext ctx)
@@ -193,9 +218,22 @@ public class PlayerInputReader : MonoBehaviour
         EventBus<OnDeleteActionEvent>.Raise(new OnDeleteActionEvent() { });
     }
 
+    private void OnInteractActionStarted(InputAction.CallbackContext ctx)
+    {
+        IsInteractPressed = true;
+        EventBus<OnInteractActionStartedEvent>.Raise(new OnInteractActionStartedEvent());
+    }
+
     private void OnInteractAction(InputAction.CallbackContext ctx)
     {
+        IsInteractPressed = true;
         EventBus<OnInteractActionEvent>.Raise(new OnInteractActionEvent());
+    }
+
+    private void OnInteractActionCanceled(InputAction.CallbackContext ctx)
+    {
+        IsInteractPressed = false;
+        EventBus<OnInteractActionCanceledEvent>.Raise(new OnInteractActionCanceledEvent());
     }
 
     private void OnUIInteractAction(InputAction.CallbackContext ctx)

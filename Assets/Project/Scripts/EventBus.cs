@@ -94,8 +94,12 @@ public struct ChangeActionMap : IEvent
     public ActionMapType MapType;
 }
 public struct OnPrimaryActionEvent : IEvent { }
+public struct OnPrimaryActionStartedEvent : IEvent { }
+public struct OnPrimaryActionCanceledEvent : IEvent { }
 public struct OnSecondaryActionEvent : IEvent { }
 public struct OnInteractActionEvent : IEvent { }
+public struct OnInteractActionStartedEvent : IEvent { }
+public struct OnInteractActionCanceledEvent : IEvent { }
 public struct OnUIInteractActionEvent : IEvent { }
 public struct OnRotateActionEvent : IEvent { }
 public struct OnDeleteActionEvent : IEvent { }
