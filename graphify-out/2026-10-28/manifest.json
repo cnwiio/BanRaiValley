@@ -630,10 +630,10 @@
     "semantic_hash": "717f0aecdc124de0dabb1088b3c64989"
   },
   "Assets/Project/Scripts/AI/AI Animation Controller.cs": {
-    "mtime": 1793126277.1479766,
-    "seen": 1793134880.1595538,
+    "mtime": 1793157557.1887257,
+    "seen": 1793167178.970212,
     "ast_hash": "dec9407b1d06f3ce025d5cc26fd36d44",
-    "semantic_hash": "dec9407b1d06f3ce025d5cc26fd36d44"
+    "semantic_hash": ""
   },
   "Assets/Project/Scripts/AI/AI Attack.cs": {
     "mtime": 1793126277.1479766,
@@ -642,10 +642,10 @@
     "semantic_hash": "ef358afce158ab339059833325a792fa"
   },
   "Assets/Project/Scripts/AI/AI Brain.cs": {
-    "mtime": 1793126277.148481,
-    "seen": 1793134880.1595554,
+    "mtime": 1793157557.1897187,
+    "seen": 1793167178.9702168,
     "ast_hash": "73c33d8575fefd467718da38ae6ed8fb",
-    "semantic_hash": "73c33d8575fefd467718da38ae6ed8fb"
+    "semantic_hash": ""
   },
   "Assets/Project/Scripts/AI/AI Data.cs": {
     "mtime": 1793126277.1494868,
@@ -666,10 +666,10 @@
     "semantic_hash": "db781274f29d179e00a13d98e84882ba"
   },
   "Assets/Project/Scripts/AI/AI Movement.cs": {
-    "mtime": 1793126277.1500242,
-    "seen": 1793134880.159559,
+    "mtime": 1793157557.189222,
+    "seen": 1793167178.9702249,
     "ast_hash": "234f1bc1eb08b79e6e6e7414c0e3decf",
-    "semantic_hash": "234f1bc1eb08b79e6e6e7414c0e3decf"
+    "semantic_hash": ""
   },
   "Assets/Project/Scripts/AI/Attack HitBox.cs": {
     "mtime": 1793126277.1500242,
@@ -684,10 +684,10 @@
     "semantic_hash": "f1b195eddf91160afcb34d86bd50425c"
   },
   "Assets/Project/Scripts/Bare Hand.cs": {
-    "mtime": 1793126277.1546364,
-    "seen": 1793134880.1595614,
-    "ast_hash": "771d06168f3be9f4ee24523468ca77b6",
-    "semantic_hash": "771d06168f3be9f4ee24523468ca77b6"
+    "mtime": 1793166894.6736214,
+    "seen": 1793167178.9702308,
+    "ast_hash": "160e99211c6feae4c0702bbeeb57406c",
+    "semantic_hash": ""
   },
   "Assets/Project/Scripts/Bed.cs": {
     "mtime": 1793126277.1546364,
@@ -708,16 +708,16 @@
     "semantic_hash": ""
   },
   "Assets/Project/Scripts/Combat/ComboAttackController.cs": {
-    "mtime": 1793126277.156369,
-    "seen": 1793134880.1595647,
-    "ast_hash": "d5e3209cd647b0419ff23d5651b3fbfb",
-    "semantic_hash": "d5e3209cd647b0419ff23d5651b3fbfb"
+    "mtime": 1793166879.042273,
+    "seen": 1793167178.9702392,
+    "ast_hash": "d1e17182ee3c35c1fcaaa4859f68c5d6",
+    "semantic_hash": ""
   },
   "Assets/Project/Scripts/EventBus.cs": {
-    "mtime": 1793126277.1580935,
-    "seen": 1793134880.1595657,
-    "ast_hash": "21350427943b182aa76af63e1b18190f",
-    "semantic_hash": "21350427943b182aa76af63e1b18190f"
+    "mtime": 1793165378.6352656,
+    "seen": 1793167178.9702413,
+    "ast_hash": "011354c9446ffb2b7454d74dbd2b875f",
+    "semantic_hash": ""
   },
   "Assets/Project/Scripts/Farming/Dirt Manager.cs": {
     "mtime": 1793149420.5153325,
@@ -810,16 +810,16 @@
     "semantic_hash": "2da1467dfbda115cad4aefab2bf7d50b"
   },
   "Assets/Project/Scripts/Farming/Tool/Hoe.cs": {
-    "mtime": 1793126277.164649,
-    "seen": 1793134880.1595793,
-    "ast_hash": "39f4ac40ea5c24a61eea49be22e243c4",
-    "semantic_hash": "39f4ac40ea5c24a61eea49be22e243c4"
+    "mtime": 1793166939.349746,
+    "seen": 1793167178.970272,
+    "ast_hash": "4c6627c04bafb3a728c3fb5361b16984",
+    "semantic_hash": ""
   },
   "Assets/Project/Scripts/Farming/Tool/Seed Bag.cs": {
-    "mtime": 1793126277.1651456,
-    "seen": 1793134880.1595802,
-    "ast_hash": "ebe7eb5e786f7e36bb47295c744e986a",
-    "semantic_hash": "ebe7eb5e786f7e36bb47295c744e986a"
+    "mtime": 1793165419.34894,
+    "seen": 1793167178.970274,
+    "ast_hash": "9ffc9bf807c0bcfc76aa9020d3a341e7",
+    "semantic_hash": ""
   },
   "Assets/Project/Scripts/Farming/Tool/ToolAreaCalculator.cs": {
     "mtime": 1793126277.1651456,
@@ -900,10 +900,10 @@
     "semantic_hash": "512a9c58da8c88bf80956919e66bac6c"
   },
   "Assets/Project/Scripts/Inventory/Player Hand Visualizer.cs": {
-    "mtime": 1793126277.169618,
-    "seen": 1793134880.159592,
-    "ast_hash": "742611d4bbf6d4e0cf4126e0eba832bc",
-    "semantic_hash": "742611d4bbf6d4e0cf4126e0eba832bc"
+    "mtime": 1793161540.0476162,
+    "seen": 1793167178.9703007,
+    "ast_hash": "d38f63414d61fd9694f02293cf8f5f14",
+    "semantic_hash": ""
   },
   "Assets/Project/Scripts/Inventory/Player Inventory Manager.cs": {
     "mtime": 1793126277.169618,
@@ -930,10 +930,10 @@
     "semantic_hash": "7cf5874ec7af93ed6eb065406ece0125"
   },
   "Assets/Project/Scripts/Player/Input Manager.cs": {
-    "mtime": 1793126277.1711476,
-    "seen": 1793134880.159596,
-    "ast_hash": "014683100bfe31917161d87dffd847bf",
-    "semantic_hash": "014683100bfe31917161d87dffd847bf"
+    "mtime": 1793165399.3850074,
+    "seen": 1793167178.9703097,
+    "ast_hash": "11d96d5f64f80ce86b8a488261cd8d75",
+    "semantic_hash": ""
   },
   "Assets/Project/Scripts/Player/Player Combat Manager.cs": {
     "mtime": 1793126277.1711476,
@@ -948,16 +948,16 @@
     "semantic_hash": "10936b4461259bdb450d54d3d29daa12"
   },
   "Assets/Project/Scripts/Player/Player Input Reader.cs": {
-    "mtime": 1793153945.9508684,
-    "seen": 1793154132.3322237,
-    "ast_hash": "76200094d4023bd768130cbb49fe70a7",
+    "mtime": 1793160267.9259646,
+    "seen": 1793167178.970315,
+    "ast_hash": "e0202b93e1b385d51beb41617b25071a",
     "semantic_hash": ""
   },
   "Assets/Project/Scripts/Player/Player Interactor.cs": {
-    "mtime": 1793126277.1721978,
-    "seen": 1793134880.159601,
-    "ast_hash": "d787cdd10bafb00c1a8cb52ff37d9e72",
-    "semantic_hash": "d787cdd10bafb00c1a8cb52ff37d9e72"
+    "mtime": 1793167097.5420578,
+    "seen": 1793167178.9703166,
+    "ast_hash": "3c942a40ef4d312d5f66bb7d22c852e0",
+    "semantic_hash": ""
   },
   "Assets/Project/Scripts/Player/Player Movement Data.cs": {
     "mtime": 1793153912.9747455,
@@ -1098,16 +1098,16 @@
     "semantic_hash": "40a28338ae17fa3a4d6e572cdbf6a3e5"
   },
   "Packages/manifest.json": {
-    "mtime": 1788359233.2525606,
-    "seen": 1793134880.1596274,
-    "ast_hash": "b2012789fbd2f912c1d533466eb21784",
-    "semantic_hash": "b2012789fbd2f912c1d533466eb21784"
+    "mtime": 1793158367.8158276,
+    "seen": 1793167178.9703624,
+    "ast_hash": "a426ea1d7167abd8dd24454592b440f8",
+    "semantic_hash": ""
   },
   "Packages/packages-lock.json": {
-    "mtime": 1788971175.1368594,
-    "seen": 1793134880.1596284,
-    "ast_hash": "402b4cb3bee7660be6483e7c96da09df",
-    "semantic_hash": "402b4cb3bee7660be6483e7c96da09df"
+    "mtime": 1793160421.935635,
+    "seen": 1793167178.970364,
+    "ast_hash": "57cbc7b9ef8b10b575ffb2cbac0b16d2",
+    "semantic_hash": ""
   },
   "ProjectSettings/SceneTemplateSettings.json": {
     "mtime": 1788359233.256104,
@@ -1116,9 +1116,9 @@
     "semantic_hash": "3620a2b0a1c79cc4ae4b6b6ad599ff4d"
   },
   ".agent/ai-docs/TaskOverview.md": {
-    "mtime": 1793149481.3379376,
-    "seen": 1793154132.332286,
-    "ast_hash": "398b1816a481a5290db6f8caed35a660",
+    "mtime": 1793165610.2715304,
+    "seen": 1793167178.97037,
+    "ast_hash": "e89ab7222aefa689828c8301d96549c8",
     "semantic_hash": ""
   },
   ".agent/ai-docs/TaskReview.md": {
@@ -1713,6 +1713,60 @@
     "mtime": 1793147876.4834454,
     "seen": 1793148777.361253,
     "ast_hash": "4eed5833ed0b1be1723b6a41b1e09c23",
+    "semantic_hash": ""
+  },
+  ".agent/ai-docs/plan/continuous-attack-plan.md": {
+    "mtime": 1793166700.090569,
+    "seen": 1793167178.970374,
+    "ast_hash": "cf301e4131a99f7f69f7a6c8e7c54679",
+    "semantic_hash": ""
+  },
+  ".agent/ai-docs/plan/continuous-planting-harvesting-plan.md": {
+    "mtime": 1793160039.6446173,
+    "seen": 1793167178.9703763,
+    "ast_hash": "f430675ffaed704bcc9050dcb8484e7a",
+    "semantic_hash": ""
+  },
+  ".agent/ai-docs/tasks/continuous-attack/task-01-combo-controller.md": {
+    "mtime": 1793166707.9524014,
+    "seen": 1793167178.970378,
+    "ast_hash": "2dec7fb3c33d5835e55d4d93687c153d",
+    "semantic_hash": ""
+  },
+  ".agent/ai-docs/tasks/continuous-attack/task-02-bare-hand.md": {
+    "mtime": 1793166715.7566583,
+    "seen": 1793167178.9703798,
+    "ast_hash": "7c167bc3a4aa3ceb32eb6df49655bfa5",
+    "semantic_hash": ""
+  },
+  ".agent/ai-docs/tasks/continuous-attack/task-03-hoe-attack.md": {
+    "mtime": 1793166725.0509603,
+    "seen": 1793167178.9703815,
+    "ast_hash": "33d1a22ad26dcf34111b1f12cd569a51",
+    "semantic_hash": ""
+  },
+  ".agent/ai-docs/tasks/continuous-planting-harvesting/task-01-input-events.md": {
+    "mtime": 1793160047.0041068,
+    "seen": 1793167178.9703832,
+    "ast_hash": "4d0bd423982001a5f9678eda143a2530",
+    "semantic_hash": ""
+  },
+  ".agent/ai-docs/tasks/continuous-planting-harvesting/task-02-continuous-harvest.md": {
+    "mtime": 1793160054.3504107,
+    "seen": 1793167178.9703846,
+    "ast_hash": "545bbf56e61f5292db685389e18a42ac",
+    "semantic_hash": ""
+  },
+  ".agent/ai-docs/tasks/continuous-planting-harvesting/task-03-continuous-planting.md": {
+    "mtime": 1793160062.5085714,
+    "seen": 1793167178.9703863,
+    "ast_hash": "7312a22b86e7f84fb00df5ece175898c",
+    "semantic_hash": ""
+  },
+  ".agent/ai-docs/tasks/continuous-planting-harvesting/task-04-unity-cli.md": {
+    "mtime": 1793160068.388166,
+    "seen": 1793167178.9703877,
+    "ast_hash": "ff93afe4dcd3a96e17a81de620b2c4d2",
     "semantic_hash": ""
   }
 }

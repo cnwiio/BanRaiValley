@@ -157,6 +157,7 @@ public struct OnWateringEvent : IEvent
 #region Plant Event
 
 public struct OnStartPlantingEvent : IEvent { }
+public struct OnEndPlantingEvent : IEvent { }
 
 public struct OnPlantingEvent : IEvent
 {

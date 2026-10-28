@@ -12,10 +12,40 @@ This file tracks all completed tasks performed by Coder Agents across the projec
 | TASK-002: Dirt Disappearance Over Inactivity | Farming System | `Assets/Project/Scripts/Farming/Dirt.cs`<br>`Assets/Project/Scripts/Farming/Dirt Manager.cs` | 2026-10-28 |
 | TASK-003: Sprint and Crouch System | Player Movement System | `Assets/Project/Scripts/Player/Player Movement Data.cs`<br>`Assets/Project/Data/PlayerMovementData.asset`<br>`Assets/Project/Scripts/Player/Player Input Reader.cs`<br>`Assets/Project/Scripts/Player/Player Movement.cs`<br>`Assets/Project/Prefabs/Player.prefab` | 2026-10-28 |
 | TASK-004: Continuous Planting and Harvesting System | Farming & Player Interaction | `Assets/Project/Scripts/EventBus.cs`<br>`Assets/Project/Scripts/Player/Player Input Reader.cs`<br>`Assets/Project/Scripts/Player/Player Interactor.cs`<br>`Assets/Project/Scripts/Farming/Tool/Seed Bag.cs`<br>`Assets/Project/Animation/Seed Bag/Planting.anim`<br>`Assets/Project/Animation/Seed Bag/Seed bag.controller`<br>`Assets/Project/Editor/BanRaiValleyEditorCLI.cs` | 2026-10-28 |
+| TASK-005: Continuous Attack System (Bare Hand & Hoe) | Combat & Attackable Tools | `Assets/Project/Scripts/Combat/ComboAttackController.cs`<br>`Assets/Project/Scripts/Bare Hand.cs`<br>`Assets/Project/Scripts/Farming/Tool/Hoe.cs`<br>`Assets/Project/Scripts/Player/Player Interactor.cs` | 2026-10-28 |
 
 ---
 
 ## Detailed Task Changelog
+
+### TASK-005: Continuous Attack System (Bare Hand & Hoe)
+- **Feature & Requirements**:
+  1. Make attackable tools (`BareHand` and `Hoe`) holdable with continuous combo attacking.
+  2. Holding Left Mouse Button (`Primary Action`) automatically cycles combo attacks seamlessly (Attack 1 -> Attack 2 for Bare Hand; Attack 1 -> Attack 2 -> Attack 3 for Hoe).
+  3. Single clicks still function as discrete queued attacks without double-attacking.
+  4. Exposed configurable `holdThreshold` variable in Inspector on both `BareHand` and `Hoe`.
+  5. Movement and sprinting remain at full freedom while attacking.
+  6. Hoe's Farming/Tilling/Deleting modes and right-click toggle remain completely unaffected.
+- **Root Cause of Single-Click Double-Attacking**:
+  1. Unity Input System fires `started` and `performed` back-to-back on button press down. `started` called `SetHoldAttack(true)` / `Attack()`, setting `isAttacking = true`. Immediately on the same frame, `performed` fired `OnPrimaryActionEvent`, which called `TryAttack()`. Because `isAttacking` was already true, it double-buffered `pendingAttack = true`, causing an unwanted second swing when the first swing finished.
+  2. `BareHand`'s animation hit event (`OnAnimationHit`) occurred at 0.166s, which is faster than an average human mouse click release (~0.18-0.22s). Without a hold duration threshold check, any normal tap was still physically held down when the first swing hit.
+- **Solution**:
+  1. Added exposed `[SerializeField] private float holdThreshold = 0.25f;` to both `BareHand` and `Hoe` (with Inspector tooltip).
+  2. Extended `ComboAttackController.cs`:
+     - Added `pressStartTime`, `HoldThreshold`, and dedicated `OnPressStarted()` / `OnPressCanceled()` methods.
+     - In `OnAnimationHit()`, evaluates `bool isHoldActive = isHoldingAttack && (Time.time - pressStartTime >= holdThreshold);`. Only triggers continuous follow-up if hold threshold has elapsed.
+     - In `Update()`, checks if the button is still held past `holdThreshold` to start the next combo swing if the initial swing finished before threshold.
+  3. In `BareHand.cs`:
+     - Removed redundant `OnPrimaryActionEvent` listener to eliminate phantom double-buffering.
+     - Wired `OnPrimaryActionStarted` $\to$ `combo.OnPressStarted()`, `OnPrimaryActionCanceled` $\to$ `combo.OnPressCanceled()`.
+     - Added `combo.HoldThreshold = holdThreshold; combo.Update();` in `Update()`.
+  4. In `Hoe.cs`:
+     - In `PrimaryAction()`, bypassed combo calls when in `HoeState.Idle` / `HoeState.Attacking` since press is already handled by `OnPrimaryActionStarted`.
+     - In `Update()`, runs `combo.Update()` and dynamically updates `combo.HoldThreshold`.
+     - Releasing button or changing action map cleanly cancels hold.
+  5. Hardened `PlayerInteractor.cs`:
+     - Added null safety checks for `Camera.main` and `Mouse.current` in `RayCastAtCursor()` to eliminate any startup/domain reload `NullReferenceException`.
+  6. Verified compilation via Unity Editor log (0 errors) and updated knowledge graph via `graphify update .`.
 
 ### TASK-004: Continuous Planting and Harvesting System
 - **Feature & Requirements**:
@@ -31,6 +61,7 @@ This file tracks all completed tasks performed by Coder Agents across the projec
   5. Set `m_LoopTime: 1` in `Planting.anim` and added `IsPlanting` bool parameter with transitions in `Seed bag.controller` for looping animation.
   6. Created `BanRaiValleyEditorCLI.cs` under `Assets/Project/Editor/` with static method `VerifyProject()` for headless Unity batchmode execution (`-executeMethod BanRaiValley.EditorCLI.VerifyProject`).
   7. Verified clean compilation via Unity Editor log (0 errors) and updated knowledge graph via `graphify update .`.
+  8. Fixed hotbar selection lockup: In `InputManager.cs`, stopped disabling `HotbarActionMap` during continuous planting, added `OnEndPlantingEvent`, and guaranteed hotbar action map is always restored when planting ends.
 
 ### TASK-003: Sprint and Crouch System
 - **Feature & Requirements**:

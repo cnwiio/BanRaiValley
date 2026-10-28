@@ -62,6 +62,10 @@ public class PlayerInteractor : MonoBehaviour
 
     private Ray RayCastAtCursor()
     {
+        if (_camera == null) _camera = Camera.main;
+        if (_mouse == null) _mouse = Mouse.current;
+        if (_camera == null || _mouse == null) return default;
+
         _mousePos = _mouse.position.ReadValue();
         _mousePos.z = _camera.nearClipPlane;
         return _camera.ScreenPointToRay(_mousePos);
@@ -72,6 +76,8 @@ public class PlayerInteractor : MonoBehaviour
         if (inputManager.CurrentActionMaptype != ActionMapType.Player) return;
 
         _ray = RayCastAtCursor();
+        if (_camera == null || _mouse == null) return;
+
         if (Physics.Raycast(_ray, out _hit, range, layerMask) &&
             _hit.collider.TryGetComponent<IInteractable>(out var interactable))
         {

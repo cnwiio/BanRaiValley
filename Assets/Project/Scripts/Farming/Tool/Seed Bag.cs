@@ -33,6 +33,11 @@ public class SeedBag : FarmingToolBase, IPoolable
                     EndPreviewNow();
             }
 
+            if (_currentState == SeedBagState.Planting && value != SeedBagState.Planting)
+            {
+                EventBus<OnEndPlantingEvent>.Raise(new OnEndPlantingEvent());
+            }
+
             if (value == SeedBagState.Planting)
             {
                 EventBus<OnStartPlantingEvent>.Raise(new OnStartPlantingEvent());
@@ -69,6 +74,7 @@ public class SeedBag : FarmingToolBase, IPoolable
         EndPreviewNow();
         StopPlantingLoop();
         CurrentState = SeedBagState.Farm;
+        EventBus<OnEndPlantingEvent>.Raise(new OnEndPlantingEvent());
     }
 
     private void OnChangeActionMap(ChangeActionMap evt)
@@ -131,6 +137,7 @@ public class SeedBag : FarmingToolBase, IPoolable
         {
             CurrentState = SeedBagState.Farm;
         }
+        EventBus<OnEndPlantingEvent>.Raise(new OnEndPlantingEvent());
     }
 
     public void OnPlantingAnimationFinished()

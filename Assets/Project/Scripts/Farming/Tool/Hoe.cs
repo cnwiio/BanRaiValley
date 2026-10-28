@@ -56,6 +56,8 @@ public class Hoe : FarmingToolBase
     }
     
     private readonly List<Vector3Int> _pendingTillingCells = new List<Vector3Int>(MAX_TOOL_CELLS);
+    [Tooltip("Duration in seconds the primary action button must be held before continuous combo looping triggers.")]
+    [SerializeField] private float holdThreshold = 0.25f;
     private ComboAttackController combo;
     
     private const int HoeRange = 10;
@@ -65,7 +67,7 @@ public class Hoe : FarmingToolBase
     protected override void Awake()
     {
         base.Awake();
-        combo = new ComboAttackController(hoeAnimator, 3);
+        combo = new ComboAttackController(hoeAnimator, 3, holdThreshold);
     }
 
     protected override void OnEnable()
@@ -74,6 +76,8 @@ public class Hoe : FarmingToolBase
         EventBus<ChangeActionMap>.Subscribe(OnChangeActionMap);
         EventBus<OnRotateActionEvent>.Subscribe(OnRotateAction);
         EventBus<OnDeleteActionEvent>.Subscribe(OnDeleteAction);
+        EventBus<OnPrimaryActionStartedEvent>.Subscribe(OnPrimaryActionStarted);
+        EventBus<OnPrimaryActionCanceledEvent>.Subscribe(OnPrimaryActionCanceled);
     }
 
     protected override void OnDisable()
@@ -82,14 +86,32 @@ public class Hoe : FarmingToolBase
         EventBus<ChangeActionMap>.Unsubscribe(OnChangeActionMap);
         EventBus<OnRotateActionEvent>.Unsubscribe(OnRotateAction);
         EventBus<OnDeleteActionEvent>.Unsubscribe(OnDeleteAction);
+        EventBus<OnPrimaryActionStartedEvent>.Unsubscribe(OnPrimaryActionStarted);
+        EventBus<OnPrimaryActionCanceledEvent>.Unsubscribe(OnPrimaryActionCanceled);
 
+        combo.OnPressCanceled();
         CurrentState = HoeState.Idle;
+    }
+
+    private void OnPrimaryActionStarted(OnPrimaryActionStartedEvent evt)
+    {
+        if (CurrentState == HoeState.Idle || CurrentState == HoeState.Attacking)
+        {
+            CurrentState = HoeState.Attacking;
+            combo.OnPressStarted();
+        }
+    }
+
+    private void OnPrimaryActionCanceled(OnPrimaryActionCanceledEvent evt)
+    {
+        combo.OnPressCanceled();
     }
 
     void OnChangeActionMap(ChangeActionMap evt)
     {
         if (evt.MapType != ActionMapType.Player)
         {
+            combo.OnPressCanceled();
             CurrentState = HoeState.Idle;
         }
     }
@@ -166,14 +188,9 @@ public class Hoe : FarmingToolBase
                 DeleteTile(cellWorldPos);
             }
         } 
-        else if (CurrentState == HoeState.Idle)
+        else if (CurrentState == HoeState.Idle || CurrentState == HoeState.Attacking)
         {
-            CurrentState = HoeState.Attacking;
-            combo.TryAttack();
-        }
-        else if (CurrentState == HoeState.Attacking)
-        {
-            combo.TryAttack();
+            // Attack input is handled via OnPrimaryActionStarted to avoid duplicate buffering on single clicks
         }
     }
 
@@ -181,7 +198,10 @@ public class Hoe : FarmingToolBase
     {
         if (CurrentState != HoeState.Tilling && 
             CurrentState != HoeState.Attacking)
+        {
+            combo.OnPressCanceled();
             CurrentState = CurrentState == HoeState.Farming ? HoeState.Idle : HoeState.Farming;
+        }
     }
 
     private void StartTilling()
@@ -243,11 +263,21 @@ public class Hoe : FarmingToolBase
     {
         combo.OnAnimationHit();
         EventBus<OnPlayerRequestAttackEvent>.Raise(new OnPlayerRequestAttackEvent());
-        if (!combo.IsAttacking()) CurrentState = HoeState.Idle;
+        if (!combo.IsAttacking() && !combo.IsHolding) CurrentState = HoeState.Idle;
     }
 
     void Update()
     {
+        if (CurrentState == HoeState.Idle || CurrentState == HoeState.Attacking)
+        {
+            combo.HoldThreshold = holdThreshold;
+            combo.Update();
+            if (combo.IsAttacking())
+            {
+                CurrentState = HoeState.Attacking;
+            }
+        }
+
         if (!TryGetGrid()) return;
 
         if (CurrentState == HoeState.Farming)

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -58,6 +58,7 @@ public class InputManager : MonoBehaviour
         EventBus<OnWateringEvent>.Subscribe(OnWatering);
         EventBus<OnStartPlantingEvent>.Subscribe(OnStartPlanting);
         EventBus<OnPlantingEvent>.Subscribe(OnPlanting);
+        EventBus<OnEndPlantingEvent>.Subscribe(OnEndPlanting);
         
         CurrentActionMaptype = ActionMapType.Player;
     }
@@ -70,6 +71,7 @@ public class InputManager : MonoBehaviour
         EventBus<OnWateringEvent>.Unsubscribe(OnWatering);
         EventBus<OnStartPlantingEvent>.Unsubscribe(OnStartPlanting);
         EventBus<OnPlantingEvent>.Unsubscribe(OnPlanting);
+        EventBus<OnEndPlantingEvent>.Unsubscribe(OnEndPlanting);
         
         UIActionMap?.Disable();
         playerActionMap?.Disable();
@@ -106,9 +108,13 @@ public class InputManager : MonoBehaviour
     }
     private void OnStartPlanting(OnStartPlantingEvent evt)
     {
-        HotbarActionMap?.Disable();
+        // Keep HotbarActionMap enabled during continuous planting so player can always swap hotbar items
     }
     private void OnPlanting(OnPlantingEvent evt)
+    {
+        HotbarActionMap?.Enable();
+    }
+    private void OnEndPlanting(OnEndPlantingEvent evt)
     {
         HotbarActionMap?.Enable();
     }
