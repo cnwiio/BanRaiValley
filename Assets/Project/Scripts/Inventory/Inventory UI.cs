@@ -78,8 +78,10 @@ public class InventoryUI : MonoBehaviour, ICloseableUI
 
         HotbarUICanvasGroup.alpha = 1;
         InventoryUICanvasGroup.alpha = 1;
-        UIPanel.SetActive(willOpen);
-        HotbarUIPanel.SetActive(willOpen);
+        if (UIPanel != null)
+            UIPanel.SetActive(willOpen);
+        if (HotbarUIPanel != null)
+            HotbarUIPanel.SetActive(!willOpen);
 
         if (willOpen)
         {

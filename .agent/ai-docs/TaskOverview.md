@@ -44,6 +44,7 @@ This file tracks all completed tasks performed by Coder Agents across the projec
     - Centralized `ChangeActionMap` emission into `UIStackManager.RegisterOpen` and `UIStackManager.UnregisterClosed`, guaranteeing `ActionMapType.Player` is raised when any UI closes via non-ESC methods (e.g. inventory key 'I', close button click, interact trigger).
     - Added next-frame cursor lock re-assertion in `InputManager` to prevent Unity Editor ESC key releases and UGUI button mouse-up events from canceling cursor lock.
     - Added click-to-lock fallback in `InputManager.Update()` for window focus regaining in player mode.
+    - Fixed hotbar disappearance upon closing inventory by properly toggling HUD `HotbarUIPanel` active (`!willOpen`) when `UIPanel` closes.
 
 ### TASK-010: Plant AI Architecture Documentation & Prefab Verification (Task 05) — 2026-10-28 14:32
 - **Target Files**:
