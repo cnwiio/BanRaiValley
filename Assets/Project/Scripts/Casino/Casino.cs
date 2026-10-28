@@ -13,6 +13,7 @@ public class Casino : MonoBehaviour
 {
     [Header("UI Ref")]
     [SerializeField] private TMP_InputField inputField;
+    [SerializeField] private TextMeshProUGUI hintText;
     [SerializeField] private TextMeshProUGUI gamblingMoneyText;
     [SerializeField] private TextMeshProUGUI gamblingButtonText;
     [SerializeField] private Button gamblingButton;
@@ -44,14 +45,15 @@ public class Casino : MonoBehaviour
 
     private void Awake()
     {
-        _initialText = inputField.text;
+        _initialText = hintText.text;
         _gamblingTextGameObject = gamblingMoneyText.gameObject;
         _inputFieldGameObject = inputField.gameObject;
     }
     
     private void OnEnable()
     {
-        inputField.text = _initialText;
+        inputField.text = "";
+        hintText.text = _initialText;
         gamblingMoneyText.gameObject.SetActive(false);
         withdrawButton.interactable = false;
         playerMoneyUI.SetText($"Money : {playerMoney.Money.ToString()}$");
@@ -90,7 +92,8 @@ public class Casino : MonoBehaviour
             }
             else
             {
-                inputField.text = "Invalid Amount";
+                inputField.text = "";
+                hintText.text = "Invalid Amount";
             }
         }
         
@@ -107,7 +110,8 @@ public class Casino : MonoBehaviour
         switch (currrentState)
         {
             case CasinoState.Idle:
-                inputField.text = _initialText;
+                inputField.text = "";
+                hintText.text = _initialText;
                 _inputFieldGameObject.SetActive(true);
                 
                 withdrawButton.interactable = false;
