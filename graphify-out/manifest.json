@@ -702,10 +702,10 @@
     "semantic_hash": "56a41797e69c9cf51e34e68524df611a"
   },
   "Assets/Project/Scripts/Casino/Casino.cs": {
-    "mtime": 1793126277.1558497,
-    "seen": 1793134880.1595638,
-    "ast_hash": "7b7497d3a6430bfd4bdcd0c031eefaf1",
-    "semantic_hash": "7b7497d3a6430bfd4bdcd0c031eefaf1"
+    "mtime": 1793148590.927,
+    "seen": 1793148777.3610878,
+    "ast_hash": "41a54c82d6764dcb420916058277b343",
+    "semantic_hash": ""
   },
   "Assets/Project/Scripts/Combat/ComboAttackController.cs": {
     "mtime": 1793126277.156369,
@@ -720,16 +720,16 @@
     "semantic_hash": "21350427943b182aa76af63e1b18190f"
   },
   "Assets/Project/Scripts/Farming/Dirt Manager.cs": {
-    "mtime": 1793126277.1580935,
-    "seen": 1793134880.1595666,
-    "ast_hash": "a1b12d88f2cec11b442f271606073933",
-    "semantic_hash": "a1b12d88f2cec11b442f271606073933"
+    "mtime": 1793149420.5153325,
+    "seen": 1793149474.788941,
+    "ast_hash": "9c483f517c9f7be4a10a0af3a5ad99b3",
+    "semantic_hash": ""
   },
   "Assets/Project/Scripts/Farming/Dirt.cs": {
-    "mtime": 1793127078.9765775,
-    "seen": 1793134880.1595674,
-    "ast_hash": "9d5ad8d668a97c09ae885d88b6df5856",
-    "semantic_hash": "9d5ad8d668a97c09ae885d88b6df5856"
+    "mtime": 1793149411.628251,
+    "seen": 1793149474.7889426,
+    "ast_hash": "098af0532e3a4b4be612ebb46570648d",
+    "semantic_hash": ""
   },
   "Assets/Project/Scripts/Farming/Gird/Farming Grid.cs": {
     "mtime": 1793126277.1593175,
@@ -1008,10 +1008,10 @@
     "semantic_hash": "edacbdeb07d1d5130f4a8505204d004f"
   },
   "Assets/Project/Scripts/Time/DayNightLightingController.cs": {
-    "mtime": 1793126277.1758702,
-    "seen": 1793134880.159609,
-    "ast_hash": "1c9a3044823b7cbb2ba76b1fcbabafef",
-    "semantic_hash": "1c9a3044823b7cbb2ba76b1fcbabafef"
+    "mtime": 1793137082.064431,
+    "seen": 1793148777.3611476,
+    "ast_hash": "bead28b325233299f51c5a412c5cbeb4",
+    "semantic_hash": ""
   },
   "Assets/Project/Scripts/Time/GameDateTime.cs": {
     "mtime": 1793126277.1758702,
@@ -1026,10 +1026,10 @@
     "semantic_hash": "e9ea743c00b2cdd40916849d967b8213"
   },
   "Assets/Project/Scripts/Time/Time Manager.cs": {
-    "mtime": 1793126277.1769707,
-    "seen": 1793134880.1596167,
-    "ast_hash": "03f9e4340fecec54790a92c58b35cf25",
-    "semantic_hash": "03f9e4340fecec54790a92c58b35cf25"
+    "mtime": 1793137123.349076,
+    "seen": 1793148777.3611512,
+    "ast_hash": "3b8a16c353c13ed32e26c6a25e528740",
+    "semantic_hash": ""
   },
   "Assets/Project/Scripts/Time/Time UI.cs": {
     "mtime": 1793126277.1769707,
@@ -1116,10 +1116,10 @@
     "semantic_hash": "3620a2b0a1c79cc4ae4b6b6ad599ff4d"
   },
   ".agent/ai-docs/TaskOverview.md": {
-    "mtime": 1793127059.5179675,
-    "seen": 1793134880.1596298,
-    "ast_hash": "0338b3b71d1ec6912a89db9edc64b203",
-    "semantic_hash": "0338b3b71d1ec6912a89db9edc64b203"
+    "mtime": 1793137179.1465704,
+    "seen": 1793148777.3611708,
+    "ast_hash": "808234a7369b3e9be0deeec5d9cc6ea3",
+    "semantic_hash": ""
   },
   ".agent/ai-docs/TaskReview.md": {
     "mtime": 1793127059.518781,
@@ -1702,5 +1702,17 @@
     "seen": 1793134880.1597166,
     "ast_hash": "5d0c2cbf1cf2b5dcbec18ddb36d4ecb7",
     "semantic_hash": "5d0c2cbf1cf2b5dcbec18ddb36d4ecb7"
+  },
+  ".agent/Manuals/ShadowConfigurationManual.md": {
+    "mtime": 1793137167.4811418,
+    "seen": 1793148777.361169,
+    "ast_hash": "e7f2812deb4c1700677b15808bdd76ea",
+    "semantic_hash": ""
+  },
+  "Assets/Project/Assets/Texture/seamless-textured-grass.jpg": {
+    "mtime": 1793147876.4834454,
+    "seen": 1793148777.361253,
+    "ast_hash": "4eed5833ed0b1be1723b6a41b1e09c23",
+    "semantic_hash": ""
   }
 }

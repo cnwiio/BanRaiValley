@@ -8,9 +8,12 @@ public class Dirt : MonoBehaviour, IPoolable
     [SerializeField] private Material wateredMaterial;
     [SerializeField] private MeshRenderer meshRenderer;
 
+    public int InactiveDays { get; private set; }
+
     public void OnSpawn()
     {
         meshRenderer.sharedMaterial = initialMaterial;
+        InactiveDays = 0;
     }
 
     public void OnDespawn()
@@ -26,5 +29,16 @@ public class Dirt : MonoBehaviour, IPoolable
     public void Watering()
     {
         meshRenderer.sharedMaterial = wateredMaterial;
+        ResetInactiveDays();
+    }
+
+    public void ResetInactiveDays()
+    {
+        InactiveDays = 0;
+    }
+
+    public void IncrementInactiveDays()
+    {
+        InactiveDays++;
     }
 }
