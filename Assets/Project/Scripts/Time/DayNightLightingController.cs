@@ -13,51 +13,38 @@ public class DayNightLightingController : MonoBehaviour
 
     [Tooltip("Fixed yaw (Y-axis) of the sun orbit. Controls the compass direction of sunrise/sunset.")]
     [SerializeField] private float _sunYawDegrees = -30f;
-    
-    [Header("Smoothing")]
-    [SerializeField] private float _rotationSmoothSpeed = 15f;
-    
-    private Quaternion _targetSunRotation;
-    private bool _hasTarget;
 
-    public void HandleTimeTick(float normalizedTime)
+    /// <summary>
+    /// Smoothly updates the sun's pitch and rotation per frame using continuous normalized day time.
+    /// </summary>
+    /// <param name="continuousNormalizedTime">Continuous fraction of the day elapsed (0.0 to 1.0).</param>
+    public void UpdateContinuousLighting(float continuousNormalizedTime)
     {
-        EvaluateLighting(normalizedTime);
-    }
-
-    private void EvaluateLighting(float normalizedTime)
-    {
-        if (_configuration == null)
+        if (_sunDirectionalLight == null)
             return;
 
-        UpdateSunTargetRotation(normalizedTime);
+        float sunPitch = (continuousNormalizedTime * 360f) + _sunRotationOffsetDegrees;
+        _sunDirectionalLight.transform.rotation = Quaternion.Euler(sunPitch, _sunYawDegrees, 0f);
     }
 
-    private void UpdateSunTargetRotation(float normalizedTime)
-    {
-        float sunPitch = (normalizedTime * 360f) + _sunRotationOffsetDegrees;
-        _targetSunRotation = Quaternion.Euler(sunPitch, _sunYawDegrees, 0f);
-        _hasTarget = true;
-    }
-
+    /// <summary>
+    /// Immediately snaps the sun's rotation to the specified normalized day time (e.g. on new day or wake-up).
+    /// </summary>
     public void SetSunRotation(float normalizedTime)
     {
-        float sunPitch = (normalizedTime * 360f) + _sunRotationOffsetDegrees;
-        _sunDirectionalLight.transform.rotation = Quaternion.Euler(sunPitch, _sunYawDegrees, 0f);
-        _hasTarget = false;
-    }
-
-    private void Update()
-    {
-        if (!_sunDirectionalLight || !_hasTarget)
+        if (_sunDirectionalLight == null)
             return;
 
-        float t = 1f - Mathf.Exp(-_rotationSmoothSpeed * Time.deltaTime);
-        _sunDirectionalLight.transform.rotation = Quaternion.Slerp(
-            _sunDirectionalLight.transform.rotation,
-            _targetSunRotation,
-            t
-        );
+        float sunPitch = (normalizedTime * 360f) + _sunRotationOffsetDegrees;
+        _sunDirectionalLight.transform.rotation = Quaternion.Euler(sunPitch, _sunYawDegrees, 0f);
     }
 
+    /// <summary>
+    /// Discrete tick callback kept for backward compatibility with external event callers.
+    /// Continuous lighting updates are now driven per-frame via UpdateContinuousLighting.
+    /// </summary>
+    public void HandleTimeTick(float normalizedTime)
+    {
+        // No-op: per-frame continuous lighting handles smooth sun traversal.
+    }
 }

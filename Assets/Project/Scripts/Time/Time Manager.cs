@@ -10,8 +10,6 @@ public class TimeManager : MonoBehaviour
     [Tooltip("When true, the simulation starts ticking immediately in Awake.")]
     [SerializeField] private bool _autoStartOnAwake = true;
 
-    
-    
     // ----------------------------------------------------------------
     // Private State
     // ----------------------------------------------------------------
@@ -26,9 +24,27 @@ public class TimeManager : MonoBehaviour
     // Public Properties
     // ----------------------------------------------------------------
 
-    public GameDateTime CurrentDateTime   => _currentDateTime;
-    public bool         IsPaused          => _isPaused;
+    public GameDateTime CurrentDateTime     => _currentDateTime;
+    public bool         IsPaused            => _isPaused;
     public float        TimeScaleMultiplier => _timeScaleMultiplier;
+
+    /// <summary>
+    /// Returns the continuous fraction of the 24-hour day elapsed (0.0 to 1.0),
+    /// incorporating sub-tick real-time progress for smooth per-frame visual rendering.
+    /// </summary>
+    public float ContinuousNormalizedDayTime
+    {
+        get
+        {
+            float secondsPerMinute = (configuration != null && configuration.realSecondsPerGameMinute > 0f)
+                ? configuration.realSecondsPerGameMinute
+                : 1f;
+
+            float fractionalMinutes = _minuteAccumulator / secondsPerMinute;
+            float totalMinutes = (_currentDateTime.Hour * 60f) + _currentDateTime.Minute + fractionalMinutes;
+            return (totalMinutes / 1440f) % 1f;
+        }
+    }
 
     private void OnEnable()
     {
@@ -46,16 +62,15 @@ public class TimeManager : MonoBehaviour
     {
         SleepToNextMorning();
     }
+
     private void OnPlayerOutOfHP(OnPlayerOutOfHPEvent evt)
     {
         ForcePassout();
     }
-    
-    
+
     private void Awake()
     {
         _currentDateTime = GameDateTime.InitialDate;
-        
 
         if (!_autoStartOnAwake)
             _isPaused = true;
@@ -63,12 +78,14 @@ public class TimeManager : MonoBehaviour
 
     private void Start()
     {
-        dayNightLightingController.SetSunRotation(_currentDateTime.NormalizedDayTime);
-        // dayNightLightingController.HandleTimeTick(_currentDateTime.NormalizedDayTime);
-        timeUI.HandleTimeTick(_currentDateTime);
+        if (dayNightLightingController != null)
+            dayNightLightingController.SetSunRotation(_currentDateTime.NormalizedDayTime);
+
+        if (timeUI != null)
+            timeUI.HandleTimeTick(_currentDateTime);
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         if (_isPaused || configuration == null)
             return;
@@ -83,9 +100,13 @@ public class TimeManager : MonoBehaviour
             _minuteAccumulator -= secondsPerTick;
             AdvanceMinute(configuration.minuteTickInterval);
         }
+
+        if (dayNightLightingController != null)
+        {
+            dayNightLightingController.UpdateContinuousLighting(ContinuousNormalizedDayTime);
+        }
     }
-    
-    
+
     /// <summary>
     /// Advances the in-game clock by the specified number of minutes,
     /// handling hour roll-overs, passout detection, and event emission.
@@ -111,13 +132,6 @@ public class TimeManager : MonoBehaviour
 
         if (hourDidChange)
         {
-            // EventBus<OnHourChangedEvent>.Raise(new OnHourChangedEvent
-            // {
-            //     PreviousHour    = previousHour,
-            //     NewHour         = _currentDateTime.Hour,
-            //     CurrentDateTime = _currentDateTime
-            // });
-
             // Passout check — triggers once per day at the configured hour
             if (_currentDateTime.Hour == configuration.passoutHour && !_hasPassedOutToday)
             {
@@ -126,11 +140,14 @@ public class TimeManager : MonoBehaviour
                 return; // ForcePassout resets state; exit to avoid stale tick event
             }
         }
-        
-        dayNightLightingController.HandleTimeTick(_currentDateTime.NormalizedDayTime);
-        timeUI.HandleTimeTick(_currentDateTime);
+
+        if (dayNightLightingController != null)
+            dayNightLightingController.HandleTimeTick(_currentDateTime.NormalizedDayTime);
+
+        if (timeUI != null)
+            timeUI.HandleTimeTick(_currentDateTime);
     }
-    
+
     /// <summary>
     /// Call this when the player chooses to sleep voluntarily.
     /// Ends the current day and begins a new one at the configured start hour.
@@ -146,18 +163,13 @@ public class TimeManager : MonoBehaviour
         _isPaused = true;
         AdvanceToNextDay(wasPassout: false);
     }
-    
+
     /// <summary>
     /// Triggers a forced passout (player was still awake at the passout hour).
     /// Applies a stamina penalty and transitions to the next day.
     /// </summary>
     public void ForcePassout()
     {
-        // {
-        //     PassoutTime           = _currentDateTime,
-        //     StaminaPenaltyPercent = 0.5f
-        // });
-        //
         EventBus<OnDayEndedEvent>.Raise(new OnDayEndedEvent
         {
             EndedDateTime = _currentDateTime,
@@ -166,7 +178,7 @@ public class TimeManager : MonoBehaviour
         EventBus<OnPlayerPassedOutEvent>.Raise(new OnPlayerPassedOutEvent());
         AdvanceToNextDay(wasPassout: true);
     }
-    
+
     /// <summary>
     /// Shared calendar advancement logic used by both sleep and passout paths.
     /// </summary>
@@ -177,7 +189,7 @@ public class TimeManager : MonoBehaviour
         _currentDateTime.Minute = 0;
         _minuteAccumulator      = 0f;
         _hasPassedOutToday      = false;
-        _isPaused = false;
+        _isPaused               = false;
 
         // Advance day-of-season and day-of-week
         _currentDateTime.DayOfSeason++;
@@ -189,35 +201,27 @@ public class TimeManager : MonoBehaviour
         {
             _currentDateTime.DayOfSeason = 1;
 
-            Season previousSeason    = _currentDateTime.Season;
-            _currentDateTime.Season  = (Season)(((int)_currentDateTime.Season + 1) % 4);
+            Season previousSeason   = _currentDateTime.Season;
+            _currentDateTime.Season = (Season)(((int)_currentDateTime.Season + 1) % 4);
 
             // Year increment when rolling from Winter -> Spring
             if (_currentDateTime.Season == Season.Spring)
                 _currentDateTime.Year++;
-
-            // EventBus<OnSeasonChangedEvent>.Raise(new OnSeasonChangedEvent
-            // {
-            //     PreviousSeason = previousSeason,
-            //     NewSeason      = _currentDateTime.Season,
-            //     Year           = _currentDateTime.Year
-            // });
         }
 
-        timeUI.RefreshCalender(_currentDateTime);
-        dayNightLightingController.SetSunRotation(_currentDateTime.NormalizedDayTime);
-        timeUI.HandleTimeTick(_currentDateTime);
+        if (timeUI != null)
+        {
+            timeUI.RefreshCalender(_currentDateTime);
+            timeUI.HandleTimeTick(_currentDateTime);
+        }
+
+        if (dayNightLightingController != null)
+            dayNightLightingController.SetSunRotation(_currentDateTime.NormalizedDayTime);
+
         EventBus<OnNewDayStartedEvent>.Raise(new OnNewDayStartedEvent
         {
             NewDateTime = _currentDateTime,
             WasPassOut  = wasPassout
         });
-        
-        // Emit the first tick of the new day so listeners (lighting, HUD) update immediately
-        // EventBus<OnTimeTickEvent>.Raise(new OnTimeTickEvent
-        // {
-        //     CurrentDateTime   = _currentDateTime,
-        //     NormalizedDayTime = _currentDateTime.NormalizedDayTime
-        // });
     }
 }
