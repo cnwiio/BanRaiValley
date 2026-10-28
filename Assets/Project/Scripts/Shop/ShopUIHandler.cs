@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Project.Scripts;
 using UnityEngine;
 
-public class ShopUIHandler : MonoBehaviour, IInteractable
+public class ShopUIHandler : MonoBehaviour, IInteractable, ICloseableUI
 {
     [Header("Shop UI")]
     [SerializeField] private GameObject shopUIPanel;
@@ -14,9 +14,10 @@ public class ShopUIHandler : MonoBehaviour, IInteractable
     [SerializeField] private TextTipReference textTipReference;
     [SerializeField] private String tipText;
     
-
     private readonly List<Material> _mats = new List<Material>();
     private ITextTip _textTip;
+
+    public bool IsOpen => shopUIPanel != null && shopUIPanel.activeSelf;
 
     private void OnEnable()
     {
@@ -28,18 +29,26 @@ public class ShopUIHandler : MonoBehaviour, IInteractable
     {
         EventBus<InventoryToggleEvent>.Unsubscribe(OnInventoryToggle);
         EventBus<OnUIInteractActionEvent>.Unsubscribe(OnInteract);
+        UIStackManager.UnregisterClosed(this);
     }
 
     private void OnInventoryToggle(InventoryToggleEvent evt)
     {
-        if (shopUIPanel.activeSelf)
-            shopUIPanel.SetActive(false);
-    }
-    private void OnInteract(OnUIInteractActionEvent evt)
-    {
-        if (shopUIPanel.activeSelf)
+        if (IsOpen)
             SetUIActive(false);
     }
+
+    private void OnInteract(OnUIInteractActionEvent evt)
+    {
+        if (IsOpen)
+            SetUIActive(false);
+    }
+
+    public void CloseUI()
+    {
+        SetUIActive(false);
+    }
+
     private void Start()
     {
         skinMeshRenderer?.GetSharedMaterials(_mats);
@@ -48,15 +57,17 @@ public class ShopUIHandler : MonoBehaviour, IInteractable
 
     public void SetUIActive(bool value)
     {
+        if (shopUIPanel == null) return;
+
         shopUIPanel.SetActive(value);
         
         if (value)
         {
-            EventBus<ChangeActionMap>.Raise(new ChangeActionMap(){MapType = ActionMapType.UI});
+            UIStackManager.RegisterOpen(this);
         }
         else
         {
-            EventBus<ChangeActionMap>.Raise(new ChangeActionMap(){MapType = ActionMapType.Player});
+            UIStackManager.UnregisterClosed(this);
         }
     }
 
@@ -79,8 +90,8 @@ public class ShopUIHandler : MonoBehaviour, IInteractable
 
     private void OnHover()
     {
-        _textTip.SetText(tipText);
-        _textTip.SetActive(true);
+        _textTip?.SetText(tipText);
+        _textTip?.SetActive(true);
         
         _mats.Add(outlineMaterial);
         if (skinMeshRenderer)
@@ -89,7 +100,7 @@ public class ShopUIHandler : MonoBehaviour, IInteractable
 
     private void OnStopHover()
     {
-        _textTip.SetActive(false);
+        _textTip?.SetActive(false);
         
         _mats.Remove(outlineMaterial);
 

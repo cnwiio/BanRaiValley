@@ -1,96 +1,161 @@
-using System;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Serialization;
 
+/// <summary>
+/// Concrete NavMesh-based locomotion and rotation component for plant monsters.
+/// </summary>
 [RequireComponent(typeof(NavMeshAgent))]
-public class AIMovement : MonoBehaviour
+public class AIMovement : AIMovementBase
 {
+    #region Serialized Fields
+    [Header("Navigation")]
+    [Tooltip("Reference to the NavMeshAgent handling pathfinding.")]
     [SerializeField] private NavMeshAgent agent;
 
-    private Vector3 startPos;
-    private float stopDistance;
-    [HideInInspector] public Transform targetTranform;
+    [Tooltip("Target transform being pursued.")]
+    [HideInInspector] [SerializeField] public Transform targetTranform;
+    #endregion
 
-    public float Speed => agent.velocity.magnitude;
-    public bool IsReachDestination => !agent.hasPath;
+    #region Fields
+    private Vector3 _startPos;
+    private float _stopDistance;
+    #endregion
+
+    #region Properties
+    /// <summary>Gets the current movement speed magnitude of the agent.</summary>
+    public override float Speed => agent != null ? agent.velocity.magnitude : 0f;
+
+    /// <summary>Gets whether the plant has completed its path or stopped.</summary>
+    public override bool IsReachDestination => agent != null && !agent.hasPath;
+
+    /// <summary>Gets the bound target transform.</summary>
+    public override Transform TargetTransform => targetTranform;
+    #endregion
+
+    #region Unity Messages
+    private void Awake()
+    {
+        if (agent == null)
+        {
+            agent = GetComponent<NavMeshAgent>();
+        }
+    }
+    #endregion
+
+    #region Public Methods
+    /// <summary>
+    /// Initializes movement parameters from configuration data.
+    /// </summary>
+    /// <param name="startPosition">Home coordinate to return to.</param>
+    /// <param name="data">Data asset containing speed, angular speed, and acceleration.</param>
+    public override void Initialize(Vector3 startPosition, AIData data)
+    {
+        _startPos = startPosition;
+        if (data != null)
+        {
+            _stopDistance = data.StopDistance;
+            if (agent != null)
+            {
+                agent.speed = data.Speed;
+                agent.angularSpeed = data.TurnSpeed;
+                agent.acceleration = data.Acceleration;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Backwards-compatible initialization overload accepting discrete movement parameters.
+    /// </summary>
     public void Initialize(Vector3 startPosition, float stoppingDistance, float speed, float turnSpeed, float acceleration)
     {
-        startPos = startPosition;
-        stopDistance = stoppingDistance;
-        agent.speed = speed;
-        agent.angularSpeed = turnSpeed;
-        agent.acceleration = acceleration;
-    }
-    
-    public void BindTargetTransform(Transform transform)
-    {
-        targetTranform = transform;
+        _startPos = startPosition;
+        _stopDistance = stoppingDistance;
+        if (agent != null)
+        {
+            agent.speed = speed;
+            agent.angularSpeed = turnSpeed;
+            agent.acceleration = acceleration;
+        }
     }
 
-    public void UnBindTargetTransform()
+    /// <summary>Binds a target transform for chasing and orientation.</summary>
+    public override void BindTargetTransform(Transform target)
+    {
+        targetTranform = target;
+    }
+
+    /// <summary>Unbinds the current target transform.</summary>
+    public override void UnBindTargetTransform()
     {
         targetTranform = null;
     }
 
+    /// <summary>Navigates directly towards the bound target transform.</summary>
     public void MoveToTarget()
     {
-        if (!agent.isActiveAndEnabled || !agent.isOnNavMesh)
+        if (targetTranform != null)
         {
-            Debug.LogWarning("Can not set Destination");
-            return;
+            MoveTo(targetTranform.position);
         }
-        
-        agent.stoppingDistance = stopDistance;
-        agent.isStopped = false;
-        agent.SetDestination(targetTranform.position);
     }
-        
-    public void MoveTo(Vector3 targetPos)
+
+    /// <summary>Commands the movement system to navigate toward a destination coordinate.</summary>
+    public override void MoveTo(Vector3 targetPos)
     {
-        if (!agent.isActiveAndEnabled || !agent.isOnNavMesh)
+        if (agent == null || !agent.isActiveAndEnabled || !agent.isOnNavMesh)
         {
-            Debug.LogWarning("Can not set Destination");
+            Debug.LogWarning("[AIMovement] Cannot set Destination - Agent is null, inactive, or not on NavMesh.");
             return;
         }
-        
-        agent.stoppingDistance = stopDistance;
+
+        agent.stoppingDistance = _stopDistance;
         agent.isStopped = false;
         agent.SetDestination(targetPos);
     }
-    
-    public void ReturnToStart()
+
+    /// <summary>Commands the plant to navigate back to its starting/home position.</summary>
+    public override void ReturnToStart()
     {
-        if (!agent.isActiveAndEnabled || !agent.isOnNavMesh)
+        if (agent == null || !agent.isActiveAndEnabled || !agent.isOnNavMesh)
         {
             return;
         }
-        
-        agent.stoppingDistance = 0;
-        agent.SetDestination(startPos);
+
+        agent.stoppingDistance = 0f;
+        agent.isStopped = false;
+        agent.SetDestination(_startPos);
     }
 
-    public void StopMoving()
+    /// <summary>Stops all active movement immediately.</summary>
+    public override void StopMoving()
     {
-        if (!agent.isActiveAndEnabled || !agent.isOnNavMesh)
+        if (agent == null || !agent.isActiveAndEnabled || !agent.isOnNavMesh)
         {
             return;
         }
-        
+
         agent.isStopped = true;
         agent.ResetPath();
     }
-    
-    public void RotateToTarget()
-    {
-        Vector3 targetPos = targetTranform.position;
-        // Zero out vertical component so the plant never pitches up or down.
-        targetPos.y = 0f;
 
-        if (targetPos.sqrMagnitude < 0.001f)
+    /// <summary>Rotates the plant horizontally towards its currently bound target.</summary>
+    public override void RotateToTarget()
+    {
+        if (targetTranform == null)
         {
             return;
         }
-        transform.LookAt(targetPos);
+
+        Vector3 targetPos = targetTranform.position;
+        targetPos.y = transform.position.y;
+
+        Vector3 direction = targetPos - transform.position;
+        if (direction.sqrMagnitude < 0.001f)
+        {
+            return;
+        }
+
+        transform.rotation = Quaternion.LookRotation(direction);
     }
+    #endregion
 }

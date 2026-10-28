@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,6 +9,7 @@ public enum ActionMapType
     UI,
     Static
 }
+
 public class InputManager : MonoBehaviour
 {
     [Header("Input Action Asset Reference")]
@@ -44,6 +46,8 @@ public class InputManager : MonoBehaviour
         }
     }
 
+    private Coroutine _lockCursorCoroutine;
+
     private void OnEnable()
     {
         playerActionMap = inputActionAsset.FindActionMap(PlayerActionMapName);
@@ -65,6 +69,12 @@ public class InputManager : MonoBehaviour
 
     private void OnDisable()
     {
+        if (_lockCursorCoroutine != null)
+        {
+            StopCoroutine(_lockCursorCoroutine);
+            _lockCursorCoroutine = null;
+        }
+
         EventBus<ChangeActionMap>.Unsubscribe(ChangeActionMap);
         EventBus<OnStartTillingEvent>.Unsubscribe(OnStartTilling);
         EventBus<OnTillingImpactEvent>.Unsubscribe(OnTillingImpact);
@@ -81,10 +91,25 @@ public class InputManager : MonoBehaviour
         inputActionAsset.Disable();
     }
 
+    private void Update()
+    {
+        if (currentActionMaptype == ActionMapType.Player)
+        {
+            if (Cursor.lockState != CursorLockMode.Locked && Application.isFocused)
+            {
+                if (Mouse.current != null && (Mouse.current.leftButton.wasPressedThisFrame || Mouse.current.rightButton.wasPressedThisFrame))
+                {
+                    SetCursorState(false);
+                }
+            }
+        }
+    }
+
     private void ChangeActionMap(ChangeActionMap evt)
     {
         CurrentActionMaptype = evt.MapType;
     }
+
     private void OnStartTilling(OnStartTillingEvent evt)
     {
         HotbarActionMap?.Disable();
@@ -106,21 +131,22 @@ public class InputManager : MonoBehaviour
     {
         HotbarActionMap?.Enable();
     }
+
     private void OnStartPlanting(OnStartPlantingEvent evt)
     {
         // Keep HotbarActionMap enabled during continuous planting so player can always swap hotbar items
     }
+
     private void OnPlanting(OnPlantingEvent evt)
     {
         HotbarActionMap?.Enable();
     }
+
     private void OnEndPlanting(OnEndPlantingEvent evt)
     {
         HotbarActionMap?.Enable();
     }
 
-    
-    
     public void SwitchToPlayerActionMap()
     {
         UIActionMap?.Disable();
@@ -128,11 +154,31 @@ public class InputManager : MonoBehaviour
         playerActionMap?.Enable();
         MovementActionMap?.Enable();
         HotbarActionMap?.Enable();
+        
         SetCursorState(false);
+
+        if (_lockCursorCoroutine != null)
+        {
+            StopCoroutine(_lockCursorCoroutine);
+        }
+        _lockCursorCoroutine = StartCoroutine(LockCursorNextFrame());
+    }
+
+    private IEnumerator LockCursorNextFrame()
+    {
+        yield return null;
+        SetCursorState(false);
+        _lockCursorCoroutine = null;
     }
 
     public void SwitchToUIActionMap()
     {
+        if (_lockCursorCoroutine != null)
+        {
+            StopCoroutine(_lockCursorCoroutine);
+            _lockCursorCoroutine = null;
+        }
+
         playerActionMap?.Disable();
         MovementActionMap?.Disable();
         HotbarActionMap?.Disable();
@@ -143,12 +189,17 @@ public class InputManager : MonoBehaviour
 
     public void SwitchToStaticUIActionMap()
     {
+        if (_lockCursorCoroutine != null)
+        {
+            StopCoroutine(_lockCursorCoroutine);
+            _lockCursorCoroutine = null;
+        }
+
         UIActionMap?.Disable();
         playerActionMap?.Disable();
         HotbarActionMap?.Disable();
         MovementActionMap?.Disable();
         SetCursorState(false);
-
     }
     
     void SetCursorState(bool isVisible)

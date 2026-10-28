@@ -2,377 +2,340 @@ using System.Collections;
 using UnityEngine;
 using Lean.Pool;
 
-public enum PlantAIState
+/// <summary>
+/// Concrete coordinator for plant monster AI behavior.
+/// Implements coroutine loops for chasing, animation speed syncing, hit stun recovery, and death drops.
+/// </summary>
+public class AIBrain : AIBrainBase
 {
-    Awake,
-    Idle,
-    Chase,
-    Attack,
-    Stun,
-    Die
-}
-
-public enum PlantChaseState
-{
-    ChasePlayer,
-    ChaseHome
-}
-
-public class AIBrain : MonoBehaviour, IPoolable
-{
-    [Header("Data")] 
-    [SerializeField] private AIData data;
-
-    
-    [Header("Scripts")]
-    [SerializeField] private AIMovement movement;
-    [SerializeField] private AIDetection detection;
-    [SerializeField] private AIAttack attack;
-    [SerializeField] private AIAnimationController animator;
-    [SerializeField] private AIHealth health;
-    
-
-
+    #region Constants
     private const float MOVE_THRESHOLD = 1.5f;
-    private const float HITBOX_LIFESPAN = 0.2f;
+    private const float DE_SPAWN_DELAY_SEC = 3f;
+    private const float CHASE_UPDATE_INTERVAL_SEC = 0.25f;
+    #endregion
 
-    private readonly WaitForSeconds chaseWaitInterval = new WaitForSeconds(0.25f);
-    private WaitForSeconds stunTime;
-    private readonly WaitForSeconds deSpawnTime = new WaitForSeconds(3);
-    private Coroutine chaseCoroutine;
-    private Coroutine movementCoroutine;
-    private Coroutine stunCoroutine;
-    private Coroutine dieCoroutine;
+    #region Fields
+    private readonly WaitForSeconds _chaseWaitInterval = new WaitForSeconds(CHASE_UPDATE_INTERVAL_SEC);
+    private WaitForSeconds _stunWaitTime;
+    private readonly WaitForSeconds _deSpawnWaitTime = new WaitForSeconds(DE_SPAWN_DELAY_SEC);
 
-    private PlantAIState _currentState = PlantAIState.Idle;
+    private Coroutine _chaseCoroutine;
+    private Coroutine _movementCoroutine;
+    private Coroutine _stunCoroutine;
+    private Coroutine _dieCoroutine;
 
-    private PlantAIState currentState
+    private Vector3 _lastKnownTargetPos;
+    #endregion
+
+    #region Unity Messages
+    protected override void Awake()
     {
-        get => _currentState;
-        set
-        {
-            if (_currentState == value) return;
-            
-            ExitState(_currentState);
-            EnterState(value);
+        base.Awake();
 
-            _currentState = value;
+        if (data != null)
+        {
+            _stunWaitTime = new WaitForSeconds(data.StunTime);
         }
     }
-    private PlantChaseState _currentChaseState = PlantChaseState.ChasePlayer;
 
-    private PlantChaseState currentChaseState
+    protected override void OnDisable()
     {
-        get => _currentChaseState;
-        set
-        {
-            // if (_currentChaseState == value) return;
-            
-            ExitChaseState(_currentChaseState);
-            EnterChaseState(value);
-
-            _currentChaseState = value;
-            // Debug.Log(value);
-        }
+        base.OnDisable();
+        StopAllCoroutinesSafely();
     }
-    private void Awake()
-    {
-        stunTime = new WaitForSeconds(data.StunTime);
-    }
+    #endregion
 
-    private void Initialize()
-    {
-        detection.Initialize(data.DetectionRange);
-        movement.Initialize(transform.position, data.StopDistance, data.Speed, data.TurnSpeed, data.Acceleration);
-        attack.Initialize(data.AttackCooldown, HITBOX_LIFESPAN, data.Damage);
-        health.Initialize(data.HP);
-        
-        _lastKnowTargetPos = Vector3.zero;
-    }
-
-    private void OnEnable()
-    {
-        detection.OnTargetDetectedEvent += OnTargetDetected;
-        detection.OnTargetLostEvent += OnTargetLost;
-
-        attack.OnAttackEndEvent += OnAttackEnd;
-
-        health.OnTakeDamageEvent += OnTakeDamage;
-        health.OnDieEvent += OnDie;
-    }
-
-    private void OnDisable()
-    {
-        detection.OnTargetDetectedEvent -= OnTargetDetected;
-        detection.OnTargetLostEvent -= OnTargetLost;
-
-        attack.OnAttackEndEvent -= OnAttackEnd;
-
-        health.OnTakeDamageEvent -= OnTakeDamage;
-        health.OnDieEvent -= OnDie;
-    }
-
-    private void EnterState(PlantAIState state)
+    #region State Machine Hooks
+    /// <summary>
+    /// Handles entering a state by starting appropriate actions and coroutines.
+    /// </summary>
+    protected override void OnEnterState(PlantAIState state)
     {
         switch (state)
         {
             case PlantAIState.Awake:
-                health.IsInvicible = true;
-                detection.EnableDetect(false);
-                animator.PlayAwaken();
+                if (health != null) health.IsInvincible = true;
+                if (detection != null) detection.EnableDetect(false);
+                if (animator != null) animator.PlayAwaken();
                 break;
+
             case PlantAIState.Idle:
                 break;
+
             case PlantAIState.Chase:
-                movementCoroutine = StartCoroutine(AnimationSpeedCoroutine());
+                _movementCoroutine = StartCoroutine(AnimationSpeedCoroutine());
                 break;
+
             case PlantAIState.Attack:
-                movement.RotateToTarget();
-                attack.StartAttack();
-                animator.PlayAttack();
+                if (movement != null) movement.RotateToTarget();
+                if (attack != null) attack.StartAttack();
+                if (animator != null) animator.PlayAttack();
                 break;
+
             case PlantAIState.Stun:
-                movement.StopMoving();
-                movement.RotateToTarget();
-                attack.StopAttack();
-                stunCoroutine = StartCoroutine(StunCoroutine());
-                animator.PlayHit();
+                if (movement != null)
+                {
+                    movement.StopMoving();
+                    movement.RotateToTarget();
+                }
+                if (attack != null) attack.StopAttack();
+                if (animator != null) animator.PlayHit();
+                _stunCoroutine = StartCoroutine(StunCoroutine());
                 break;
+
             case PlantAIState.Die:
-                movement.StopMoving();
-                attack.StopAttack();
-                animator.PlayDie();
-                dieCoroutine = StartCoroutine(DieCoroutine());
+                if (movement != null) movement.StopMoving();
+                if (attack != null) attack.StopAttack();
+                if (animator != null) animator.PlayDie();
+                _dieCoroutine = StartCoroutine(DieCoroutine());
                 break;
         }
     }
 
-    private void ExitState(PlantAIState state)
+    /// <summary>
+    /// Handles exiting a state by stopping active coroutines and resetting states.
+    /// </summary>
+    protected override void OnExitState(PlantAIState state)
     {
         switch (state)
         {
             case PlantAIState.Awake:
-                health.IsInvicible = false;
+                if (health != null) health.IsInvincible = false;
                 break;
+
             case PlantAIState.Chase:
-                if (chaseCoroutine != null)
+                if (_chaseCoroutine != null)
                 {
-                    StopCoroutine(chaseCoroutine);
-                    chaseCoroutine = null;
+                    StopCoroutine(_chaseCoroutine);
+                    _chaseCoroutine = null;
                 }
-                if (movementCoroutine != null)
+                if (_movementCoroutine != null)
                 {
-                    StopCoroutine(movementCoroutine);
-                    movementCoroutine = null;
+                    StopCoroutine(_movementCoroutine);
+                    _movementCoroutine = null;
                 }
-                movement.StopMoving();
-                animator.SetMoving(0f);
+                if (movement != null) movement.StopMoving();
+                if (animator != null) animator.SetMoving(0f);
                 break;
+
             case PlantAIState.Attack:
                 break;
+
             case PlantAIState.Stun:
-                if (stunCoroutine != null)
+                if (_stunCoroutine != null)
                 {
-                    StopCoroutine(stunCoroutine);
-                    stunCoroutine = null;
+                    StopCoroutine(_stunCoroutine);
+                    _stunCoroutine = null;
                 }
                 break;
+
             case PlantAIState.Die:
-                if (dieCoroutine != null)
+                if (_dieCoroutine != null)
                 {
-                    StopCoroutine(DieCoroutine());
-                    dieCoroutine = null;
+                    StopCoroutine(_dieCoroutine);
+                    _dieCoroutine = null;
                 }
                 break;
         }
     }
 
-    private void EnterChaseState(PlantChaseState state)
+    /// <summary>
+    /// Handles entering a chase sub-state.
+    /// </summary>
+    protected override void EnterChaseState(PlantChaseState state)
     {
         switch (state)
         {
             case PlantChaseState.ChasePlayer:
-                chaseCoroutine = StartCoroutine(ChaseTargetCoroutine());
+                if (_chaseCoroutine != null)
+                {
+                    StopCoroutine(_chaseCoroutine);
+                }
+                _chaseCoroutine = StartCoroutine(ChaseTargetCoroutine());
                 break;
+
             case PlantChaseState.ChaseHome:
-                movement.ReturnToStart();
+                if (movement != null) movement.ReturnToStart();
                 break;
         }
     }
-    private void ExitChaseState(PlantChaseState state)
+
+    /// <summary>
+    /// Handles exiting a chase sub-state.
+    /// </summary>
+    protected override void ExitChaseState(PlantChaseState state)
     {
         switch (state)
         {
             case PlantChaseState.ChasePlayer:
-                if (chaseCoroutine != null)
+                if (_chaseCoroutine != null)
                 {
-                    StopCoroutine(chaseCoroutine);
-                    chaseCoroutine = null;
+                    StopCoroutine(_chaseCoroutine);
+                    _chaseCoroutine = null;
                 }
                 break;
+
             case PlantChaseState.ChaseHome:
                 break;
         }
     }
-    
-    private void OnTargetDetected(Transform transform)
+    #endregion
+
+    #region Event Handlers
+    /// <summary>
+    /// Refreshes stun state if hit during active stun; otherwise transitions into stun.
+    /// </summary>
+    protected override void OnTakeDamage()
     {
-        if (currentState == PlantAIState.Idle ||
-            currentState == PlantAIState.Awake ||
-            (currentState == PlantAIState.Chase && currentChaseState == PlantChaseState.ChaseHome))
+        if (CurrentState == PlantAIState.Die) return;
+
+        if (CurrentState == PlantAIState.Stun)
         {
-            currentState = PlantAIState.Chase;
-            movement.BindTargetTransform(transform);
-            currentChaseState = PlantChaseState.ChasePlayer;
+            if (_stunCoroutine != null)
+            {
+                StopCoroutine(_stunCoroutine);
+                _stunCoroutine = null;
+            }
+
+            if (movement != null) movement.RotateToTarget();
+            if (animator != null) animator.PlayHit();
+            _stunCoroutine = StartCoroutine(StunCoroutine());
+            return;
         }
-    }
 
-    private void OnTargetLost()
-    {
-        if (currentState != PlantAIState.Chase) return;
-        currentChaseState = PlantChaseState.ChaseHome;
+        ChangeState(PlantAIState.Stun);
     }
+    #endregion
 
-    private void OnAttackEnd()
+    #region Drop & Pool Lifecycle
+    /// <summary>
+    /// Initializes all modular components with data asset configuration.
+    /// </summary>
+    protected override void Initialize()
     {
-        if (currentState != PlantAIState.Attack) return;
-        currentState = PlantAIState.Chase;
-        if (detection.IsPlayerInSight)
+        if (data == null)
         {
-            currentChaseState = PlantChaseState.ChasePlayer;
+            Debug.LogError($"[AIBrain] Missing AIData on {gameObject.name}");
+            return;
         }
-        else
+
+        if (_stunWaitTime == null)
         {
-            currentChaseState = PlantChaseState.ChaseHome;
+            _stunWaitTime = new WaitForSeconds(data.StunTime);
         }
-    }
 
-    public void OnAttackAnimationHit()
-    {
-        if (currentState != PlantAIState.Attack) return;
-        attack.ExcuteAttack();
-    }
+        if (detection != null) detection.Initialize(data.DetectionRange);
+        if (movement != null) movement.Initialize(transform.position, data);
+        if (attack != null) attack.Initialize(data);
+        if (health != null) health.Initialize(data.HP);
 
-    private void OnTakeDamage()
-    {
-        if (currentState == PlantAIState.Die) return;
-        if (currentState == PlantAIState.Stun)
-        {
-            StopCoroutine(stunCoroutine);
-            stunCoroutine = null;
-            stunCoroutine = StartCoroutine(StunCoroutine());
-            movement.RotateToTarget();
-            animator.PlayHit();
-        }
-        currentState = PlantAIState.Stun;
+        _lastKnownTargetPos = Vector3.zero;
     }
+    #endregion
 
-    private void OnDie()
-    {
-        currentState = PlantAIState.Die;
-    }
-
-    private void RollDrop()
-    {
-        if (data.dropItem == null) return;
-        if (UnityEngine.Random.value > data.dropChance) return;
- 
-        var amount = UnityEngine.Random.Range(data.dropAmountMin, data.dropAmountMax + 1);
-        if (amount <= 0) return;
- 
-        EventBus<OnItemPickupEvent>.Raise(new OnItemPickupEvent
-        {
-            item = data.dropItem,
-            amount = amount
-        });
-    }
-
-    public void OnAwakeAnimationEnd()
-    {
-        currentState = PlantAIState.Idle;
-        detection.EnableDetect(true);
-    }
-    
-    private float _distanceFromLastPos;
-    private float _distanceFromPlayer;
-    private Vector3 _lastKnowTargetPos;
+    #region Coroutines
     private IEnumerator ChaseTargetCoroutine()
     {
-        if (movement.targetTranform == null)
+        if (movement == null || movement.TargetTransform == null)
         {
-            Debug.LogError("no Target transform to chasing");
+            Debug.LogWarning($"[AIBrain] No target transform bound on {gameObject.name}");
             yield break;
         }
-        // var waitInterval = new WaitForSeconds(CHASE_UPDATE_INTERVAL_SEC);
-        var target = movement.targetTranform;
-        while (currentState == PlantAIState.Chase)
+
+        Transform target = movement.TargetTransform;
+        while (CurrentState == PlantAIState.Chase)
         {
-            _distanceFromPlayer = Vector3.Distance(transform.position, target.position);
-            if (_distanceFromPlayer <= data.AttackRange)
+            if (target == null) yield break;
+
+            float distanceFromPlayer = Vector3.Distance(transform.position, target.position);
+            if (distanceFromPlayer <= data.AttackRange)
             {
-                if (attack.CanAttack || currentState == PlantAIState.Chase)
-                    currentState = PlantAIState.Attack;
+                if (attack != null && (attack.CanAttack || CurrentState == PlantAIState.Chase))
+                {
+                    ChangeState(PlantAIState.Attack);
+                }
             }
             else
             {
-                _distanceFromLastPos = Vector3.Distance(target.position, _lastKnowTargetPos);
-                if (_distanceFromLastPos > MOVE_THRESHOLD || _lastKnowTargetPos == Vector3.zero)
+                float distanceFromLastPos = Vector3.Distance(target.position, _lastKnownTargetPos);
+                if (distanceFromLastPos > MOVE_THRESHOLD || _lastKnownTargetPos == Vector3.zero)
                 {
-                    _lastKnowTargetPos = target.position;
+                    _lastKnownTargetPos = target.position;
                     movement.MoveTo(target.position);
                 }
             }
-            yield return chaseWaitInterval;
+
+            yield return _chaseWaitInterval;
         }
     }
-    
+
     private IEnumerator AnimationSpeedCoroutine()
     {
         while (true)
         {
-            if (currentChaseState == PlantChaseState.ChaseHome)
+            if (CurrentChaseState == PlantChaseState.ChaseHome && movement != null && movement.IsReachDestination)
             {
-                if (movement.IsReachDestination)
-                {
-                    currentState = PlantAIState.Idle;
-                }
+                ChangeState(PlantAIState.Idle);
             }
-            animator.SetMoving(movement.Speed);
-            yield return chaseWaitInterval;
+
+            if (animator != null && movement != null)
+            {
+                animator.SetMoving(movement.Speed);
+            }
+
+            yield return _chaseWaitInterval;
         }
     }
 
     private IEnumerator StunCoroutine()
     {
-        yield return stunTime;
-        currentState = PlantAIState.Chase;
-        if (detection.IsPlayerInSight)
+        yield return _stunWaitTime;
+        _stunCoroutine = null;
+
+        ChangeState(PlantAIState.Chase);
+        if (detection != null && detection.IsPlayerInSight)
         {
-            currentChaseState = PlantChaseState.ChasePlayer;
+            ChangeChaseState(PlantChaseState.ChasePlayer);
         }
         else
         {
-            currentChaseState = PlantChaseState.ChaseHome;
+            ChangeChaseState(PlantChaseState.ChaseHome);
         }
     }
 
     private IEnumerator DieCoroutine()
     {
-        yield return deSpawnTime;
+        yield return _deSpawnWaitTime;
         RollDrop();
         LeanPool.Despawn(this);
-        dieCoroutine = null;
+        _dieCoroutine = null;
     }
 
-    public void OnSpawn()
+    private void StopAllCoroutinesSafely()
     {
-        Initialize();
-        currentState = PlantAIState.Awake;
-    }
+        if (_chaseCoroutine != null)
+        {
+            StopCoroutine(_chaseCoroutine);
+            _chaseCoroutine = null;
+        }
 
-    public void OnDespawn()
-    {
-        animator.Reset();
-        // currentState = PlantAIState.Idle;
+        if (_movementCoroutine != null)
+        {
+            StopCoroutine(_movementCoroutine);
+            _movementCoroutine = null;
+        }
+
+        if (_stunCoroutine != null)
+        {
+            StopCoroutine(_stunCoroutine);
+            _stunCoroutine = null;
+        }
+
+        if (_dieCoroutine != null)
+        {
+            StopCoroutine(_dieCoroutine);
+            _dieCoroutine = null;
+        }
     }
+    #endregion
 }

@@ -1,7 +1,7 @@
 using Lean.Pool;
 using UnityEngine;
 
-public class InventoryUI : MonoBehaviour
+public class InventoryUI : MonoBehaviour, ICloseableUI
 {
     [Header("UI Reference")]
     [SerializeField] private Transform HotbarUITransform;
@@ -18,7 +18,8 @@ public class InventoryUI : MonoBehaviour
     [SerializeField] private HotbarInventoryModel hotbarModel;
 
     private InventorySlotUI[] _inventorySlotUI, _hotSlotUI;
-    private bool IsInventoryUIActive => UIPanel.activeSelf;
+    private bool IsInventoryUIActive => UIPanel != null && UIPanel.activeSelf;
+    public bool IsOpen => IsInventoryUIActive;
 
     private void OnEnable()
     {
@@ -29,6 +30,7 @@ public class InventoryUI : MonoBehaviour
     {
         EventBus<InventoryToggleEvent>.Unsubscribe(ToggleInventoryUI);
         EventBus<OnDayEndedEvent>.Unsubscribe(OnDayEnd);
+        UIStackManager.UnregisterClosed(this);
     }
 
     public void ToggleInventoryUI(InventoryToggleEvent evt)
@@ -40,6 +42,14 @@ public class InventoryUI : MonoBehaviour
     {
         if (IsInventoryUIActive)
             EventBus<InventoryToggleEvent>.Raise(new InventoryToggleEvent());
+    }
+
+    public void CloseUI()
+    {
+        if (IsInventoryUIActive)
+        {
+            EventBus<InventoryToggleEvent>.Raise(new InventoryToggleEvent());
+        }
     }
 
     private InventorySlotUI[] CreatSlotUI(int totalSlots, IInventory inventory, GameObject prefabs, Transform parentTransform)
@@ -60,16 +70,25 @@ public class InventoryUI : MonoBehaviour
         HotbarUICanvasGroup.alpha = 0;
         InventoryUICanvasGroup.alpha = 0;
 
+        bool willOpen = !IsInventoryUIActive;
         
-        CreateAndDestroyUI(!IsInventoryUIActive);
-        SetActionMapType(!IsInventoryUIActive);
+        CreateAndDestroyUI(willOpen);
 
         EventBus<InventoryUIRefreshEvent>.Raise(new InventoryUIRefreshEvent() { });
 
         HotbarUICanvasGroup.alpha = 1;
         InventoryUICanvasGroup.alpha = 1;
-        UIPanel.SetActive(!IsInventoryUIActive);
-        HotbarUIPanel.SetActive(!IsInventoryUIActive);
+        UIPanel.SetActive(willOpen);
+        HotbarUIPanel.SetActive(willOpen);
+
+        if (willOpen)
+        {
+            UIStackManager.RegisterOpen(this);
+        }
+        else
+        {
+            UIStackManager.UnregisterClosed(this);
+        }
     }
 
     void CreateAndDestroyUI(bool value)
@@ -81,27 +100,21 @@ public class InventoryUI : MonoBehaviour
         }
         else
         {
-            for (int i = 0; i < _inventorySlotUI.Length; i++)
+            if (_inventorySlotUI != null)
             {
-                LeanPool.Despawn(_inventorySlotUI[i]);
+                for (int i = 0; i < _inventorySlotUI.Length; i++)
+                {
+                    LeanPool.Despawn(_inventorySlotUI[i]);
+                }
             }
 
-            for (int i = 0; i < _hotSlotUI.Length; i++)
+            if (_hotSlotUI != null)
             {
-                LeanPool.Despawn(_hotSlotUI[i]);
+                for (int i = 0; i < _hotSlotUI.Length; i++)
+                {
+                    LeanPool.Despawn(_hotSlotUI[i]);
+                }
             }
-        }
-    }
-
-    void SetActionMapType(bool value)
-    {
-        if (value)
-        {
-            EventBus<ChangeActionMap>.Raise(new ChangeActionMap() { MapType = ActionMapType.UI });
-        }
-        else
-        {
-            EventBus<ChangeActionMap>.Raise(new ChangeActionMap() { MapType = ActionMapType.Player });
         }
     }
 }

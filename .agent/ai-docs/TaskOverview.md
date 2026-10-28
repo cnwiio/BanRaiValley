@@ -13,10 +13,100 @@ This file tracks all completed tasks performed by Coder Agents across the projec
 | TASK-003: Sprint and Crouch System | Player Movement System | `Assets/Project/Scripts/Player/Player Movement Data.cs`<br>`Assets/Project/Data/PlayerMovementData.asset`<br>`Assets/Project/Scripts/Player/Player Input Reader.cs`<br>`Assets/Project/Scripts/Player/Player Movement.cs`<br>`Assets/Project/Prefabs/Player.prefab` | 2026-10-28 |
 | TASK-004: Continuous Planting and Harvesting System | Farming & Player Interaction | `Assets/Project/Scripts/EventBus.cs`<br>`Assets/Project/Scripts/Player/Player Input Reader.cs`<br>`Assets/Project/Scripts/Player/Player Interactor.cs`<br>`Assets/Project/Scripts/Farming/Tool/Seed Bag.cs`<br>`Assets/Project/Animation/Seed Bag/Planting.anim`<br>`Assets/Project/Animation/Seed Bag/Seed bag.controller`<br>`Assets/Project/Editor/BanRaiValleyEditorCLI.cs` | 2026-10-28 |
 | TASK-005: Continuous Attack System (Bare Hand & Hoe) | Combat & Attackable Tools | `Assets/Project/Scripts/Combat/ComboAttackController.cs`<br>`Assets/Project/Scripts/Bare Hand.cs`<br>`Assets/Project/Scripts/Farming/Tool/Hoe.cs`<br>`Assets/Project/Scripts/Player/Player Interactor.cs` | 2026-10-28 |
+| TASK-006: Plant AI Abstract Base Classes | Plant AI System | `Assets/Project/Scripts/AI/AIMovementBase.cs`<br>`Assets/Project/Scripts/AI/AIAttackBase.cs`<br>`Assets/Project/Scripts/AI/AIDetectionBase.cs`<br>`Assets/Project/Scripts/AI/AIAnimationControllerBase.cs`<br>`Assets/Project/Scripts/AI/AIHealthBase.cs` | 2026-10-28 |
+| TASK-007: Plant AI Brain Base Coordinator | Plant AI System | `Assets/Project/Scripts/AI/AIBrainBase.cs` | 2026-10-28 |
+| TASK-008: Concrete AI Components Inheritance Refactor | Plant AI System | `Assets/Project/Scripts/AI/AI Movement.cs`<br>`Assets/Project/Scripts/AI/AI Attack.cs`<br>`Assets/Project/Scripts/AI/AI Detection.cs`<br>`Assets/Project/Scripts/AI/AI Animation Controller.cs`<br>`Assets/Project/Scripts/AI/AI Health.cs` | 2026-10-28 |
+| TASK-009: AI Brain Refactor to Inherit Base | Plant AI System | `Assets/Project/Scripts/AI/AI Brain.cs` | 2026-10-28 |
+| TASK-010: Plant AI Architecture Documentation & Prefab Verification | Plant AI System | `Assets/Project/Scripts/AI/README.md`<br>`Assets/Project/Prefabs/Plant Monster/*.prefab` | 2026-10-28 |
+| TASK-011: ESC Action Closes Active UI Stack & Cursor Auto-Lock Fix | UI & Input Management | `Assets/Project/Scripts/ICloseableUI.cs`<br>`Assets/Project/Scripts/UIStackManager.cs`<br>`Assets/Project/Scripts/Setting.cs`<br>`Assets/Project/Scripts/Inventory/Inventory UI.cs`<br>`Assets/Project/Scripts/Inventory/Inventory UI Controller.cs`<br>`Assets/Project/Scripts/Shop/ShopUIHandler.cs`<br>`Assets/Project/Scripts/Casino/Casino Interactor.cs`<br>`Assets/Project/Scripts/Player/Input Manager.cs` | 2026-10-28 |
 
 ---
 
 ## Detailed Task Changelog
+
+### TASK-011: ESC Action Closes Active UI Stack (2026-10-28)
+- **Target Files**:
+  - [`Assets/Project/Scripts/ICloseableUI.cs`](file:///d:/Work/Unity Project/BanRaiValley/Assets/Project/Scripts/ICloseableUI.cs) ([NEW])
+  - [`Assets/Project/Scripts/UIStackManager.cs`](file:///d:/Work/Unity Project/BanRaiValley/Assets/Project/Scripts/UIStackManager.cs) ([NEW])
+  - [`Assets/Project/Scripts/Setting.cs`](file:///d:/Work/Unity Project/BanRaiValley/Assets/Project/Scripts/Setting.cs) ([MODIFIED])
+  - [`Assets/Project/Scripts/Inventory/Inventory UI.cs`](file:///d:/Work/Unity Project/BanRaiValley/Assets/Project/Scripts/Inventory/Inventory UI.cs) ([MODIFIED])
+  - [`Assets/Project/Scripts/Inventory/Inventory UI Controller.cs`](file:///d:/Work/Unity Project/BanRaiValley/Assets/Project/Scripts/Inventory/Inventory UI Controller.cs) ([MODIFIED])
+  - [`Assets/Project/Scripts/Shop/ShopUIHandler.cs`](file:///d:/Work/Unity Project/BanRaiValley/Assets/Project/Scripts/Shop/ShopUIHandler.cs) ([MODIFIED])
+  - [`Assets/Project/Scripts/Casino/Casino Interactor.cs`](file:///d:/Work/Unity Project/BanRaiValley/Assets/Project/Scripts/Casino/Casino Interactor.cs) ([MODIFIED])
+  - [`Assets/Project/Scripts/Player/Input Manager.cs`](file:///d:/Work/Unity Project/BanRaiValley/Assets/Project/Scripts/Player/Input Manager.cs) ([MODIFIED])
+- **What Was Done**:
+  - Created `ICloseableUI` contract specifying `CloseUI()` and `bool IsOpen`.
+  - Implemented `UIStackManager` static LIFO manager that manages active UI panels and transitions action maps back to `ActionMapType.Player` when all panels are closed.
+  - Updated `Setting.cs` to query `UIStackManager.TryCloseTopUI()` on `OnEscapeActionEvent`. When any UI is open, ESC closes the top-most window instead of overlaying the Pause/Settings menu. Only when no UI is open does ESC toggle the Pause menu.
+  - Implemented `ICloseableUI` on `InventoryUI`, `ShopUIHandler`, `CasinoInteractor`, and `Setting`.
+  - Added safe item auto-return in `InventoryUIController` (`ReturnHeldItem()`) to return any held/dragged stack back to its original slot/inventory upon closing via ESC or toggle.
+  - **Fixed Cursor Lock & Movement Restoration**:
+    - Centralized `ChangeActionMap` emission into `UIStackManager.RegisterOpen` and `UIStackManager.UnregisterClosed`, guaranteeing `ActionMapType.Player` is raised when any UI closes via non-ESC methods (e.g. inventory key 'I', close button click, interact trigger).
+    - Added next-frame cursor lock re-assertion in `InputManager` to prevent Unity Editor ESC key releases and UGUI button mouse-up events from canceling cursor lock.
+    - Added click-to-lock fallback in `InputManager.Update()` for window focus regaining in player mode.
+
+### TASK-010: Plant AI Architecture Documentation & Prefab Verification (Task 05) — 2026-10-28 14:32
+- **Target Files**:
+  - [`Assets/Project/Scripts/AI/README.md`](../../Assets/Project/Scripts/AI/README.md) ([NEW])
+  - [`Assets/Project/Prefabs/Plant Monster/Cabbage Monster.prefab`](../../Assets/Project/Prefabs/Plant%20Monster/Cabbage%20Monster.prefab) ([VERIFIED])
+  - [`Assets/Project/Prefabs/Plant Monster/Cabbage Monster Tier 1.prefab`](../../Assets/Project/Prefabs/Plant%20Monster/Cabbage%20Monster%20Tier%201.prefab) ([VERIFIED])
+  - [`Assets/Project/Prefabs/Plant Monster/Cabbage Monster Tier 2.prefab`](../../Assets/Project/Prefabs/Plant%20Monster/Cabbage%20Monster%20Tier%202.prefab) ([VERIFIED])
+  - [`Assets/Project/Prefabs/Plant Monster/Cabbage Monster Tier 3.prefab`](../../Assets/Project/Prefabs/Plant%20Monster/Cabbage%20Monster%20Tier%203.prefab) ([VERIFIED])
+  - [`Assets/Project/Prefabs/Plant Monster/Test Plant Monster.prefab`](../../Assets/Project/Prefabs/Plant%20Monster/Test%20Plant%20Monster.prefab) ([VERIFIED])
+- **What Was Done**:
+  - Created `Assets/Project/Scripts/AI/README.md` fulfilling Section 16 of `architecture-guide.md`, including:
+    - Modular architecture overview and decoupling philosophy.
+    - Mermaid relationship diagram illustrating `AIBrainBase` coordinating modular components and inventory/events.
+    - Component breakdown table mapping base contracts to concrete implementations and roles.
+    - Step-by-step User Manuals (Guides 1–5): creating new movement strategies (e.g. rooted/turret), new attack mechanics (e.g. ranged spit), custom brains/states, new `AIData` configuration ScriptableObjects, and full prefab assembly.
+  - Verified all 5 plant monster prefabs (`Cabbage Monster`, `Tier 1`, `Tier 2`, `Tier 3`, `Test Plant Monster`):
+    - Confirmed each prefab contains all 6 component script GUIDs without broken or missing MonoBehaviour references.
+    - Confirmed property mappings (`data`, `movement`, `detection`, `attack`, `animator`, `health`) serialize polymorphically into base class fields.
+
+### TASK-007 / TASK-008 / TASK-009: Plant AI Framework Refactor (Tasks 02, 03, 04) — 2026-10-28 14:25
+- **Target Files**:
+  - [`Assets/Project/Scripts/AI/AIBrainBase.cs`](../../Assets/Project/Scripts/AI/AIBrainBase.cs) ([NEW])
+  - [`Assets/Project/Scripts/AI/AI Movement.cs`](../../Assets/Project/Scripts/AI/AI%20Movement.cs) ([MODIFIED])
+  - [`Assets/Project/Scripts/AI/AI Attack.cs`](../../Assets/Project/Scripts/AI/AI%20Attack.cs) ([MODIFIED])
+  - [`Assets/Project/Scripts/AI/AI Detection.cs`](../../Assets/Project/Scripts/AI/AI%20Detection.cs) ([MODIFIED])
+  - [`Assets/Project/Scripts/AI/AI Animation Controller.cs`](../../Assets/Project/Scripts/AI/AI%20Animation%20Controller.cs) ([MODIFIED])
+  - [`Assets/Project/Scripts/AI/AI Health.cs`](../../Assets/Project/Scripts/AI/AI%20Health.cs) ([MODIFIED])
+  - [`Assets/Project/Scripts/AI/AI Brain.cs`](../../Assets/Project/Scripts/AI/AI%20Brain.cs) ([MODIFIED])
+- **What Was Done**:
+  - **Task 02 (`AIBrainBase.cs`)**:
+    - Implemented abstract `AIBrainBase` coordinator inheriting `MonoBehaviour` and `IPoolable`.
+    - Declared enums `PlantAIState` and `PlantChaseState`.
+    - Added protected serialized component fields (`data`, `movement`, `detection`, `attack`, `animator`, `health`) matching existing prefab field names with `[Header]` and `[Tooltip]`.
+    - Implemented auto-component resolution in `Awake()`.
+    - Established leak-free event subscription in `OnEnable()` and clean unsubscription in `OnDisable()`.
+    - Added state transitions (`ChangeState`, `ChangeChaseState`) and virtual hooks (`OnEnterState`, `OnExitState`, `EnterChaseState`, `ExitChaseState`).
+    - Added virtual handlers (`OnTargetDetected`, `OnTargetLost`, `OnAttackEnd`, `OnAttackAnimationHit`, `OnAwakeAnimationEnd`, `OnTakeDamage`, `OnDie`) and pool lifecycle hooks (`RollDrop`, `OnSpawn`, `OnDespawn`).
+  - **Task 03 (Concrete AI Components)**:
+    - `AIMovement`: Inherits `AIMovementBase`; added `agent` validation for active/enabled/onNavMesh; implemented `Speed`, `IsReachDestination`, `TargetTransform`, `Initialize(Vector3, AIData)`, `MoveTo`, `ReturnToStart`, `StopMoving`, and `RotateToTarget`.
+    - `AIAttack`: Inherits `AIAttackBase`; implemented `CanAttack`, `IsAttacking`, `OnAttackEndEvent`, `Initialize(AIData)`, `StartAttack`, `ExecuteAttack`, `StopAttack`, and coroutine cleanup on `OnDisable`.
+    - `AIDetection`: Inherits `AIDetectionBase`; implemented `IsPlayerInSight`, `TargetTransform`, `OnTargetDetectedEvent`, `OnTargetLostEvent`, `Initialize(float)`, and `EnableDetect(bool)`.
+    - `AIAnimationController`: Inherits `AIAnimationControllerBase`; implemented `PlayAwaken`, `PlayAttack`, `PlayHit`, `PlayDie`, `SetMoving`, and `Reset`.
+    - `AIHealth`: Inherits `AIHealthBase`; implemented `IsInvincible`, `CurrentHp`, `MaxHp`, `OnDieEvent`, `OnTakeDamageEvent`, `Initialize(int)`, and `TakeDamage(int)`.
+    - Preserved all existing `.meta` files, GUIDs, and backwards-compatible member aliases (`targetTranform`, `ExcuteAttack`, `IsInvicible`, `Hp`).
+  - **Task 04 (`AIBrain.cs`)**:
+    - Refactored `AIBrain` to inherit from `AIBrainBase`, removing redundant enum declarations and delegating lifecycle and event coordination to base class.
+    - Implemented state and chase sub-state coroutine orchestration (`ChaseTargetCoroutine`, `AnimationSpeedCoroutine`, `StunCoroutine`, `DieCoroutine`).
+    - Added safe coroutine cleanup in `OnDisable()` and `StopAllCoroutinesSafely()`.
+
+### TASK-006: Plant AI Abstract Base Classes — 2026-10-28 14:10
+- **Target Files**:
+  - [`Assets/Project/Scripts/AI/AIMovementBase.cs`](../../Assets/Project/Scripts/AI/AIMovementBase.cs) ([NEW])
+  - [`Assets/Project/Scripts/AI/AIAttackBase.cs`](../../Assets/Project/Scripts/AI/AIAttackBase.cs) ([NEW])
+  - [`Assets/Project/Scripts/AI/AIDetectionBase.cs`](../../Assets/Project/Scripts/AI/AIDetectionBase.cs) ([NEW])
+  - [`Assets/Project/Scripts/AI/AIAnimationControllerBase.cs`](../../Assets/Project/Scripts/AI/AIAnimationControllerBase.cs) ([NEW])
+  - [`Assets/Project/Scripts/AI/AIHealthBase.cs`](../../Assets/Project/Scripts/AI/AIHealthBase.cs) ([NEW])
+- **What Was Done**:
+  - Created `AIMovementBase` abstract base class defining locomotion parameters, destination querying, targeting binding, and movement control methods (`MoveTo`, `ReturnToStart`, `StopMoving`, `RotateToTarget`).
+  - Created `AIAttackBase` abstract base class defining attack availability, progression state, cooldown handling, and `OnAttackEndEvent`.
+  - Created `AIDetectionBase` abstract base class defining perception range, target sensing state, and perception events (`OnTargetDetectedEvent`, `OnTargetLostEvent`).
+  - Created `AIAnimationControllerBase` abstract base class defining animation trigger methods (`PlayAwaken`, `PlayAttack`, `PlayHit`, `PlayDie`, `SetMoving`, `Reset`).
+  - Created `AIHealthBase` abstract base class implementing `IDamageable`, exposing invincibility state, HP values, damage handling, and health events (`OnDieEvent`, `OnTakeDamageEvent`).
+  - Adhered strictly to code styling guidelines with Allman braces, XML documentation on all public members, explicit `#region` boundaries, modal booleans, and zero memory leaks.
 
 ### TASK-005: Continuous Attack System (Bare Hand & Hoe)
 - **Feature & Requirements**:

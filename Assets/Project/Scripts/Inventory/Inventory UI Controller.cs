@@ -40,6 +40,7 @@ public class InventoryUIController : MonoBehaviour
     }
     private void OnDisable()
     {
+        ReturnHeldItem();
         EventBus<OnUISlotClickEvent>.Unsubscribe(OnClick);
         EventBus<OnUIBeginDragEvent>.Unsubscribe(OnBeginDrag);
         EventBus<OnUIDragEvent>.Unsubscribe(OnDrag);
@@ -352,8 +353,38 @@ public class InventoryUIController : MonoBehaviour
         EnableDragIcon(slot);
     }
     
+    public void ReturnHeldItem()
+    {
+        if (!HasHeldItem) return;
+
+        if (_heldInventory != null && _heldIndex >= 0)
+        {
+            SlotData slotData = _heldInventory.GetSlotData(_heldIndex);
+            if (slotData.IsEmpty)
+            {
+                _heldInventory.SetSlotData(_heldSlotData, _heldIndex);
+            }
+            else if (slotData.item == _heldSlotData.item && _heldSlotData.item.stackable)
+            {
+                int remaining = _heldInventory.AddStackItemToSlot(_heldIndex, _heldSlotData.item, _heldSlotData.count);
+                if (remaining > 0)
+                {
+                    _heldInventory.AddItemGetLeftover(_heldSlotData.item, remaining);
+                }
+            }
+            else
+            {
+                _heldInventory.AddItemGetLeftover(_heldSlotData.item, _heldSlotData.count);
+            }
+        }
+
+        ClearHeldItem();
+    }
+
     private void OnToggleInventoryUI(InventoryToggleEvent evt)
     {
+        ReturnHeldItem();
+
         if (_slotUI_A != null)
         {
             _slotUI_A.RenderVisual();

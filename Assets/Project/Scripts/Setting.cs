@@ -3,25 +3,25 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class Setting : MonoBehaviour
+public class Setting : MonoBehaviour, ICloseableUI
 {
     [SerializeField] private GameObject UiGameObject;
     [SerializeField] private InputActionReference lookAction;
     [SerializeField] private Slider slider;
     [SerializeField] private TextMeshProUGUI sliderValueText;
     
-    
-    
-    // [SerializeField] private  inputActionReference;
-    
     public float baseSpeedX = 0.1f; 
-    public float baseSpeedY =-0.1f;
+    public float baseSpeedY = -0.1f;
 
+    public bool IsOpen => UiGameObject != null && UiGameObject.activeSelf;
 
     private void Start()
     {
-        sliderValueText.SetText(slider.value.ToString());
-        SetMouseSensitive(slider.value);
+        if (slider != null && sliderValueText != null)
+        {
+            sliderValueText.SetText(slider.value.ToString());
+            SetMouseSensitive(slider.value);
+        }
     }
 
     private void OnEnable()
@@ -32,26 +32,45 @@ public class Setting : MonoBehaviour
     private void OnDisable()
     {
         EventBus<OnEscapeActionEvent>.Unsubscribe(OnEscapeAction);
+        UIStackManager.UnregisterClosed(this);
     }
 
     private void OnEscapeAction(OnEscapeActionEvent evt)
     {
-        // Debug.Log("yes");
-        TogglePauseUI();
+        if (UIStackManager.TryCloseTopUI())
+        {
+            return;
+        }
+
+        OpenPauseUI();
     }
     
-    private void TogglePauseUI()
+    public void OpenPauseUI()
     {
-        // if (UiGameObject.activeSelf)
-            UiGameObject.SetActive(!UiGameObject.activeSelf);
-            if (UiGameObject.activeSelf)
-            {
-                EventBus<ChangeActionMap>.Raise(new ChangeActionMap(){MapType = ActionMapType.UI});
-            }
-            else
-            {
-                EventBus<ChangeActionMap>.Raise(new ChangeActionMap(){MapType = ActionMapType.Player});
-            }
+        if (UiGameObject == null) return;
+
+        UiGameObject.SetActive(true);
+        UIStackManager.RegisterOpen(this);
+    }
+
+    public void CloseUI()
+    {
+        if (UiGameObject == null) return;
+
+        UiGameObject.SetActive(false);
+        UIStackManager.UnregisterClosed(this);
+    }
+
+    public void TogglePauseUI()
+    {
+        if (IsOpen)
+        {
+            CloseUI();
+        }
+        else
+        {
+            OpenPauseUI();
+        }
     }
 
     public void SetMouseSensitive(float multiplier)

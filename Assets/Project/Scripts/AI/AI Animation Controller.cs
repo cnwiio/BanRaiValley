@@ -1,12 +1,16 @@
 using UnityEngine;
 
-public class AIAnimationController : MonoBehaviour
+/// <summary>
+/// Concrete animation driver component for plant monsters interfacing with Unity Animator.
+/// </summary>
+public class AIAnimationController : AIAnimationControllerBase
 {
+    #region Serialized Fields
     [Header("Animation")]
-    [Tooltip("Reference to the Animator component that drives the plant's skeletal animations.")]
+    [Tooltip("Reference to the Animator component driving skeletal animations.")]
     [SerializeField] private Animator _animator;
 
-    [Tooltip("Animator boolean parameter name used to drive the movement blend tree.")]
+    [Tooltip("Animator float parameter name used to drive the movement blend tree.")]
     [SerializeField] private string _movingParamName = "IsMoving";
 
     [Tooltip("Animator trigger parameter name for the awakening / uprooting animation.")]
@@ -20,66 +24,87 @@ public class AIAnimationController : MonoBehaviour
 
     [Tooltip("Animator trigger parameter name for the death animation.")]
     [SerializeField] private string _dieParamName = "Die";
-    
+    #endregion
+
+    #region Fields
     private int _movingHash;
     private int _awakenHash;
     private int _attackHash;
     private int _hitHash;
     private int _dieHash;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    #endregion
+
+    #region Unity Messages
     private void Awake()
     {
+        if (_animator == null)
+        {
+            _animator = GetComponent<Animator>();
+        }
+
         _movingHash = Animator.StringToHash(_movingParamName);
         _awakenHash = Animator.StringToHash(_awakenParamName);
         _attackHash = Animator.StringToHash(_attackParamName);
         _hitHash    = Animator.StringToHash(_hitParamName);
         _dieHash    = Animator.StringToHash(_dieParamName);
     }
+    #endregion
 
-    /// <summary>
-    /// Fires the awakening / uprooting trigger on the Animator.
-    /// </summary>
-    public void PlayAwaken()
+    #region Public Methods
+    /// <summary>Fires the awakening / uprooting trigger on the Animator.</summary>
+    public override void PlayAwaken()
     {
-        _animator.SetTrigger(_awakenHash);
+        if (_animator != null)
+        {
+            _animator.SetTrigger(_awakenHash);
+        }
     }
 
-    /// <summary>
-    /// Fires the attack trigger on the Animator.
-    /// </summary>
-    public void PlayAttack()
+    /// <summary>Fires the attack trigger on the Animator.</summary>
+    public override void PlayAttack()
     {
-        _animator.SetTrigger(_attackHash);
+        if (_animator != null)
+        {
+            _animator.SetTrigger(_attackHash);
+        }
     }
 
-    /// <summary>
-    /// Fires the hit-react / flinch trigger on the Animator.
-    /// </summary>
-    public void PlayHit()
+    /// <summary>Fires the hit-react / flinch trigger on the Animator.</summary>
+    public override void PlayHit()
     {
-        _animator.SetTrigger(_hitHash);
+        if (_animator != null)
+        {
+            _animator.SetTrigger(_hitHash);
+        }
     }
 
-    /// <summary>
-    /// Fires the death trigger on the Animator.
-    /// </summary>
-    public void PlayDie()
+    /// <summary>Fires the death trigger on the Animator.</summary>
+    public override void PlayDie()
     {
-        _animator.SetTrigger(_dieHash);
+        if (_animator != null)
+        {
+            _animator.SetTrigger(_dieHash);
+        }
     }
 
-    /// <summary>
-    /// Sets the movement boolean on the Animator to drive the movement blend tree.
-    /// </summary>
-    /// <param name="isMoving"><c>true</c> when the plant is actively navigating; <c>false</c> when idle or stopped.</param>
-    public void SetMoving(float speed)
+    /// <summary>Updates locomotion animation speed parameter.</summary>
+    /// <param name="speed">Current movement speed magnitude.</param>
+    public override void SetMoving(float speed)
     {
-        _animator.SetFloat(_movingHash, speed);
+        if (_animator != null)
+        {
+            _animator.SetFloat(_movingHash, speed);
+        }
     }
 
-    public void Reset()
+    /// <summary>Resets the animation state machine to default rebinding.</summary>
+    public override void Reset()
     {
-        _animator.Rebind();
-        _animator.Update(0);
+        if (_animator != null)
+        {
+            _animator.Rebind();
+            _animator.Update(0f);
+        }
     }
+    #endregion
 }
