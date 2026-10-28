@@ -13,6 +13,11 @@ MonoBehaviour:
   m_Name: PlayerMovementData
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovementData
   Speed: 6
+  SprintSpeed: 10
+  CrouchSpeed: 3
   JumpHeight: 5
   GroundSnapForce: -0.5
   GravityMultiplyer: 4
+  CrouchHeight: 1
+  CrouchHeadY: 0.25
+  CrouchTransitionSpeed: 12

@@ -263,6 +263,8 @@ MonoBehaviour:
   DebugAction: {fileID: -2429492104494996083, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
   MoveAction: {fileID: -2822950199889475732, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
   JumpAction: {fileID: 3764721509380322806, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
+  RunAction: {fileID: 4915682446195045174, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
+  CrouchAction: {fileID: 5288473775791016014, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
   InventoryToggleAction_PlayerMap: {fileID: 4672973331285641741, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
   InventoryToggleAction_UIMap: {fileID: -8967117750965259324, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}
   HotbarSelectAction: {fileID: 6586862962766629273, guid: ce40093d0a8493147b7e4f88c899b09f, type: 3}

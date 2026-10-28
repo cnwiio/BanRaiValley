@@ -10,10 +10,29 @@ This file tracks all completed tasks performed by Coder Agents across the projec
 | :--- | :--- | :--- | :--- |
 | TASK-001: Shadow Stutter & Terrain Flickering Fix | Lighting & Time System / Scene Configuration | `Assets/Project/Scenes/BuildScene 2.unity`<br>`Assets/Project/Scripts/Time/DayNightLightingController.cs`<br>`Assets/Project/Scripts/Time/Time Manager.cs`<br>`.agent/Manuals/ShadowConfigurationManual.md` | 2026-10-28 |
 | TASK-002: Dirt Disappearance Over Inactivity | Farming System | `Assets/Project/Scripts/Farming/Dirt.cs`<br>`Assets/Project/Scripts/Farming/Dirt Manager.cs` | 2026-10-28 |
+| TASK-003: Sprint and Crouch System | Player Movement System | `Assets/Project/Scripts/Player/Player Movement Data.cs`<br>`Assets/Project/Data/PlayerMovementData.asset`<br>`Assets/Project/Scripts/Player/Player Input Reader.cs`<br>`Assets/Project/Scripts/Player/Player Movement.cs`<br>`Assets/Project/Prefabs/Player.prefab` | 2026-10-28 |
 
 ---
 
 ## Detailed Task Changelog
+
+### TASK-003: Sprint and Crouch System
+- **Feature & Requirements**:
+  1. Hold to Sprint (Shift) and Hold to Crouch (Ctrl).
+  2. Crouch takes precedence over sprint (cannot sprint while crouching; jumping while crouching is disabled).
+  3. Sprinting allowed in any movement direction.
+  4. Smooth camera / head lowering and CharacterController collider height adjustment with feet grounded.
+  5. Overhead clearance check preventing the player from standing up while under low ceilings.
+- **Solution**:
+  1. Extended `PlayerMovementData.cs` and `PlayerMovementData.asset` with `SprintSpeed` (10f), `CrouchSpeed` (3f), `CrouchHeight` (1.0f), `CrouchHeadY` (0.25f), and `CrouchTransitionSpeed` (12f).
+  2. Updated `PlayerInputReader.cs` to bind `Run` and `Crouch` input actions (with fallback asset resolution if unassigned in inspector) and exposed `IsSprintPressed` and `IsCrouchPressed`.
+  3. Updated `PlayerMovement.cs`:
+     - Added `UpdateCrouchState()` with smooth exponential damping for `CharacterController.height`, `CharacterController.center`, and `Head.localPosition.y`.
+     - Implemented `HasCeilingObstacle()` via `Physics.SphereCast` upward to enforce crouch until clearance is restored.
+     - Updated `HandleHorizontalMovement()` to handle speed selection: Crouch (3) > Sprint (10) > Walk (6).
+     - Guarded `HandleJumpInput()` to block jumping while crouching.
+  4. Wired `RunAction` and `CrouchAction` in `Assets/Project/Prefabs/Player.prefab`.
+  5. Refreshed knowledge graph via `graphify update .`.
 
 ### TASK-002: Dirt Disappearance Over Inactivity
 - **Problem**:

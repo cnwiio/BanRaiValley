@@ -1,17 +1,17 @@
 # Graph Report - BanRaiValley  (2026-10-28)
 
 ## Corpus Check
-- 211 files · ~124,164 words
+- 211 files · ~124,840 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 1095 file(s) not represented in the graph (top: .meta 742, .asset 87, .prefab 68)
 
 ## Summary
-- 3742 nodes · 7747 edges · 301 communities (130 shown, 171 thin omitted)
+- 3753 nodes · 7765 edges · 294 communities (126 shown, 168 thin omitted)
 - Extraction: 93% EXTRACTED · 7% INFERRED · 0% AMBIGUOUS · INFERRED: 541 edges (avg confidence: 0.84)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `5d54f2fc`
+- Built from commit: `5e102e22`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -35,15 +35,14 @@
 - CwHelper Acos
 - Casino PlayerMoney
 - packages-lock com
-- Farming Grid IFarmingGrid
+- FarmingGrid
 - architecture-guide SKILL
-- PlacementPreviewer
+- PreviewState
 - Inventory UI Controller IInventory
 - LeanPath LeanPlane
-- EventBus Time Manager
+- TransformCopyPasteEditor
 - packages-lock com
 - LeanGameObjectPool Delay
-- Navigator MenuItemBrowser
 - CwInputManager Finger
 - FavoritesWindow
 - AI Brain AI Movement
@@ -54,8 +53,7 @@
 - Player Input Reader EventBus
 - packages-lock com
 - CwDemoButton LinkType
-- Color
-- ToolAreaPattern
+- WateringCan
 - packages-lock dependencies
 - Player Combat Manager Player Health
 - Inventory Slot UI OnDrag
@@ -82,34 +80,33 @@
 - CwDemo
 - CwDemoButtonBuilder Player
 - TileData
-- PlayerHandVisualizer
+- SlotData
 - ToolbarSceneSelection LeanTween
 - ScriptableObject
 - Documentation Component
-- Input Manager ActionMapType
+- EventBus.cs
 - LTSeq append
-- ToolbarEnterPlayMode ToolbarFpsSlider
+- GUIContent
 - CwDepthTextureMode CwHelper
 - AI Animation Controller AI Brain
-- SeedBagState
+- CwCameraLook
 - Inventory UI PlayerInventoryCoordinator
 - Player Movement Unity.Cinemachine
 - BaseToolbarElement ToolbarInitializer
-- LeanPool
+- Transform
 - CwFollow LateUpdate
 - Hoe
 - .Any
-- LTSpline
+- PlayerCombatManager
 - Dirt Manager Dirt
 - packages-lock com
 - packages-lock com
 - SceneAssetsUtils ToolbarStartFromFirstScene
 - ToolbarReloadScene ToolbarTimeSlider
-- .Draw
 - GitUtils ToolbarGitStatus
-- FarmingGridReference IFarmingGrid
+- PlantManager
 - LeanDestroy ExecuteType
-- Plant Plant Manager
+- Plant
 - ToolbarFindMissingReferences MissingReference
 - package name
 - WinInstanceInfo
@@ -126,7 +123,6 @@
 - LTGUI
 - CachedFavorite
 - Sleep Sequence Controller ChangeActionMap
-- Vector2
 - packages-lock com
 - SKILL Ponytail
 - package name
@@ -135,27 +131,27 @@
 - Setting Exit
 - packages-lock com
 - packages-lock com
-- AIMovement
+- CwDemoButtonBuilder
 - Navigator PathUtility
 - Navigator
 - LeanSelectableBehaviour Register
 - LeanSpawn Prefab
 - package name
 - FarmingToolBase
-- CwCameraLook
+- CwCameraMove
 - package name
 - .OnInspector
-- CwCameraMove
+- ToolbarEnterPlayMode
 - AI Detection OnTriggerEnter
 - ButtonDataManager ButtonBundle
 - Navigator_Helpers PieAssetType
-- .RenderVisual
-- InventoyModel
-- .SellItemsByType
-- SceneBookmark ToolbarSceneBookmarks
+- PlayerInventoryManager
+- ToolbarFpsSlider
+- FavoriteItem.cs
 - ToolbarReserializeAll SerializeAssetsUtils
 - LeanSelectableGraphicColor DefaultColor
 - LeanSelectableRendererColor DefaultColor
+- CwHelper DrawShapeOutline
 - AI Brain PlantAIState
 - packages-lock com
 - ToolbarSceneBookmarks Name
@@ -163,10 +159,7 @@
 - LeanGameObjectPool NotificationType
 - CwInputManager AxisGesture
 - ToolbarClearPlayerPrefs Name
-- ToolbarRecompile Name
-- PlayerHealth
 - LeanSelect ReselectType
-- PlantStageData
 - .OnInspector
 - Spawner OnDisable
 - packages-lock dependencies
@@ -174,11 +167,8 @@
 - README Custom
 - LeanSelect LimitType
 - internalOnLevelWasLoaded
-- EventBus Raise
-- WaterCanState
 - License LeanTween
-- ToolbarSaveProject
-- ButtonCache
+- List
 - LeanGameObjectPool StrategyType
 - Bag Inventory
 - Coder Agent
@@ -342,7 +332,7 @@
 - **PieTabs Editor UI Icon Set** — assets_pinepie_pietabs_editor_core_ui_81nwobjayd181_icon, assets_pinepie_pietabs_editor_core_ui_cross_icon_icon, assets_pinepie_pietabs_editor_core_ui_dropdownarrow_arrow, assets_pinepie_pietabs_editor_core_ui_grip_handle, assets_pinepie_pietabs_editor_core_ui_magnifying_glass_1_icon, assets_pinepie_pietabs_editor_core_ui_plus_1_icon, assets_pinepie_pietabs_editor_core_ui_right_arrow_1_icon, assets_pinepie_pietabs_editor_core_ui_single_line_separator [INFERRED 0.85]
 - **Ponytail Lean Engineering Suite** — agents_skills_ponytail_audit_skill_audit, agents_skills_ponytail_debt_skill_debt, agents_skills_ponytail_gain_skill_gain [INFERRED 0.85]
 
-## Communities (301 total, 171 thin omitted)
+## Communities (294 total, 168 thin omitted)
 
 ### Community 0 - "LTDescr ActionMethodDelegate"
 Cohesion: 0.02
@@ -350,23 +340,23 @@ Nodes (11): ActionMethodDelegate, EaseTypeDelegate, LTDescr, easeInternal, from,
 
 ### Community 2 - "LeanTween add"
 Cohesion: 0.03
-Nodes (75): add(), alpha(), alphaCanvas(), alphaText(), alphaVertex(), cancel(), cancelAll(), color() (+67 more)
+Nodes (73): add(), alpha(), alphaCanvas(), alphaText(), alphaVertex(), cancel(), cancelAll(), color() (+65 more)
 
 ### Community 3 - "LeanTweenExt LeanValue"
 Cohesion: 0.05
-Nodes (3): pause(), resume(), LeanTweenExt
+Nodes (6): addListener(), LTEvent, pause(), removeListener(), resume(), LeanTweenExt
 
 ### Community 4 - "LTDescr LeanTween"
 Cohesion: 0.04
-Nodes (4): LTBezier, LTBezierPath, distance, LTUtility
+Nodes (4): LTBezier, LTSpline, LTUtility, move()
 
 ### Community 5 - "Unity Editor"
 Cohesion: 0.03
 Nodes (74): Assembly-CSharp, Assembly-CSharp-Editor, CustomToolbar, CW.Common, LeanCommon, LeanPool, PPv2URPConverters, Unity.2D.Sprite.Editor (+66 more)
 
 ### Community 6 - "SceneBookmarksWindow SceneBookmarksManager"
-Cohesion: 0.09
-Nodes (9): BookmarkGroup, SceneBookmark, SceneBookmarkData, SceneBookmarksManager, Instance, EditorInputDialog, SceneBookmarksWindow, TransformCopyPasteEditor (+1 more)
+Cohesion: 0.13
+Nodes (7): BookmarkGroup, SceneBookmark, SceneBookmarkData, SceneBookmarksManager, Instance, EditorInputDialog, SceneBookmarksWindow
 
 ### Community 7 - "LTDescrOptional"
 Cohesion: 0.05
@@ -381,8 +371,8 @@ Cohesion: 0.07
 Nodes (13): ToolbarSettingsProvider, KeyCombination, PieTabsPrefs, AskBeforeDelete, FastFolderOpen, FastPrefabOpen, FastSceneOpen, FastScriptOpen (+5 more)
 
 ### Community 11 - "Manager LeanPooledRigidbody"
-Cohesion: 0.08
-Nodes (3): CwShared, Project.Scripts, Lean.Pool
+Cohesion: 0.06
+Nodes (4): CwShared, Project.Scripts, Lean.Pool, Lean.Pool.Editor
 
 ### Community 12 - "MenuItemBrowser ReadmeEditor"
 Cohesion: 0.07
@@ -394,7 +384,7 @@ Nodes (40): LeanTweenType, animationCurve, clamp, easeInBack, easeInBounce, ease
 
 ### Community 14 - "LeanDestroy CwSeedAttribute"
 Cohesion: 0.09
-Nodes (5): CwSeedAttribute, Lean.Common.Editor, Lean.Common, Lean.Pool.Editor, CW.Common
+Nodes (4): CwSeedAttribute, Lean.Common.Editor, Lean.Common, CW.Common
 
 ### Community 15 - "packages-lock com"
 Cohesion: 0.06
@@ -405,76 +395,68 @@ Cohesion: 0.05
 Nodes (5): CwHelper, IsBIRP, IsHDRP, IsSRP, IsURP
 
 ### Community 17 - "Casino PlayerMoney"
-Cohesion: 0.10
-Nodes (8): Casino, currrentState, CasinoState, Idle, Playing, PlayerMoney, Money, ShopBuyHandler
+Cohesion: 0.08
+Nodes (14): Casino, currrentState, CasinoState, Idle, Playing, ItemType, Plant, Seed (+6 more)
 
 ### Community 18 - "packages-lock com"
 Cohesion: 0.06
 Nodes (36): dependencies, depth, source, url, version, dependencies, depth, source (+28 more)
 
-### Community 19 - "Farming Grid IFarmingGrid"
+### Community 19 - "FarmingGrid"
 Cohesion: 0.11
-Nodes (3): FarmingGrid, ITileStore, TileStore
+Nodes (4): FarmingGrid, FarmingGridReference, Grid, IFarmingGrid
 
 ### Community 20 - "architecture-guide SKILL"
 Cohesion: 0.09
 Nodes (16): Completed Tasks Summary & Changelog, Task Review Dashboard & Technical Audits, Combat & Equipment Subsystem, Farming & Agriculture Subsystem, GameEventBus Subsystem, The Living Harvest (Awakened Crop Mechanic), Static Strongly-Typed GameEventBus, Input Manager Event-Only Interface (+8 more)
 
-### Community 21 - "PlacementPreviewer"
-Cohesion: 0.18
-Nodes (6): PlacementPreviewer, PreviewState, Build, Delete, Planting, Watering
+### Community 21 - "PreviewState"
+Cohesion: 0.40
+Nodes (5): PreviewState, Build, Delete, Planting, Watering
 
 ### Community 22 - "Inventory UI Controller IInventory"
-Cohesion: 0.11
-Nodes (9): OnUISlotClickEvent, BaseInventory, TotalSlot, IInventory, TotalSlot, InventoryUIController, HasHeldItem, SlotData (+1 more)
+Cohesion: 0.14
+Nodes (5): OnUISlotClickEvent, IInventory, TotalSlot, InventoryUIController, HasHeldItem
 
 ### Community 23 - "LeanPath LeanPlane"
-Cohesion: 0.15
-Nodes (3): LeanPath, PointCount, LeanPlane
-
-### Community 24 - "EventBus Time Manager"
-Cohesion: 0.13
-Nodes (29): EndPreviewEvent, IEvent, MultiPreviewingEvent, OnClearPlantEvent, OnDebugActionEvent, OnEscapeActionEvent, OnHarvestPlantEvent, OnHotbarScrollActionEvent (+21 more)
+Cohesion: 0.12
+Nodes (6): LeanPath, PointCount, LeanPlane, CwRotate, AngularVelocity, RelativeTo
 
 ### Community 25 - "packages-lock com"
 Cohesion: 0.06
 Nodes (33): dependencies, depth, source, version, dependencies, depth, source, version (+25 more)
 
 ### Community 26 - "LeanGameObjectPool Delay"
-Cohesion: 0.06
+Cohesion: 0.07
 Nodes (16): Delay, LeanGameObjectPool, Capacity, DeactivatedChild, Despawned, DespawnedClonesMatch, Notification, Persist (+8 more)
 
 ### Community 28 - "CwInputManager Finger"
-Cohesion: 0.15
-Nodes (6): Axis, CwInputManager, Fingers, GuiLayers, ScaleFactor, Link
+Cohesion: 0.14
+Nodes (8): DragState, Axis, CwInputManager, Fingers, GuiLayers, ScaleFactor, Finger, SmoothScreenPositionDelta
 
 ### Community 29 - "FavoritesWindow"
-Cohesion: 0.15
+Cohesion: 0.13
 Nodes (4): FavoriteList, FavoritesManager, Instance, FavoritesWindow
 
 ### Community 30 - "AI Brain AI Movement"
-Cohesion: 0.12
-Nodes (6): AIBrain, currentChaseState, currentState, PlantChaseState, ChaseHome, ChasePlayer
+Cohesion: 0.09
+Nodes (9): AIBrain, currentChaseState, currentState, PlantChaseState, ChaseHome, ChasePlayer, AIMovement, IsReachDestination (+1 more)
 
 ### Community 31 - "TimeManager"
 Cohesion: 0.09
-Nodes (12): 2. Day / Night Sun Traversal (Smooth vs Discrete), Architecture, How to configure in the Unity Editor, OnDayEndedEvent, DayNightLightingController, TimeManager, ContinuousNormalizedDayTime, CurrentDateTime (+4 more)
+Nodes (14): 2. Day / Night Sun Traversal (Smooth vs Discrete), Architecture, How to configure in the Unity Editor, OnNewDayStartedEvent, OnPlayerOutOfHPEvent, OnSleepEvent, DayNightLightingController, TimeManager (+6 more)
 
 ### Community 32 - "PreviewVisualStrategies Placement Previewer"
-Cohesion: 0.16
-Nodes (5): BuildPreviewStrategy, DeletePreviewStrategy, IPreviewVisualStrategy, PlantingPreviewStrategy, WateringPreviewStrategy
+Cohesion: 0.13
+Nodes (6): PlacementPreviewer, BuildPreviewStrategy, DeletePreviewStrategy, IPreviewVisualStrategy, PlantingPreviewStrategy, WateringPreviewStrategy
 
 ### Community 33 - "packages-lock com"
 Cohesion: 0.07
 Nodes (29): depth, source, version, dependencies, depth, source, version, dependencies (+21 more)
 
-### Community 34 - "RectTransform"
-Cohesion: 0.06
-Nodes (8): isPaused(), isTweening(), CwDemoButtonBuilder, ButtonPrefab, ButtonRoot, Color, Icon, OverrideName
-
 ### Community 35 - "Player Input Reader EventBus"
-Cohesion: 0.12
-Nodes (4): InventoryToggleEvent, OnDeleteActionEvent, PlayerInputReader, MovementInput
+Cohesion: 0.08
+Nodes (14): OnDebugActionEvent, OnDeleteActionEvent, OnEscapeActionEvent, OnHotbarScrollActionEvent, OnHotbarSelectEvent, OnInteractActionEvent, OnJumpEvent, OnRotateActionEvent (+6 more)
 
 ### Community 36 - "packages-lock com"
 Cohesion: 0.08
@@ -484,28 +466,24 @@ Nodes (28): dependencies, depth, source, url, version, dependencies, depth, sour
 Cohesion: 0.09
 Nodes (15): CwDemoButton, IsolateTarget, IsolateToggle, Link, UrlTarget, LinkType, Isolate, NextScene (+7 more)
 
-### Community 39 - "ToolAreaPattern"
-Cohesion: 0.22
-Nodes (6): ToolAreaCalculator, ToolAreaPattern, CenteredSquare, ForwardLine, Single, ToolData
+### Community 39 - "WateringCan"
+Cohesion: 0.09
+Nodes (12): ToolAreaCalculator, WaterCanState, Farm, Idle, Watering, WateringCan, CurrentState, ToolAreaPattern (+4 more)
 
 ### Community 40 - "packages-lock dependencies"
 Cohesion: 0.07
 Nodes (27): dependencies, depth, source, version, dependencies, depth, source, url (+19 more)
 
 ### Community 41 - "Player Combat Manager Player Health"
-Cohesion: 0.15
-Nodes (6): AIHealth, Hp, AttackHitBox, IDamageable, ItemAttackData, PlayerCombatManager
-
-### Community 42 - "Inventory Slot UI OnDrag"
-Cohesion: 0.11
-Nodes (4): OnUIBeginDragEvent, OnUIDropEvent, OnUIEndDragEvent, InventorySlotUI
+Cohesion: 0.14
+Nodes (6): AIHealth, Hp, AttackHitBox, IDamageable, PlayerHealth, Hp
 
 ### Community 43 - "packages-lock com"
 Cohesion: 0.08
 Nodes (26): dependencies, depth, source, url, version, dependencies, depth, source (+18 more)
 
 ### Community 44 - "LTRect"
-Cohesion: 0.10
+Cohesion: 0.09
 Nodes (9): LTRect, hasInitiliazed, height, id, rect, width, x, y (+1 more)
 
 ### Community 45 - "packages-lock com"
@@ -514,27 +492,27 @@ Nodes (25): dependencies, depth, source, version, dependencies, depth, source, u
 
 ### Community 48 - "BaseToolbarElement OpalStudio"
 Cohesion: 0.10
-Nodes (5): OpalStudio.CustomToolbar.Editor.Core, OpalStudio.CustomToolbar.Editor.ToolbarElements, OpalStudio.CustomToolbar.Editor.ToolbarElements.Favorites.Data, OpalStudio.CustomToolbar.Editor.Settings, OpalStudio.CustomToolbar.Editor.Utils
-
-### Community 49 - "Hotbar Invetory Model Player Inventory Manage"
-Cohesion: 0.17
-Nodes (3): OnHotbarChangeEvent, HotbarInventoryModel, SelectedIndex
+Nodes (11): OpalStudio.CustomToolbar.Editor.ToolbarElements.SceneBookmarks.Window, REUN.NiceTransformCopyPaste, OpalStudio.CustomToolbar.Editor.ToolbarElements.Favorites, OpalStudio.CustomToolbar.Editor.ToolbarElements.SceneBookmarks, OpalStudio.CustomToolbar.Editor.ToolbarElements.SceneBookmarks.Data, PinePie.PieTabs, OpalStudio.CustomToolbar.Editor.Core, OpalStudio.CustomToolbar.Editor.ToolbarElements (+3 more)
 
 ### Community 50 - "ToolbarSettings ToolbarSide"
-Cohesion: 0.13
-Nodes (13): ToolbarConfiguration, ToolbarElement, ToolbarGroup, ToolbarSide, Left, Right, ToolboxShortcut, ToolbarSettings (+5 more)
+Cohesion: 0.18
+Nodes (10): ToolbarConfiguration, ToolbarElement, ToolbarGroup, ToolbarSide, Left, Right, ToolboxShortcut, ToolbarSettings (+2 more)
+
+### Community 51 - "ToolbarFindMissingReferences.cs"
+Cohesion: 0.50
+Nodes (3): OpalStudio.CustomToolbar.Editor.ToolbarElements.MissingReferences, OpalStudio.CustomToolbar.Editor.ToolbarElements.MissingReferences.Window, OpalStudio.CustomToolbar.Editor.ToolbarElements.MissingReferences.Data
 
 ### Community 52 - "ToolbarToolbox ToolbarLayerVisibility"
-Cohesion: 0.13
-Nodes (6): ToolbarLayerVisibility, Name, Tooltip, ToolbarToolbox, Name, Tooltip
+Cohesion: 0.19
+Nodes (3): ToolbarToolbox, Name, Tooltip
 
 ### Community 53 - "ButtonDataManager GetButtonElement"
-Cohesion: 0.13
-Nodes (12): CreatorButton, Label, CreatorButtonBundle, IButtonData, Label, ShortcutButton, Label, Path (+4 more)
+Cohesion: 0.15
+Nodes (11): CreatorButton, Label, CreatorButtonBundle, IButtonData, Label, ShortcutButton, Label, Path (+3 more)
 
 ### Community 54 - "Base Inventory Demo Spawn Item"
-Cohesion: 0.22
-Nodes (3): InventoryUIRefreshEvent, DemoSpawnItem, Item
+Cohesion: 0.14
+Nodes (5): InventoryUIRefreshEvent, DemoSpawnItem, InventoyModel, Item, PlayerInventoryCoordinator
 
 ### Community 56 - "LeanFormatString SetString"
 Cohesion: 0.17
@@ -549,11 +527,11 @@ Cohesion: 0.11
 Nodes (7): LeanSelectable, IsSelected, IsSelectedCount, OnDeselected, OnSelected, SelectedCount, SelfSelected
 
 ### Community 59 - "OnDespawn OnSpawn"
-Cohesion: 0.08
-Nodes (8): LeanPooledRigidbody2D, LeanPooledRigidbody, IPoolable, CwRotate, AngularVelocity, RelativeTo, Dirt, InactiveDays
+Cohesion: 0.12
+Nodes (3): LeanPooledRigidbody2D, LeanPooledRigidbody, IPoolable
 
 ### Community 60 - "CwRenderTextureManager CwHelper"
-Cohesion: 0.14
+Cohesion: 0.16
 Nodes (3): CwRenderTextureManager, Lifetime, Entry
 
 ### Community 61 - "GameDateTime"
@@ -569,12 +547,16 @@ Cohesion: 0.07
 Nodes (15): CwDemo, ChangeCloudsInHDRP, ChangeExposureInHDRP, ChangeFogInHDRP, ChangeMotionBlurInHDRP, ChangeVisualEnvironmentInHDRP, UpgradeCamerasInHDRP, UpgradeInputModule (+7 more)
 
 ### Community 65 - "TileData"
-Cohesion: 0.17
-Nodes (8): TileData, IsPlanted, IsTilled, IsWatered, TileState, Tillable, Tilled, Untillable
+Cohesion: 0.12
+Nodes (10): ITileStore, TileData, IsPlanted, IsTilled, IsWatered, TileState, Tillable, Tilled (+2 more)
+
+### Community 66 - "SlotData"
+Cohesion: 0.11
+Nodes (6): OnHotbarChangeEvent, BaseInventory, TotalSlot, PlayerHandVisualizer, SlotData, IsEmpty
 
 ### Community 67 - "ToolbarSceneSelection LeanTween"
-Cohesion: 0.21
-Nodes (3): ToolbarSceneSelection, Name, Tooltip
+Cohesion: 0.16
+Nodes (6): ToolbarLayerVisibility, Name, Tooltip, ToolbarSceneSelection, Name, Tooltip
 
 ### Community 68 - "ScriptableObject"
 Cohesion: 0.10
@@ -584,25 +566,33 @@ Nodes (9): ToolbarCallback, PieTabs_AnchorSO, CwGuide, Icon, Version, AIData, Pl
 Cohesion: 0.13
 Nodes (18): Lean Common Library, LeanCommon Utility Class, LeanDestroy Component, LeanFormatString Component, LeanPath Component, LeanPlane Component, LeanRoll Component, LeanSelect Base Component (+10 more)
 
-### Community 70 - "Input Manager ActionMapType"
-Cohesion: 0.13
-Nodes (3): OnTillingImpactEvent, InputManager, CurrentActionMaptype
+### Community 70 - "EventBus.cs"
+Cohesion: 0.07
+Nodes (18): EventBus, IEvent, InventoryToggleEvent, OnClearPlantEvent, OnDayEndedEvent, OnHarvestPlantEvent, OnItemPickupEvent, OnPlantingEvent (+10 more)
 
-### Community 72 - "ToolbarEnterPlayMode ToolbarFpsSlider"
+### Community 72 - "GUIContent"
 Cohesion: 0.12
-Nodes (9): ToolbarFavorites, Name, Tooltip, ToolbarEnterPlayMode, Name, Tooltip, ToolbarFpsSlider, Name (+1 more)
+Nodes (9): ToolbarFavorites, Name, Tooltip, ToolbarRecompile, Name, Tooltip, ToolbarSaveProject, Name (+1 more)
 
 ### Community 73 - "CwDepthTextureMode CwHelper"
 Cohesion: 0.17
 Nodes (3): CwDepthTextureMode, DepthMode, CwDepthTextureMode_Editor
 
-### Community 75 - "SeedBagState"
-Cohesion: 0.50
-Nodes (4): SeedBagState, Farm, Idle, Planting
+### Community 75 - "CwCameraLook"
+Cohesion: 0.20
+Nodes (7): CwCameraLook, Damping, Listen, PitchControls, RollControls, Sensitivity, YawControls
+
+### Community 77 - "Player Movement Unity.Cinemachine"
+Cohesion: 0.13
+Nodes (4): PlayerMovement, IsCrouching, IsSprinting, Unity.Cinemachine
 
 ### Community 78 - "BaseToolbarElement ToolbarInitializer"
 Cohesion: 0.14
 Nodes (8): ToolbarInitializer, BaseToolbarElement, Enabled, Name, Tooltip, Width, ToolbarSpace, Name
+
+### Community 79 - "Transform"
+Cohesion: 0.05
+Nodes (4): drawBezierPath(), LTBezierPath, distance, LeanPool
 
 ### Community 80 - "CwFollow LateUpdate"
 Cohesion: 0.11
@@ -610,11 +600,15 @@ Nodes (15): CwFollow, Damping, Follow, FollowIn, IgnoreZ, LocalPosition, LocalRo
 
 ### Community 81 - "Hoe"
 Cohesion: 0.10
-Nodes (10): BareHand, ComboAttackController, Hoe, CurrentState, HoeState, Attacking, Deleting, Farming (+2 more)
+Nodes (12): BareHand, ComboAttackController, OnPlayerRequestAttackEvent, OnPrimaryActionEvent, Hoe, CurrentState, HoeState, Attacking (+4 more)
 
 ### Community 82 - ".Any"
-Cohesion: 0.27
-Nodes (4): LeanDestroy_Editor, LeanPlane_Editor, LeanRoll_Editor, CwDemoButton_Editor
+Cohesion: 0.21
+Nodes (5): LeanDestroy_Editor, LeanPlane_Editor, LeanRoll_Editor, LeanSelect_Editor, CwDemoButton_Editor
+
+### Community 84 - "Dirt Manager Dirt"
+Cohesion: 0.16
+Nodes (3): Dirt, InactiveDays, DirtManager
 
 ### Community 85 - "packages-lock com"
 Cohesion: 0.12
@@ -632,37 +626,29 @@ Nodes (6): ToolbarStartFromFirstScene, Name, Tooltip, SceneAssetsUtils, SceneSet
 Cohesion: 0.13
 Nodes (6): ToolbarReloadScene, Name, Tooltip, ToolbarTimeSlider, Name, Tooltip
 
-### Community 89 - ".Draw"
-Cohesion: 0.18
-Nodes (5): LeanSelect_Editor, LeanSelectableGraphicColor_Editor, LeanSelectableRendererColor_Editor, LeanSelectableSpriteRendererColor_Editor, P3dLight_Editor
-
 ### Community 90 - "GitUtils ToolbarGitStatus"
 Cohesion: 0.23
 Nodes (5): ToolbarGitStatus, Name, Tooltip, GitUtils, IsGitInstalled
-
-### Community 91 - "FarmingGridReference IFarmingGrid"
-Cohesion: 0.12
-Nodes (3): FarmingGridReference, Grid, IFarmingGrid
 
 ### Community 92 - "LeanDestroy ExecuteType"
 Cohesion: 0.15
 Nodes (10): reset(), ExecuteType, AfterDelay, AfterDelayUnscaled, Manually, OnFirstFrame, LeanDestroy, Execute (+2 more)
 
-### Community 93 - "Plant Plant Manager"
-Cohesion: 0.10
-Nodes (9): PlantData, FinalStageIndex, PlantManager, Plant, currentState, PlantState, CannotHarvest, ReadyToHarvest (+1 more)
+### Community 93 - "Plant"
+Cohesion: 0.14
+Nodes (8): PlantData, FinalStageIndex, Plant, currentState, PlantState, CannotHarvest, ReadyToHarvest, Withered
 
 ### Community 94 - "ToolbarFindMissingReferences MissingReference"
-Cohesion: 0.21
-Nodes (4): MissingReferenceInfo, ToolbarFindMissingReferences, Name, Tooltip
+Cohesion: 0.23
+Nodes (3): ToolbarFindMissingReferences, Name, Tooltip
 
 ### Community 95 - "package name"
 Cohesion: 0.14
 Nodes (13): author, email, name, url, description, displayName, documentationUrl, keywords (+5 more)
 
 ### Community 97 - ".GetTargets"
-Cohesion: 0.17
-Nodes (6): CwCameraLook_Editor, CwCameraMove_Editor, CwCameraPivot_Editor, CwDemo_Editor, CwDemoButtonBuilder_Editor, CwRenderTextureManager_Editor
+Cohesion: 0.11
+Nodes (10): LeanSelectableGraphicColor_Editor, LeanSelectableRendererColor_Editor, LeanSelectableSpriteRendererColor_Editor, CwCameraLook_Editor, CwCameraMove_Editor, CwCameraPivot_Editor, CwDemo_Editor, CwDemoButtonBuilder_Editor (+2 more)
 
 ### Community 99 - "CasinoInteractor"
 Cohesion: 0.06
@@ -689,7 +675,7 @@ Cohesion: 0.36
 Nodes (3): ToolbarScreenshot, Name, Tooltip
 
 ### Community 108 - "LTGUI"
-Cohesion: 0.16
+Cohesion: 0.18
 Nodes (4): Element_Type, Label, Texture, LTGUI
 
 ### Community 109 - "CachedFavorite"
@@ -698,7 +684,7 @@ Nodes (11): FavoriteItem, FavoriteItemType, Asset, GameObject, CachedFavorite, A
 
 ### Community 110 - "Sleep Sequence Controller ChangeActionMap"
 Cohesion: 0.14
-Nodes (6): ChangeActionMap, ActionMapType, Player, Static, UI, SleepSequenceController
+Nodes (8): ChangeActionMap, OnPlayerPassedOutEvent, OnRequestTeleportEvent, ActionMapType, Player, Static, UI, SleepSequenceController
 
 ### Community 112 - "packages-lock com"
 Cohesion: 0.17
@@ -713,7 +699,7 @@ Cohesion: 0.18
 Nodes (10): author, email, name, url, dependencies, description, displayName, name (+2 more)
 
 ### Community 115 - "LeanRoll Angle"
-Cohesion: 0.18
+Cohesion: 0.20
 Nodes (6): LeanRoll, Angle, Clamp, ClampMax, ClampMin, Damping
 
 ### Community 118 - "packages-lock com"
@@ -724,13 +710,13 @@ Nodes (11): dependencies, depth, source, version, dependencies, depth, source, v
 Cohesion: 0.18
 Nodes (11): dependencies, depth, source, version, dependencies, depth, source, version (+3 more)
 
-### Community 120 - "AIMovement"
-Cohesion: 0.18
-Nodes (3): AIMovement, IsReachDestination, Speed
+### Community 120 - "CwDemoButtonBuilder"
+Cohesion: 0.29
+Nodes (6): CwDemoButtonBuilder, ButtonPrefab, ButtonRoot, Color, Icon, OverrideName
 
 ### Community 122 - "Navigator"
-Cohesion: 0.14
-Nodes (3): Navigator, IsSearchBarOpen, LastCreatorWidth
+Cohesion: 0.15
+Nodes (4): PathUtility, Navigator, IsSearchBarOpen, LastCreatorWidth
 
 ### Community 124 - "LeanSpawn Prefab"
 Cohesion: 0.20
@@ -741,32 +727,28 @@ Cohesion: 0.20
 Nodes (9): author, email, name, url, description, displayName, name, unity (+1 more)
 
 ### Community 126 - "FarmingToolBase"
-Cohesion: 0.09
-Nodes (9): PreviewingEvent, StartPreviewEvent, PreviewTileData, FarmingToolBase, GridCheck, SeedBag, CurrentState, WateringCan (+1 more)
+Cohesion: 0.08
+Nodes (14): EndPreviewEvent, MultiPreviewingEvent, OnTileClearEvent, PreviewingEvent, StartPreviewEvent, PreviewTileData, FarmingToolBase, GridCheck (+6 more)
 
-### Community 127 - "CwCameraLook"
-Cohesion: 0.10
-Nodes (12): CwCameraLook, Damping, Listen, PitchControls, RollControls, Sensitivity, YawControls, CwCameraPivot (+4 more)
+### Community 127 - "CwCameraMove"
+Cohesion: 0.08
+Nodes (12): CwCameraMove, Damping, DepthControls, HorizontalControls, Listen, Sensitivity, VerticalControls, CwCameraPivot (+4 more)
 
 ### Community 128 - "package name"
 Cohesion: 0.20
 Nodes (9): author, email, name, url, description, displayName, name, unity (+1 more)
 
-### Community 132 - "CwCameraMove"
-Cohesion: 0.24
-Nodes (7): CwCameraMove, Damping, DepthControls, HorizontalControls, Listen, Sensitivity, VerticalControls
+### Community 132 - "ToolbarEnterPlayMode"
+Cohesion: 0.33
+Nodes (3): ToolbarEnterPlayMode, Name, Tooltip
 
 ### Community 135 - "Navigator_Helpers PieAssetType"
 Cohesion: 0.25
 Nodes (8): PieAssetType, Folder, Other, Prefab, Scene, Script, ShaderGraph, VisualScriptingGraph
 
-### Community 138 - ".SellItemsByType"
-Cohesion: 0.28
-Nodes (6): ItemType, Plant, Seed, Tool, Weapon, SellZone
-
-### Community 139 - "SceneBookmark ToolbarSceneBookmarks"
-Cohesion: 0.33
-Nodes (3): OpalStudio.CustomToolbar.Editor.ToolbarElements.SceneBookmarks.Window, OpalStudio.CustomToolbar.Editor.ToolbarElements.SceneBookmarks, OpalStudio.CustomToolbar.Editor.ToolbarElements.SceneBookmarks.Data
+### Community 137 - "ToolbarFpsSlider"
+Cohesion: 0.40
+Nodes (3): ToolbarFpsSlider, Name, Tooltip
 
 ### Community 140 - "ToolbarReserializeAll SerializeAssetsUtils"
 Cohesion: 0.29
@@ -808,16 +790,12 @@ Nodes (6): AxisGesture, HorizontalDrag, HorizontalPull, Twist, VerticalDrag, Ver
 Cohesion: 0.40
 Nodes (3): ToolbarClearPlayerPrefs, Name, Tooltip
 
-### Community 152 - "ToolbarRecompile Name"
-Cohesion: 0.40
-Nodes (3): ToolbarRecompile, Name, Tooltip
-
 ### Community 154 - "LeanSelect ReselectType"
 Cohesion: 0.40
 Nodes (5): ReselectType, Deselect, DeselectAndSelect, KeepSelected, SelectAgain
 
 ### Community 156 - ".OnInspector"
-Cohesion: 0.29
+Cohesion: 0.24
 Nodes (4): LeanFormatString_Editor, LeanSpawn_Editor, CwRotate_Editor, CwFollow_Editor
 
 ### Community 158 - "packages-lock dependencies"
@@ -837,20 +815,16 @@ Cohesion: 0.50
 Nodes (4): LimitType, DeselectFirst, StopAtMax, Unlimited
 
 ### Community 162 - "internalOnLevelWasLoaded"
-Cohesion: 0.40
+Cohesion: 0.22
 Nodes (3): internalOnLevelWasLoaded(), OnLevelWasLoaded(), onLevelWasLoaded54()
-
-### Community 164 - "WaterCanState"
-Cohesion: 0.50
-Nodes (4): WaterCanState, Farm, Idle, Watering
 
 ### Community 165 - "License LeanTween"
 Cohesion: 0.67
 Nodes (3): LeanTween MIT License, Robert Penner Easing Equations License, LeanTween Engine Overview
 
-### Community 166 - "ToolbarSaveProject"
-Cohesion: 0.40
-Nodes (3): ToolbarSaveProject, Name, Tooltip
+### Community 167 - "List"
+Cohesion: 0.27
+Nodes (3): ButtonCache, Wrapper, Link
 
 ### Community 168 - "LeanGameObjectPool StrategyType"
 Cohesion: 0.67
@@ -865,24 +839,24 @@ Cohesion: 0.33
 Nodes (5): 1. Terrain Shadow Casting (Preventing Camera Shimmer / Jumping Shadows), 3. Camera Anti-Aliasing (Optional Extra Smoothing for Foliage Edges), How to configure in the Unity Editor, Manual: Shadow and Lighting Configuration Guide, What it does
 
 ## Knowledge Gaps
-- **588 isolated node(s):** `from`, `to`, `easeInternal`, `initInternal`, `toTrans` (+583 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 1370 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **171 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **592 isolated node(s):** `from`, `to`, `easeInternal`, `initInternal`, `toTrans` (+587 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 1375 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **168 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `LTDescr` connect `LTDescr ActionMethodDelegate` to `LeanTween add`, `LeanTweenExt LeanValue`, `RectTransform`, `CwDemoButton LinkType`, `Color`, `LTDescr LeanTween`, `LTDescrOptional`, `LeanTween MOVE`, `LTSeq append`, `Manager LeanPooledRigidbody`, `LTRect`, `LeanTween LTDescr`, `Rect`, `Vector2`, `LTSpline`, `PlantStageData`?**
-  _High betweenness centrality (0.131) - this node is a cross-community bridge._
+- **Why does `LTDescr` connect `LTDescr ActionMethodDelegate` to `RectTransform`, `LeanTween add`, `LeanTweenExt LeanValue`, `LTDescr LeanTween`, `CwDemoButton LinkType`, `Color`, `LTDescrOptional`, `LeanTween MOVE`, `LTSeq append`, `Manager LeanPooledRigidbody`, `LTRect`, `LeanTween LTDescr`, `LTGUI`, `Transform`, `CwInputManager Finger`, `Plant`?**
+  _High betweenness centrality (0.133) - this node is a cross-community bridge._
 - **What connects `from`, `to`, `easeInternal` to the rest of the system?**
-  _588 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _592 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `LTDescr ActionMethodDelegate` be split into smaller, more focused modules?**
-  _Cohesion score 0.02043452730475631 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.020087532263494558 - nodes in this community are weakly interconnected._
 - **Why does `LeanTweenType` connect `LeanTween LTDescr` to `LTDescr ActionMethodDelegate`, `LeanTween add`?**
   _High betweenness centrality (0.042) - this node is a cross-community bridge._
 - **Should `CwEditor` be split into smaller, more focused modules?**
-  _Cohesion score 0.13675213675213677 - nodes in this community are weakly interconnected._
-- **Why does `TweenAction` connect `LeanTween MOVE` to `LTDescr ActionMethodDelegate`, `LeanTween add`?**
-  _High betweenness centrality (0.035) - this node is a cross-community bridge._
+  _Cohesion score 0.14153846153846153 - nodes in this community are weakly interconnected._
+- **Why does `LeanGameObjectPool` connect `LeanGameObjectPool Delay` to `.OnInspector`, `LeanTweenExt LeanValue`, `CwChild LeanGameObjectPool`, `List`, `LeanGameObjectPool StrategyType`, `PlantManager`, `Manager LeanPooledRigidbody`, `Transform`, `.DespawnNow`, `PlayerCombatManager`, `LeanGameObjectPool NotificationType`, `OnDespawn OnSpawn`, `CwRenderTextureManager CwHelper`, `ToolbarFindMissingReferences MissingReference`?**
+  _High betweenness centrality (0.041) - this node is a cross-community bridge._
 - **Should `LeanTween add` be split into smaller, more focused modules?**
-  _Cohesion score 0.03365992414664981 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.034561834561834565 - nodes in this community are weakly interconnected._
