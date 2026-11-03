@@ -50,7 +50,9 @@ public class Setting : MonoBehaviour, ICloseableUI
         if (UiGameObject == null) return;
 
         UiGameObject.SetActive(true);
+        SetTimeStop(true);
         UIStackManager.RegisterOpen(this);
+        
     }
 
     public void CloseUI()
@@ -58,6 +60,7 @@ public class Setting : MonoBehaviour, ICloseableUI
         if (UiGameObject == null) return;
 
         UiGameObject.SetActive(false);
+        SetTimeStop(false);
         UIStackManager.UnregisterClosed(this);
     }
 
@@ -71,6 +74,11 @@ public class Setting : MonoBehaviour, ICloseableUI
         {
             OpenPauseUI();
         }
+    }
+
+    private void SetTimeStop(bool isStop)
+    {
+        Time.timeScale = isStop ? 0 : 1;
     }
 
     public void SetMouseSensitive(float multiplier)

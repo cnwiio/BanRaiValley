@@ -1,6 +1,6 @@
 using Unity.Cinemachine;
 using UnityEngine;
-
+    
 public class PlayerMovement : MonoBehaviour
 {
     #region Inspector Fields
