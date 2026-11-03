@@ -182,7 +182,7 @@
                 {
                     "name": "binding",
                     "id": "ebc87509-b7cd-44d4-ba08-407e1c42744f",
-                    "path": "<Keyboard>/p",
+                    "path": "<Keyboard>/m",
                     "interactions": "",
                     "processors": "",
                     "groups": ";KeyBoard&Mouse",
